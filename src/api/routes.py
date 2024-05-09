@@ -20,3 +20,36 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@api.route("/users",  methods=['GET'])
+def get_users():
+    users= User.query.all()
+    all_users= list(map(lambda x: x.serialize(), users))
+    return jsonify(all_users), 200
+
+@api.route("/users",  methods=['POST'])
+def create_user():
+    new_user = request.get_json()
+
+    if 'name' not in new_user:
+        return "Name should be in New user Body", 400
+    if 'password' not in new_user:
+        return "password should be in New user Body", 400
+    if 'email' not in new_user:
+        return "email should be in New user Body", 400
+    if 'user_class' not in new_user:
+        return "class should be in New user Body", 400
+
+    new_user = User(
+        name = new_user['name'],
+        password = new_user['password'],
+        email = new_user['email'],
+        user_class = new_user["user_class"],
+        user_level= 1
+        
+        )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"msg": "New user is Created"}), 201
