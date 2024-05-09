@@ -13,7 +13,7 @@ class Clas(db.Model):
     hability_3 = db.Column(db.String(120), unique=True, nullable=False)
     
     def __repr__(self):
-        return f'<User {self.name}>'
+        return f'<Class {self.name}>'
     
     def serialize(self):
         return {
@@ -67,7 +67,7 @@ class Difficulty(db.Model):
     
 
     def __repr__(self):
-        return f'<User {self.difficulty_name}>'
+        return f'<Difficulty {self.difficulty_name}>'
     
     def serialize(self):
         return {
@@ -90,7 +90,7 @@ class Task(db.Model):
     user=db.relationship(User)
 
     def __repr__(self):
-        return f'<User {self.label}>'
+        return f'<Task {self.label}>'
     
     def serialize(self):
         return {
@@ -110,7 +110,7 @@ class Rarity(db.Model):
     
 
     def __repr__(self):
-        return f'<User {self.rarity_name}>'
+        return f'<Rarity {self.rarity_name}>'
     
     def serialize(self):
         return {
@@ -131,7 +131,7 @@ class Reward(db.Model):
     rarity=db.relationship(Rarity)
 
     def __repr__(self):
-        return f'<User {self.label}>'
+        return f'<Reward {self.label}>'
     
     def serialize(self):
         return {
@@ -152,7 +152,7 @@ class Bestiary(db.Model):
   
     
     def __repr__(self):
-        return f'<User {self.monster_name}>'
+        return f'<Monster {self.monster_name}>'
     
     def serialize(self):
         return {
