@@ -2,6 +2,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			allMonsters : null,
+			encounterPool: null,
 			demo: [
 				{
 					title: "FIRST",
@@ -31,6 +33,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			getallMonsters: async ()=>{
+				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
 				const requestOptions = {
@@ -41,11 +44,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 				fetch("https://www.dnd5eapi.co/api/monsters", requestOptions)
-  				.then((response) => response.text())
-  				.then((result) => console.log(result))
+  				.then((response) => response.json())
+  				.then((result) => {setStore({allMonsters: result.results})
+				  console.log(store.allMonsters)})
   				.catch((error) => console.error(error));
 			},
-			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23)=>{
+			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
+				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and the form 1 to 24
+				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
 				const requestOptions = {
@@ -55,12 +61,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 
 
-				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23}`, requestOptions)
-				.then((response) => response.text())
-				.then((result) => console.log(result))
+				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
+				.then((response) => response.json())
+				.then((result) => {setStore({encounterPool: result.results})
+					console.log(store.encounterPool)})
 				.catch((error) => console.error(error));
 			},
-			getmonsterByIndex: (index)=>{
+			getMonsterByIndex: (index)=>{
+				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
 				const requestOptions = {
@@ -74,6 +82,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.then((response) => response.text())
 				.then((result) => console.log(result))
 				.catch((error) => console.error(error));	
+			},
+			getEncounter: (userLevel)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				
+				if(userLevel <= 10) {return action.getMonsterByCr(0.125)}
+				if(userLevel <= 20) {return action.getMonsterByCr(0.125,0.250)}
+				if(userLevel <= 30) {return action.getMonsterByCr(0.125,0.250,0.500)}
+				if(userLevel <= 40) {return action.getMonsterByCr(0.125,0.250,0.500,1)}
+				if(userLevel <= 50) {return action.getMonsterByCr(0.125,0.250,0.500,1,2)}
+				if(userLevel <= 60) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3)}
+				if(userLevel <= 70) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4)}
+				if(userLevel <= 80) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5)}
+				if(userLevel <= 90) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6)}
+				if(userLevel <= 100) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6,7)}
+			
+			},
+			getSingleUser: ()=>{
+				
 			}
 			
 		}
