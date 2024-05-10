@@ -37,14 +37,12 @@ def create_user():
         return "password should be in New user Body", 400
     if 'email' not in new_user:
         return "email should be in New user Body", 400
-    if 'user_class' not in new_user:
-        return "class should be in New user Body", 400
+    
 
     new_user = User(
         name = new_user['name'],
         password = new_user['password'],
         email = new_user['email'],
-        user_class = new_user["user_class"],
         user_level= 1
         
         )
