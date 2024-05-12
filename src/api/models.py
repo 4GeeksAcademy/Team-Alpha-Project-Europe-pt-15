@@ -38,9 +38,9 @@ class User(db.Model):
     email = db.Column(db.String(80), unique=False, nullable=False)
     user_class=db.Column(db.Integer, db.ForeignKey('clas.id'))
     clas = db.relationship(Clas)
-    user_level = db.Column(db.Integer)
-    user_experience = db.Column(db.Integer)
-    user_energy = db.Column(db.Integer)
+    level = db.Column(db.Integer)
+    experience = db.Column(db.Integer)
+    energy = db.Column(db.Integer)
 
 
     def __repr__(self):
@@ -51,10 +51,10 @@ class User(db.Model):
             "id": self.id,
             "email": self.email,
             "name": self.name,
-            "class": self.user_class,
-            "level": self.user_level,
-            "experience": self.user_experience,
-            "energy": self.user_energy
+            "user_class": self.user_class,
+            "level": self.level,
+            "experience": self.experience,
+            "energy": self.energy
             # do not serialize the password, its a security breach
         }
 
