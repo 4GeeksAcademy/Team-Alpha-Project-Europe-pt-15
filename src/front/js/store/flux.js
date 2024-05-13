@@ -83,27 +83,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.then((result) => console.log(result))
 				.catch((error) => console.error(error));	
 			},
-			getEncounter: (userLevel)=>{
-				const store=getStore()
-				const action=getActions()
-				
-				
-				if(userLevel <= 10) {return action.getMonsterByCr(0.125)}
-				if(userLevel <= 20) {return action.getMonsterByCr(0.125,0.250)}
-				if(userLevel <= 30) {return action.getMonsterByCr(0.125,0.250,0.500)}
-				if(userLevel <= 40) {return action.getMonsterByCr(0.125,0.250,0.500,1)}
-				if(userLevel <= 50) {return action.getMonsterByCr(0.125,0.250,0.500,1,2)}
-				if(userLevel <= 60) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3)}
-				if(userLevel <= 70) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4)}
-				if(userLevel <= 80) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5)}
-				if(userLevel <= 90) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6)}
-				if(userLevel <= 100) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6,7)}
-			
-			},
-			getSingleUser: ()=>{
-				
-			}
-			
 		}
 	};
 };
