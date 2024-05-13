@@ -24,7 +24,7 @@ class Clas(db.Model):
             "hability_2": self.hability_2,
             "hability_3": self.hability_3,
 
-            # do not serialize the password, its a security breach
+           
         }
 
 
@@ -75,7 +75,7 @@ class Difficulty(db.Model):
             "name": self.difficulty_name,
             "experience": self.experience_given,
             "energy": self.energy_given
-            # do not serialize the password, its a security breach
+           
         }
     
 
@@ -98,7 +98,7 @@ class Task(db.Model):
             "label": self.label,
             "userId": self.user_id,
             "difficulty": self.task_difficulty_id
-            # do not serialize the password, its a security breach
+           
         }
     
 
@@ -117,7 +117,7 @@ class Rarity(db.Model):
             "id": self.id,
             "name": self.rarity_name,
             "requirement": self.energy_required
-            # do not serialize the password, its a security breach
+            
         }
 
 
@@ -137,10 +137,10 @@ class Reward(db.Model):
         return {
             "id": self.id,
             "label": self.label,
-            "userId": self.user_id,
-            "rarity": self.rarity_id
+            "user_id": self.user_id,
+            "rarity_id": self.rarity_id
 
-            # do not serialize the password, its a security breach
+            
         }
     
 class Bestiary(db.Model):
@@ -157,9 +157,8 @@ class Bestiary(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.monster_name,
-            "userId": self.user_id,
+            "monster_name": self.monster_name,
+            "user_id": self.user_id,
             
 
-            # do not serialize the password, its a security breach
         }
