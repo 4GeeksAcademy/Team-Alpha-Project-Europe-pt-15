@@ -2,6 +2,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			allMonsters : null,
+			encounterPool: null,
 			demo: [
 				{
 					title: "FIRST",
@@ -17,10 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-
+			
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
@@ -33,20 +32,57 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+			getallMonsters: async ()=>{
+				const store=getStore()
+				const myHeaders = new Headers();
+				myHeaders.append("Accept", "application/json");
+				const requestOptions = {
+  					method: "GET",
+  					headers: myHeaders,
+  					redirect: "follow"
+				};
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
 
-				//reset the global store
-				setStore({ demo: demo });
-			}
+				fetch("https://www.dnd5eapi.co/api/monsters", requestOptions)
+  				.then((response) => response.json())
+  				.then((result) => {setStore({allMonsters: result.results})
+				  console.log(store.allMonsters)})
+  				.catch((error) => console.error(error));
+			},
+			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
+				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and the form 1 to 24
+				const store=getStore()
+				const myHeaders = new Headers();
+				myHeaders.append("Accept", "application/json");
+				const requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow"
+				};
+
+
+				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
+				.then((response) => response.json())
+				.then((result) => {setStore({encounterPool: result.results})
+					console.log(store.encounterPool)})
+				.catch((error) => console.error(error));
+			},
+			getMonsterByIndex: (index)=>{
+				const store=getStore()
+				const myHeaders = new Headers();
+				myHeaders.append("Accept", "application/json");
+				const requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow"
+				};
+
+
+				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
+				.then((response) => response.text())
+				.then((result) => console.log(result))
+				.catch((error) => console.error(error));	
+			},
 		}
 	};
 };
