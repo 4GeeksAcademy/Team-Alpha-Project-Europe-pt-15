@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import "../../styles/signUp.css";
 
-const SignUp = () => {
+export const SignUp = () => {
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
@@ -95,4 +95,3 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
