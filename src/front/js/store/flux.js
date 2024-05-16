@@ -1,21 +1,15 @@
+import barbarian from "../../img/icon_user.png"
+import wizard from "../../img/icon_email.png"
+import rogue from "../../img/icon_pwc.png"
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			roles: [],
+			images: [barbarian, wizard, rogue]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -32,6 +26,44 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+
+			getRoles: () => {
+				fetch(process.env.BACKEND_URL + "api/roles", {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rolesData) => {
+					console.log(rolesData);
+					setStore({...getStore, roles: rolesData})
+				}).catch((err) => {
+					console.error('Couldnt get classes from API', err)
+				})
+			},
+
+			addRole: (role) => {
+
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 1
+
+				fetch(process.env.BACKEND_URL + "roles/" + user + "/" + role, {
+					method: 'PUT',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((message) => {
+					console.log(message)
+				}).catch((err) => {
+					console.error('Couldnt add role to user', err)
+				})
+			},
+
 			getallMonsters: async ()=>{
 				const store=getStore()
 				const myHeaders = new Headers();
@@ -49,6 +81,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  console.log(store.allMonsters)})
   				.catch((error) => console.error(error));
 			},
+
 			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
 				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and the form 1 to 24
 				const store=getStore()
@@ -67,6 +100,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(store.encounterPool)})
 				.catch((error) => console.error(error));
 			},
+
 			getMonsterByIndex: (index)=>{
 				const store=getStore()
 				const myHeaders = new Headers();
