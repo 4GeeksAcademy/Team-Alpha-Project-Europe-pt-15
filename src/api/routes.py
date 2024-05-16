@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Clas, Difficulty, Task, Rarity, Reward, Bestiary
+from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -42,7 +42,7 @@ def create_user():
         name = new_user['name'],
         password = new_user['password'],
         email = new_user['email'],
-        user_level= 1
+        level= 1
         
         )
 
@@ -78,8 +78,8 @@ def update_user(user_id):
     if 'email' in new_updated_user:
         old_user_obj.email = new_updated_user['email']
 
-    if 'user_class' in new_updated_user:
-        old_user_obj.user_class = new_updated_user['user_class']
+    if 'user_role' in new_updated_user:
+        old_user_obj.user_role = new_updated_user['user_role']
 
     if 'level' in new_updated_user:
         old_user_obj.level = new_updated_user['level']
@@ -90,86 +90,95 @@ def update_user(user_id):
     if 'experience' in new_updated_user:
         old_user_obj.experience = new_updated_user['experience']
 
+    if 'password' in new_updated_user:
+        old_user_obj.experience = new_updated_user['password']
+
     db.session.commit()
 
     return jsonify({"msg": "User is Updated"}), 200
 
-@api.route("/classes",  methods=['GET'])
-def get_classes():
-    classes= Clas.query.all()
-    all_classes= list(map(lambda x: x.serialize(), classes))
-    return jsonify(all_classes), 200
+@api.route("/roles",  methods=['GET'])
+def get_roles():
+    roles= Role.query.all()
+    all_roles= list(map(lambda x: x.serialize(), roles))
+    return jsonify(all_roles), 200
 
-@api.route("/classes",  methods=['POST'])
-def create_class():
-    new_class = request.get_json()
+@api.route("/roles",  methods=['POST'])
+def create_roles():
+    new_role = request.get_json()
 
-    if 'name' not in new_class:
+    if 'name' not in new_role:
         return "Name should be in New class Body", 400
-    if 'passive' not in new_class:
+    if 'description' not in new_role:
+        return "description should be in New class Body", 400
+    if 'passive' not in new_role:
         return "passive should be in New class Body", 400
-    if 'habiliy_1' not in new_class:
-        return "email should be in New class Body", 400
-    if 'habiliy_2' not in new_class:
-        return "email should be in New class Body", 400
-    if 'habiliy_3' not in new_class:
-        return "email should be in New class Body", 400
+    if 'hability_1' not in new_role:
+        return "hability_1 should be in New class Body", 400
+    if 'hability_2' not in new_role:
+        return "habiliy_2 should be in New class Body", 400
+    if 'hability_3' not in new_role:
+        return "habiliy_3 should be in New class Body", 400
   
 
-    new_class = Clas(
-        name = new_class['name'],
-        passive = new_class['passive'],
-        habiliy_1 = new_class['habiliy_1'],
-        habiliy_2 = new_class["habiliy_2"],
-        habiliy_3= new_class["habiliy_3"] 
+    new_role = Role(
+        name = new_role['name'],
+        description = new_role['description'],
+        passive = new_role['passive'],
+        hability_1 = new_role['hability_1'],
+        hability_2 = new_role["hability_2"],
+        hability_3= new_role["hability_3"] 
         
         )
 
-    db.session.add(new_class)
+    db.session.add(new_role)
     db.session.commit()
 
-    return jsonify({"msg": "New class is Created"}), 201
+    return jsonify({"msg": "New role is Created"}), 201
 
-@api.route('/classes/<int:class_id>', methods=['GET'])
-def get_class(class_id):
+@api.route('/role/<int:role_id>', methods=['GET'])
+def get_role(role_id):
 
-    clas = Clas.query.get(class_id)
-    if clas is None:
-        return "No class with id: " + str(class_id), 400
+    role = Role.query.get(role_id)
+    if role is None:
+        return "No role with id: " + str(role_id), 400
     
-    one_class = clas.serialize()
+    one_role = role.serialize()
 
-    return jsonify(one_class), 200
+    return jsonify(one_role), 200
 
 
-@api.route('/classes/<int:class_id>', methods=['PUT'])
-def update_class(class_id):
+@api.route('/role/<int:role_id>', methods=['PUT'])
+def update_role(role_id):
 
-    new_updated_class = request.get_json()
-    old_class_obj = Clas.query.get(class_id)
+    new_updated_role = request.get_json()
+    old_role_obj = Role.query.get(role_id)
 
-    if old_class_obj is None:
-        return "No Class with id: " + str(class_id), 400
+    if old_role_obj is None:
+        return "No role with id: " + str(role_id), 400
 
-    if 'name' in new_updated_class:
-        old_class_obj.name = new_updated_class['name']
+    if 'name' in new_updated_role:
+        old_role_obj.name = new_updated_role['name']
 
-    if 'passive' in new_updated_class:
-        old_class_obj.passive = new_updated_class['passive']
+    if 'description' in new_updated_role:
+        old_role_obj.description = new_updated_role['description']
 
-    if 'hability_1' in new_updated_class:
-        old_class_obj.hability_1 = new_updated_class['hability_1']
+    if 'passive' in new_updated_role:
+        old_role_obj.passive = new_updated_role['passive']
 
-    if 'hability_2' in new_updated_class:
-        old_class_obj.hability_2 = new_updated_class['hability_2']
+    if 'hability_1' in new_updated_role:
+        old_role_obj.hability_1 = new_updated_role['hability_1']
 
-    if 'hability_3' in new_updated_class:
-        old_class_obj.hability_3 = new_updated_class['hability_3']
+    if 'hability_2' in new_updated_role:
+        old_role_obj.hability_2 = new_updated_role['hability_2']
+
+    if 'hability_3' in new_updated_role:
+        old_role_obj.hability_3 = new_updated_role['hability_3']
 
 
     db.session.commit()
 
-    return jsonify({"msg": "Class is Updated"}), 200
+    return jsonify({"msg": "role is Updated"}), 200
 
 @api.route("/difficulty",  methods=['GET'])
 def get_difficulties():
@@ -217,7 +226,7 @@ def get_difficulty(difficulty_id):
 def update_difficulty(difficulty_id):
 
     new_updated_difficulty = request.get_json()
-    old_difficulty_obj = Clas.query.get(difficulty_id)
+    old_difficulty_obj = Difficulty.query.get(difficulty_id)
 
     if old_difficulty_obj is None:
         return "No difficulty with id: " + str(difficulty_id), 400
@@ -275,7 +284,8 @@ def get_task_list(the_user_id):
     if tasks is None:
         return "No tasks from user: " + str(the_user_id), 400
     
-    task_list = tasks.serialize()
+    
+    task_list = list(map(lambda x: x.serialize(), tasks))
 
     return jsonify(task_list), 200
 
@@ -290,9 +300,6 @@ def update_task(task_id):
 
     if 'label' in new_updated_task:
         old_task_obj.label = new_updated_task['label']
-
-    if 'user_id' in new_updated_task:
-        old_task_obj.user_id = new_updated_task['user_id']
     
     if 'task_difficulty_id' in new_updated_task:
         old_task_obj.task_difficulty_id = new_updated_task['task_difficulty_id']
@@ -410,7 +417,7 @@ def get_reward_list(the_user_id):
     if reward is None:
         return "No rewards from user: " + str(the_user_id), 400
     
-    reward_list = reward.serialize()
+    reward_list = list(map(lambda x: x.serialize(), reward))
 
     return jsonify(reward_list), 200
 
@@ -418,10 +425,10 @@ def get_reward_list(the_user_id):
 def update_reward(reward_id):
 
     new_updated_reward = request.get_json()
-    old_reward_obj = Task.query.get(reward_id)
+    old_reward_obj = Reward.query.get(reward_id)
 
     if old_reward_obj is None:
-        return "No difficulty with id: " + str(reward_id), 400
+        return "No reward with id: " + str(reward_id), 400
 
     if 'label' in new_updated_reward:
         old_reward_obj.label = new_updated_reward['label']
@@ -440,7 +447,7 @@ def update_reward(reward_id):
 @api.route('/rewards/<int:reward_id>', methods=['DELETE'])
 def delete_reward(reward_id):
 
-    deleting_reward= Task.query.get(reward_id)
+    deleting_reward= Reward.query.get(reward_id)
 
     if deleting_reward is None:
         return "No reward with id: " + str(reward_id), 400
@@ -465,7 +472,7 @@ def create_mosnter():
     if 'user_id' not in new_monster:
         return "user_id should be in New monster Body", 400
    
-    new_monster = Reward(
+    new_monster = Bestiary(
         monster_name = new_monster['monster_name'],
         user_id = new_monster['user_id'],
          
@@ -483,6 +490,6 @@ def get_monster_list(the_user_id):
     if monster is None:
         return "No monster from user: " + str(the_user_id), 400
     
-    monster_list = monster.serialize()
+    monster_list = list(map(lambda x: x.serialize(), monster))
 
     return jsonify(monster_list), 200
