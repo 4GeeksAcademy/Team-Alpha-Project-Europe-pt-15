@@ -29,7 +29,8 @@ const injectContext = PassedComponent => {
 			 * store, instead use actions, like this:
 			 **/
 			
-			
+			//state.actions.getEncounter(20)
+			//state.actions.getBestiary(1)
 			state.actions.getMessage(); // <---- calling this function from the flux.js actions
 		}, []);
 
