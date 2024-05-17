@@ -1,0 +1,36 @@
+body {
+    font-family: Montserrat;
+}
+
+/* text */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 800;
+    margin-bottom: 7%;
+}
+
+/* background colors */
+bg-green {background: #10E0B8}
+bg-yellow {background: #FFC444}
+bg-red {background: #EB1652}
+bg-purple {background: #9111F2}
+bg-black {background: #252424}
+bg-white {background: #ffffff}
+
+/* cards borders and shadows */
+.card, .bttn {
+    padding: 3%;
+    border: 0.2em solid #252424;
+    border-radius: 0.7em;
+    box-shadow: 0.3em 0.3em #252424;
+
+    &.circle {
+        padding: 0.7em !important;
+        border-radius: 100% !important;
+        box-shadow: 0.3em 0.3em;
+    }
+}
+
+/* arrow directions */
+.right {transform: rotate(180deg)}
+.up    {transform: rotate(90deg)}
+.down  {transform: rotate(-90deg)}
