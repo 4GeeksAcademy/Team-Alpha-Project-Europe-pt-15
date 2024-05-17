@@ -1,10 +1,14 @@
-import React, { useContext} from "react";
+import React, { useContext, useEffect} from "react";
 import { Context } from "../store/appContext";
 
 import "../../styles/index.css";
 
 export const Role = () => {
 	const { store, actions } = useContext(Context);
+
+	useEffect(() => {
+		actions.getRoles()
+	},[])
 
 	return (
     <div className="container-fluid text-center">
