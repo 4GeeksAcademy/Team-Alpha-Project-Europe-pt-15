@@ -6,7 +6,11 @@ import { BackendURL } from "./component/backendURL";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
+
 import { Role } from "./pages/choose_role";
+
+import {Dash} from "./pages/dashboard";
+
 import injectContext from "./store/appContext";
 
 
@@ -24,7 +28,12 @@ const Layout = () => {
                 <ScrollToTop>
                     <Routes>
                         <Route element={<Home />} path="/" />
+
                         <Route element={<Role />} path="/chooseOne" />
+
+                        <Route element={<Dash />} path="/dashboard" />
+
+
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
