@@ -108,7 +108,7 @@ def update_user(user_id):
         old_user_obj.experience = new_updated_user['experience']
 
     if 'password' in new_updated_user:
-        old_user_obj.experience = new_updated_user['password']
+        old_user_obj.password = new_updated_user['password']
 
     db.session.commit()
 

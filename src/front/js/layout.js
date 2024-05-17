@@ -7,6 +7,7 @@ import { Home } from "./pages/home";
 import { LogIn } from "./pages/logIn";
 import { SignUp } from "./pages/signUp";
 import { Role } from "./pages/choose_role";
+import {Dash} from "./pages/dashboard";
 
 import injectContext from "./store/appContext";
 
@@ -26,6 +27,7 @@ const Layout = () => {
                         <Route element={<LogIn />} path="/LogIn" />
                         <Route element={<SignUp />} path="/SignUp" />
                         <Route element={<Role />} path="/chooseOne" />
+                        <Route element={<Dash />} path="/Dashboard" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                 </ScrollToTop>
