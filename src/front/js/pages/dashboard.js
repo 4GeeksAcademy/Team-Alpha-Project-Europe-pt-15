@@ -9,7 +9,7 @@ export const Dash = () => {
   }, []);
 
   const getUsers = () => {
-    fetch(`https://reimagined-memory-6997496wxx6x3qvq-3001.app.github.dev/api/users`)
+    fetch(`https://reimagined-memory-6997496wxx6x3qvq-3001.app.github.dev/users`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -29,7 +29,7 @@ export const Dash = () => {
       const newTask = { label: newTaskName };
 
       try {
-        const response = await fetch(`https://reimagined-memory-6997496wxx6x3qvq-3001.app.github.dev/api/task`, {
+        const response = await fetch(`https://reimagined-memory-6997496wxx6x3qvq-3001.app.github.dev/task`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export const Dash = () => {
         return task;
       });
 
-      const response = await fetch(`https://reimagined-memory-6997496wxx6x3qvq-3001.app.github.dev/api/task`, {
+      const response = await fetch(`https://reimagined-memory-6997496wxx6x3qvq-3001.app.github.dev/task`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -102,6 +102,25 @@ export const Dash = () => {
           maxLength={80}
           value={newTaskName}
         />
+        <div className="form-check form-check-inline">
+        <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" />
+        <label className="form-check-label">easy</label>
+        </div>
+        <div className="form-check form-check-inline">
+        <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" />
+        <label className="form-check-label" >medium</label>
+        </div>
+        <div className="form-check form-check-inline">
+        <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" />
+        <label className="form-check-label" >hard</label>
+        </div>
+
+        <button type="button" className="btn btn-danger">Add Task</button>
+        <button type="button" className="btn btn-danger">Fight</button>
+        <button type="button" className="btn btn-warning">Edit Profile</button>
+        <button type="button" className="btn btn-primary">Reward</button>
+        <button type="button" className="btn btn-primary">Logout</button>
+
       
             
       <div className="TaskRemover mt-2">
