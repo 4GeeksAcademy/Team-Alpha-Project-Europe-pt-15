@@ -3,28 +3,30 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-class Clas(db.Model):
-    __tablename__ = "clas"
+class Role(db.Model):
+    __tablename__ = "role"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
+    description = db.Column(db.String(1000))
     passive = db.Column(db.String(120), unique=True, nullable=False)
-    hablity_1 = db.Column(db.String(120), unique=True, nullable=False)
+    hability_1 = db.Column(db.String(120), unique=True, nullable=False)
     hability_2 = db.Column(db.String(120), unique=True, nullable=False)
     hability_3 = db.Column(db.String(120), unique=True, nullable=False)
     
     def __repr__(self):
-        return f'<Class {self.name}>'
+        return f'<Role {self.name}>'
     
     def serialize(self):
         return {
             "id": self.id,
             "name": self.name,
+            "description": self.description,
             "passive": self.passive,
-            "hability_1": self.hablity_1,
+            "hability_1": self.hability_1,
             "hability_2": self.hability_2,
             "hability_3": self.hability_3,
 
-            # do not serialize the password, its a security breach
+           
         }
 
 
@@ -33,28 +35,28 @@ class Clas(db.Model):
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(80), unique=False, nullable=False)
-    user_class=db.Column(db.Integer, db.ForeignKey('clas.id'))
-    clas = db.relationship(Clas)
-    user_level = db.Column(db.Integer)
-    user_experience = db.Column(db.Integer)
-    user_energy = db.Column(db.Integer)
+    user_role= db.Column(db.Integer, db.ForeignKey('role.id'))
+    role = db.relationship(Role)
+    level = db.Column(db.Integer)
+    experience = db.Column(db.Integer)
+    energy = db.Column(db.Integer)
 
 
     def __repr__(self):
-        return f'<User {self.name}>'
+        return f'<User {self.email}>'
 
     def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
             "name": self.name,
-            "class": self.user_class,
-            "level": self.user_level,
-            "experience": self.user_experience,
-            "energy": self.user_energy
+            "user_role": self.user_role,
+            "level": self.level,
+            "experience": self.experience,
+            "energy": self.energy
             # do not serialize the password, its a security breach
         }
 
@@ -72,10 +74,10 @@ class Difficulty(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.difficulty_name,
-            "experience": self.experience_given,
-            "energy": self.energy_given
-            # do not serialize the password, its a security breach
+            "difficulty_name": self.difficulty_name,
+            "experience_given": self.experience_given,
+            "energy_given": self.energy_given
+           
         }
     
 
@@ -83,7 +85,7 @@ class Difficulty(db.Model):
 class Task(db.Model):
     __tablename__ = "task"
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(120), unique=True, nullable=False)
+    label = db.Column(db.String(120), nullable=False)
     task_difficulty_id = db.Column(db.Integer, db.ForeignKey('difficulty.id'))
     task_difficulty = db.relationship(Difficulty)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -96,9 +98,9 @@ class Task(db.Model):
         return {
             "id": self.id,
             "label": self.label,
-            "userId": self.user_id,
-            "difficulty": self.task_difficulty_id
-            # do not serialize the password, its a security breach
+            "user_id": self.user_id,
+            "task_difficulty_id": self.task_difficulty_id
+           
         }
     
 
@@ -115,16 +117,16 @@ class Rarity(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.rarity_name,
-            "requirement": self.energy_required
-            # do not serialize the password, its a security breach
+            "rarity_name": self.rarity_name,
+            "energy_required": self.energy_required
+            
         }
 
 
 class Reward(db.Model):
     __tablename__ = "reward"
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(120), unique=True, nullable=False)
+    label = db.Column(db.String(120),nullable=False)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     user=db.relationship(User)
     rarity_id=db.Column(db.Integer, db.ForeignKey('rarity.id')) 
@@ -137,10 +139,10 @@ class Reward(db.Model):
         return {
             "id": self.id,
             "label": self.label,
-            "userId": self.user_id,
-            "rarity": self.rarity_id
+            "user_id": self.user_id,
+            "rarity_id": self.rarity_id
 
-            # do not serialize the password, its a security breach
+            
         }
     
 class Bestiary(db.Model):
@@ -157,9 +159,8 @@ class Bestiary(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.monster_name,
-            "userId": self.user_id,
+            "monster_name": self.monster_name,
+            "user_id": self.user_id,
             
 
-            # do not serialize the password, its a security breach
         }
