@@ -1,3 +1,56 @@
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
+body {
+    font-family: Montserrat;
+}
+
+/* text */
+h1, h2, h3, h4, h5, h6, .bold {
+    font-weight: 800;
+}
+
+h1, button {
+    text-align: center;
+}
+
+/* colors */
+.bg-green {background: #10E0B8}
+.bg-yellow {background: #FFC444}
+.bg-red {background: #EB1652; color: #ffffff}
+.bg-purple {background: #9111F2; color: #ffffff}
+.bg-black {background: #252424}
+.bg-white {background: #ffffff}
+
+.txt-green {color: #10E0B8}
+.txt-yellow {color: #FFC444}
+.txt-red {color: #EB1652}
+.txt-purple {color: #9111F2}
+
+/* cards borders and shadows */
+.card, .bttn {
+    padding: 3%;
+    border: 0.2em solid #252424;
+    border-radius: 0.7em;
+    box-shadow: 0.3em 0.3em #252424;
+
+    &.circle {
+        padding: 0.7em !important;
+        border-radius: 100% !important;
+        box-shadow: 0.3em 0.3em;
+    }
+}
+
+/* Links */
+a {
+    text-decoration: none;
+}
+
+/* arrow directions */
+.right {transform: rotate(180deg)}
+.up    {transform: rotate(90deg)}
+.down  {transform: rotate(-90deg)}
+
+
+/* form inputs */
+input {
+    border: none;
+    background: none;
+}
