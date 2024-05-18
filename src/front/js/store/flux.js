@@ -9,7 +9,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			allMonsters : null,
 			encounterPool: null,
 			roles: [],
-			images: [barbarian, wizard, rogue]
+			images: [barbarian, wizard, rogue],
+			inputs: {},
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -25,6 +26,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}
+			},
+
+			getInput: (event) => {
+				const name = event.target.id;
+				const value = event.target.value;
+				setStore({...getStore,
+						  inputs: {...getStore().inputs, [name]: value}})
+			},
+
+			resetInput: () => {
+				setStore({...getStore,inputs: {}})
+			},
+
+			Login: (event) => {
+				event.preventDefault()
+
+				const input = getStore().inputs
+
+				fetch(process.env.BACKEND_URL + "api/login", {
+					method: 'POST',
+					body: JSON.stringify({
+						'email': input.email,
+						'password': input.password
+					}),
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					getActions().resetInput();
+					if(response.ok) return response.json();
+					throw Error(response.status)
+				}).then((loginData) => {
+					console.log(' Response From Backend', loginData)
+					localStorage.setItem('jwt-token', loginData.token)
+					localStorage.setItem('user', loginData.user_id)
+				}).catch((err) => {
+					console.error('Something Wrong when calling API', err)
+				})
 			},
 
 			getRoles: () => {
