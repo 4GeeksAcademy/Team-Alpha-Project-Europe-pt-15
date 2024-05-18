@@ -15,7 +15,6 @@ export const Home = () => {
 			<div className="alert alert-info">
 				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
 			</div>
-			<button onClick={()=>{actions.decideVictory(20,1)}}>press me</button>
 			<p>
 				This boilerplate comes with lots of documentation:{" "}
 				<a href="https://start.4geeksacademy.com/starters/react-flask">
