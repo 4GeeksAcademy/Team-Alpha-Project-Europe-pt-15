@@ -9,7 +9,8 @@ export const Dash = () => {
   
   const {tasks} = store;
   const {addTasks, getTask, updateTask, getUsers, getLevel, handleChange, label } = actions;
-
+  //user for test
+  const user = 1
 
 
   return (
@@ -18,7 +19,7 @@ export const Dash = () => {
         <div className="d-flex ">
         
         <div className="card bg-red">
-        <div className="m-2">{actions.getUsers(user.id)}</div>
+        <div className="m-2">{store.user[id]}</div>
         <div className="m-2">{store.user.Level}</div>
         <div className="mt-2">{store.user.roles}</div>
         <div className="mt-2">{store.user.energy}</div>
