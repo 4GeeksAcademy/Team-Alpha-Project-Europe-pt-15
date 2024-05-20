@@ -11,12 +11,17 @@ h1, button {
     text-align: center;
 }
 
+/* icons */
+i {
+    scale: 140%;
+}
+
 /* colors */
 .bg-green {background: #10E0B8}
 .bg-yellow {background: #FFC444}
 .bg-red {background: #EB1652; color: #ffffff}
 .bg-purple {background: #9111F2; color: #ffffff}
-.bg-black {background: #252424}
+.bg-black {background: #252424; color: #ffffff}
 .bg-white {background: #ffffff}
 
 .txt-green {color: #10E0B8}
@@ -27,14 +32,13 @@ h1, button {
 /* cards borders and shadows */
 .card, .bttn {
     padding: 3%;
-    border: 0.2em solid #252424;
-    border-radius: 0.7em;
-    box-shadow: 0.3em 0.3em #252424;
+    border: 3px solid #252424;
+    border-radius: 10px;
+    box-shadow: 4px 4px #252424;
 
     &.circle {
-        padding: 0.7em !important;
+        padding: 14px !important;
         border-radius: 100% !important;
-        box-shadow: 0.3em 0.3em;
     }
 }
 

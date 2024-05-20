@@ -1,6 +1,6 @@
 
 import click
-from api.models import db, User
+from api.models import db, User, Role, Difficulty, Rarity
 
 """
 In this file, you can add as many commands as you want using the @app.cli.command decorator
@@ -32,3 +32,45 @@ def setup_commands(app):
     @app.cli.command("insert-test-data")
     def insert_test_data():
         pass
+
+    @app.cli.command("insert-roles")
+    def insert_roles():
+        print("Creating db roles")
+        B = Role()
+        B.name = "barbarian"
+        B.description = "Battle Rage is blind and merciless but extreamely powerful. This means a greater chance at defeating your enemies and achieve victory."
+        B.passive = "b"
+        B.hability_1 = "Fang Slash"
+        B.hability_2 = "Jaw Breaker"
+        B.hability_3 = "Frenzy Strikes"
+        
+        db.session.add(B)
+        db.session.commit()
+        print("Barbarian created.")
+
+        W = Role()
+        W.name = "Wizard"
+        W.description = "Being a master at conjuring comes with it's own perks. Your Arcana abilities provide you a second shot at succeeding in a encounter."
+        W.passive = "W"
+        W.hability_1 = "Confusion Enchantment"
+        W.hability_2 = "Lightning Blast"
+        W.hability_3 = "Fireball Vortex"
+        
+        db.session.add(W)
+        db.session.commit()
+        print("Wizard created.")
+
+        R = Role()
+        R.name = "Rogue"
+        R.description = "Sneaky little bastard ain't we. How come you never get caught stealling extra experience from the master vault?"
+        R.passive = "R"
+        R.hability_1 = "Tear Smoke Bomb"
+        R.hability_2 = "Swift and Easy"
+        R.hability_3 = "Table Heist"
+        
+        db.session.add(R)
+        db.session.commit()
+        print("Rogue created.")
+        
+
+        print("All roles created")
