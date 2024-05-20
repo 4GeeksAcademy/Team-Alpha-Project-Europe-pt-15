@@ -31,15 +31,28 @@ def setup_commands(app):
 
     @app.cli.command("insert-test-data")
     def insert_test_data():
-        pass
+        print("Creating test user")
+        user = User()
+        user.name = "user"
+        user.email = "user@test"
+        user.password = "user"
+        user.level = 1
+        user.experience = 0
+        user.energy = 0
 
-    @app.cli.command("insert-roles")
-    def insert_roles():
+        db.session.add(user)
+        db.session.commit()
+        print("Test user created.")
+        print("email: user@test   password: user")
+
+
+        ##  ROLES  ##
+
         print("Creating db roles")
         B = Role()
-        B.name = "barbarian"
+        B.name = "Barbarian"
         B.description = "Battle Rage is blind and merciless but extreamely powerful. This means a greater chance at defeating your enemies and achieve victory."
-        B.passive = "b"
+        B.passive = "B"
         B.hability_1 = "Fang Slash"
         B.hability_2 = "Jaw Breaker"
         B.hability_3 = "Frenzy Strikes"
@@ -71,6 +84,65 @@ def setup_commands(app):
         db.session.add(R)
         db.session.commit()
         print("Rogue created.")
-        
-
         print("All roles created")
+
+
+        ##  TASK DIFFICULTY  ##
+
+        print("Creating db task difficulty")
+        Easy = Difficulty()
+        Easy.difficulty_name = "Easy"
+        Easy.experience_given = 7
+        Easy.energy_given = 1
+        
+        db.session.add(Easy)
+        db.session.commit()
+        print("Easy created.")
+
+        Medium = Difficulty()
+        Medium.difficulty_name = "Medium"
+        Medium.experience_given = 13
+        Medium.energy_given = 2
+        
+        db.session.add(Medium)
+        db.session.commit()
+        print("Medium created.")
+
+        Hard = Difficulty()
+        Hard.difficulty_name = "Hard"
+        Hard.experience_given = 20
+        Hard.energy_given = 4
+        
+        db.session.add(Hard)
+        db.session.commit()
+        print("Hard created.")        
+        print("All tasks difficulties created")
+
+
+        ##  REWARD RARITY  ##
+
+        print("Creating db reward rarities")
+        Common = Rarity()
+        Common.rarity_name = "Common"
+        Common.energy_required = 10
+        
+        db.session.add(Common)
+        db.session.commit()
+        print("Common created.")
+
+        Rare = Rarity()
+        Rare.rarity_name = "Rare"
+        Rare.energy_required = 20
+        
+        db.session.add(Rare)
+        db.session.commit()
+        print("Rare created.")
+
+        Legendary = Rarity()
+        Legendary.rarity_name = "Legendary"
+        Legendary.energy_required = 40
+        
+        db.session.add(Legendary)
+        db.session.commit()
+        print("Legendary created.")        
+        print("All reward rarities created")
