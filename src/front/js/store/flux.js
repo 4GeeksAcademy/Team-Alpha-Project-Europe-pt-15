@@ -11,6 +11,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			allMonsters : null,
 			encounterPool: null,
 			bestiary: null,
+			rewards: null,
 			roles: [],
 			images: [barbarian, wizard, rogue],
 			inputs: {},
@@ -195,7 +196,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					setStore({ bestiary: data})
 					// don't forget to return something, that is how the async resolves
-					//console.log(store.bestiary)
+					console.log(store.bestiary)
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
@@ -253,7 +254,68 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if(playerDice > monsterDice){return action.addMosnterOnBestiary(userId) }
 					else{return console.log(false)}
 				}, "500");
-			}
+			},
+			createReward: (userId, label, difficulty)=>{
+				const store=getStore()
+				const action=getActions()
+
+				const reward ={
+					"label": label,
+					"user_id": userId,
+					"task_difficulty_id": difficulty
+				}
+
+				fetch(process.env.BACKEND_URL + "/api/rewards", {
+					method: "POST",
+					body: JSON.stringify(reward),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			getRewards: async (userId)=>{
+				const store=getStore()
+				const action=getActions()
+
+				fetch(process.env.BACKEND_URL + "/api/rewards/"+userId, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rewardList) => {
+					setStore({rewards: rewardList })
+					console.log(store.rewards);
+				}).catch((err) => {
+					console.error('Couldnt get rewards from API', err)
+				})
+			
+			},
+			deleteRewards: (rewardId)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
+					method: 'DELETE',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rewardList) => {
+					console.log(rewardList)
+				}).catch((err) => {
+					console.error('Couldnt delete the reward', err)
+				})
+			},
+
 
 		}
 	};

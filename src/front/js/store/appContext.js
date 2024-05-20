@@ -29,7 +29,7 @@ const injectContext = PassedComponent => {
 			 * store, instead use actions, like this:
 			 **/
 			
-			
+		
 			state.actions.getMessage();
 			
 
