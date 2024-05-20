@@ -4,13 +4,14 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
+
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 
 import { Role } from "./pages/choose_role";
 
 import {Dash} from "./pages/dashboard";
-
+import { Tasker } from "./pages/insertask";
 import injectContext from "./store/appContext";
 
 
@@ -32,6 +33,7 @@ const Layout = () => {
                         <Route element={<Role />} path="/chooseOne" />
 
                         <Route element={<Dash />} path="/dashboard" />
+                        <Route element={<Tasker />} path="/insertask" />
 
 
                         <Route element={<Demo />} path="/demo" />

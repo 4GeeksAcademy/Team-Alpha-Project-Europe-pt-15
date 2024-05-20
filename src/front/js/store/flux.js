@@ -8,13 +8,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
+			user: null,
 			
-			tasks:{
-				label:'',
-				userId:'',
-				difficultyId:''
-			},
-
 			roles: [],
 			images: [barbarian, wizard, rogue]
 		},
@@ -24,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + '/api/hello')
+					const resp = await fetch(process.env.BACKEND_URL + 'api/hello')
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
@@ -34,56 +29,51 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getUsers:() => {
-				fetch(process.env.BACKEND_URL + '/api/users')
-					.then((response) => {
-			  	if (response.ok) {
-				return response.json();
-			  }
-			  	throw Error(response.status + "Something went wrong");
-			})
-			.then((data) => {
-			  console.log(data); // Do something with the data if needed
-			})
-			.catch((error) => {
-			  console.error(error);
-			})},
+			getUser: async (userId) => {
+                try {
+                    const resp = await fetch(`/api/user/${userId}`);
+                    if (!resp.ok) throw new Error('Failed');
+                    const data = await resp.json();
+                    setStore({ user: data });
+                } catch (error) {
+                    console.error(error);
+                }
+            },
 
+			
 
 			getTask: async () => {
 
 				try
 				{
 
-					const response = await fetch(process.env.BACKEND_URL + '/api/task', {
+					const response = await fetch(process.env.BACKEND_URL + "api/task", {
+						
 						method: 'GET',
-						headers: {
-							"Content-Type": "application/json",
-						  },
-					}).then((response) => {
+						headers: {"Content-Type": "application/json"},
+						}).then((response) => {
 						if(response.ok) 
 							return response.json()
 						const data = response.json()
 						console.log(data);
 						
 						})
-				}catch (error) {
-					console.log(error)
-				}
+						} catch (error) {
+						console.log(error)
+						}
 			},
 				
 
 
 			addTask : async () => {
 				try {
-				  const response = await fetch(process.env.BACKEND_URL + '/api/task', {
+					const store = getStore();
+				  	const response = await fetch(process.env.BACKEND_URL + "api/task", {
 					method: "POST",
 					headers: {
 					  "Content-Type": "application/json",
 					},
-					body: JSON.stringify({'':'',
-						'userId': ''
-					}),
+					body: JSON.stringify(),
 				  });
 			  
 				  if (!response.ok) {
@@ -97,7 +87,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			  },
 
-			  updateTask : async (id) => {
+			  updateTask : async (id, newTaskName) => {
 				try {
 				  const updatedTasks = tasks.map((task) => {
 					if (task.id === id) {
@@ -106,7 +96,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return task;
 				  });
 			
-				  const response = await fetch(process.env.BACKEND_URL + '/api/task', {
+				  const response = await fetch(process.env.BACKEND_URL + 'api/task', {
 					method: "PUT",
 					headers: {
 					  "Content-Type": "application/json",
@@ -130,14 +120,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			  },
 
 
-			  handleChange: (e) => {
-				const {id, value} = e.target
+			 /* handleChange: (e) => {
+				const { id, value } = e.target;
 				const store = getStore()
-				const newTask = {...store.tasks, [id]: task}
+				const newTasks = {...store.tasks, [id]: value}
 
-				setStore({task: newTasks})
+				setStore({tasks: newTasks})
 				
-			},
+			},*/
 
 
 			
