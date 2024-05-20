@@ -11,7 +11,7 @@ import { Single } from "./pages/single";
 import { Role } from "./pages/choose_role";
 
 import {Dash} from "./pages/dashboard";
-import { Tasker } from "./pages/insertask";
+import { Tasker } from "./pages/inserTask";
 import injectContext from "./store/appContext";
 
 
@@ -33,7 +33,7 @@ const Layout = () => {
                         <Route element={<Role />} path="/chooseOne" />
 
                         <Route element={<Dash />} path="/dashboard" />
-                        <Route element={<Tasker />} path="/insertask" />
+                        <Route element={<Tasker />} path="/inserTask" />
 
 
                         <Route element={<Demo />} path="/demo" />
