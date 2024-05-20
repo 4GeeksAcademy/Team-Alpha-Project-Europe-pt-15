@@ -8,7 +8,7 @@ import "../../styles/index.css"
 import email from "../../img/icon_email.png"
 import password from "../../img/icon_pw.png"
 
-export const LogIn = () => {
+export const Login = () => {
 	const { store, actions } = useContext(Context);
 
 	return (

@@ -4,10 +4,10 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
-import { LogIn } from "./pages/logIn";
+import { Login } from "./pages/logIn";
 import { SignUp } from "./pages/signUp";
 import { Role } from "./pages/choose_role";
-import { Quests } from "./pages/dashboard_quests";
+import { Quests } from "./pages/quests";
 import {Dash} from "./pages/dashboard";
 import { Rewards } from "./pages/rewards"; 
 
@@ -26,11 +26,11 @@ const Layout = () => {
                 <ScrollToTop>
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route element={<LogIn />} path="/LogIn" />
-                        <Route element={<SignUp />} path="/SignUp" />
-                        <Route element={<Role />} path="/chooseOne" />
+                        <Route element={<Login />} path="/login" />
+                        <Route element={<SignUp />} path="/signup" />
+                        <Route element={<Role />} path="/role" />
                         <Route element={<Quests />} path="/quests" />
-                        <Route element={<Dash />} path="/Dashboard" />
+                        <Route element={<Dash />} path="/dashboard" />
                         <Route element={<Rewards />} path="/rewards" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
