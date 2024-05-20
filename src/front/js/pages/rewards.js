@@ -2,11 +2,14 @@ import React, { useContext, useEffect} from "react";
 import { Context } from "../store/appContext";
 
 import { RewardCard } from "../component/rewardCard";
+import { RewardModal } from "../component/rewardModal";
 
 export const Rewards = () => {
 
     const { store, actions } = useContext(Context);
 
+    
+    
     useEffect(()=>{
         actions.getRewards(1)
     },[]);
@@ -23,11 +26,13 @@ export const Rewards = () => {
             <div className="mx-auto p-2" style={{marginTop:"5%"}}>
                 <div style={{display:"flex", justifyContent:"center"}}><button className="bttn p-3 bg-black text-white">Actions</button></div>
                 <div style={{display:"flex", justifyContent:"center", marginTop:"30px"}}>
-                    <button className="bttn">Template</button>
+                    <button type="button" className="bttn" data-bs-toggle="modal" data-bs-target="#createReward">temporary modal</button>
                     <button className="bttn" style={{marginLeft:"30px"}}>Template</button>
                     <button className="bttn" style={{marginLeft:"30px"}}>Template</button>
                 </div>
             </div>
+            <RewardModal modalId="createReward" modalTittel="New Loot" placeholder="Here you can enter a new reward in to your loot table, these are incentives to get you motivated to finish your tasks, remember to chosee the rarity of your loot acording with the value it has to you and how hard it is to get."
+                />
         </div>
     )
 };

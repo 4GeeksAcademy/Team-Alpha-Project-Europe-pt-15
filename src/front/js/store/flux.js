@@ -255,14 +255,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					else{return console.log(false)}
 				}, "500");
 			},
-			createReward: (userId, label, difficulty)=>{
+			createReward: (userId, label, rarity)=>{
 				const store=getStore()
 				const action=getActions()
 
 				const reward ={
 					"label": label,
 					"user_id": userId,
-					"task_difficulty_id": difficulty
+					"rarity_id": rarity
 				}
 
 				fetch(process.env.BACKEND_URL + "/api/rewards", {
@@ -315,6 +315,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error('Couldnt delete the reward', err)
 				})
 			},
+			updateReward: (rewardId, rarityId, label)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				const updatedReward= {
+					"label": label,
+					"rarity_id": rarityId
+				}
+				
+				
+				
+				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
+					method: "PUT",
+					body: JSON.stringify(updatedReward),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			}
 
 
 		}
