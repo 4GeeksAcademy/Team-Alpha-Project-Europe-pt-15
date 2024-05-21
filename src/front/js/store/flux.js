@@ -8,8 +8,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
-			//user: null,
-			task:null,
+			user: null,
+			task: null,
 			
 			roles: [],
 			images: [barbarian, wizard, rogue]
@@ -32,12 +32,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getUser: async (userId) => {
                 try {
-                    const resp = await fetch(`/api/user/${userId}`);
+                    const resp = await fetch(process.env.BACKEND_URL + `/api/users/${userId}`);
                     if (!resp.ok) throw new Error('Failed');
                     const data = await resp.json();
                     setStore({ user: data });
-                } catch (error) {
-                    console.error(error);
+                	} catch (error) {
+                    console.log(error);
                 }
             },
 
@@ -141,7 +141,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			  
 
-			getRoles: () => {
+			/*getRoles: () => {
 				fetch(process.env.BACKEND_URL + "api/roles", {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
@@ -155,9 +155,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).catch((err) => {
 					console.error('Couldnt get classes from API', err)
 				})
-			},
+			},*/
 
-			addRole: (role) => {
+			/*addRole: (role) => {
 
 				//const user = localStorage.getItem('user_id')
 
@@ -176,9 +176,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).catch((err) => {
 					console.error('Couldnt add role to user', err)
 				})
-			},
+			},*/
 
-			getallMonsters: async ()=>{
+			/*getallMonsters: async ()=>{
 				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -194,9 +194,9 @@ const getState = ({ getStore, getActions, setStore }) => {
   				.then((result) => {setStore({allMonsters: result.results})
 				  console.log(store.allMonsters)})
   				.catch((error) => console.error(error));
-			},
+			},*/
 
-			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
+			/*getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
 				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and the form 1 to 24
 				const store=getStore()
 				const myHeaders = new Headers();
@@ -213,9 +213,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.then((result) => {setStore({encounterPool: result.results})
 					console.log(store.encounterPool)})
 				.catch((error) => console.error(error));
-			},
+			},*/
 
-			getMonsterByIndex: (index)=>{
+			/*getMonsterByIndex: (index)=>{
 				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -230,7 +230,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.then((response) => response.text())
 				.then((result) => console.log(result))
 				.catch((error) => console.error(error));	
-			},
+			},*/
 		}
 	};
 };

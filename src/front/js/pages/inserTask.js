@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export const Tasker = () => {
 
     const { store, actions } = useContext(Context);
-    const {tasks} = store;
+    /*const {tasks} = store;
       
   
     const {addTask, getTask, updateTask, getUsers, getLevel, handleChange, label } = actions;
@@ -60,5 +60,5 @@ export const Tasker = () => {
             </div>
         </div>
     </div>
-</div>
+</div>*/
 }

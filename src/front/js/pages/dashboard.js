@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/index.css";
 import "../../styles/dashboard.css";
@@ -6,8 +6,13 @@ import { Link } from "react-router-dom";
 
 export const Dash = () => {
   const { store, actions } = useContext(Context);
-  const { tasks } = store;
-  const { addTask, getTask, updateTask, getUsers, getLevel, handleChange, label } = actions;
+  const { user } = store;
+  const {  getUser } = actions;
+
+  useEffect(() => {
+  
+    actions.getUser(1); 
+  }, [actions])
 
   return (
     <>
@@ -15,22 +20,18 @@ export const Dash = () => {
         <div className="row d-flex">
           <div className="col-sm-4 leftBar bg-custom-red">
             <div className="align-items-center">
-              <img
-                className="Axe"
-                alt="Axe"
-                src="/workspaces/Team-Alpha-Project-Europe-pt-15/src/front/img/icon_pw.png"
-                ></img>
+              
               </div>
 
               <div className="headerDashBoard">
-              <div className="card m-2">Username: .username{store.user}</div>
+              <div className="card m-2">Username: {}</div>
               <div className="d-inline-flex">
-                <div className="card m-2">Lvl: .level{store.user}</div>
-                <div className="card mt-2">Role: .role{store.user}</div>
+                <div className="card m-2">Lvl: {store.user}</div>
+                <div className="card mt-2">Role: {store.user}</div>
               </div>
 
               <div className="card mt-2">
-                Energy: .energy{store.user}
+                Energy: {store.user}
                 <div className="mt-2">XP: .experience{store.user}</div>
               </div>
 
