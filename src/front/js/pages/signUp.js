@@ -1,9 +1,18 @@
-import React, { useState } from "react";
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { Context } from "../store/appContext"
 
-import "../../styles/signUp.css";
+import "../../styles/index.css";
+
+import email from "../../img/icon_email.png"
+import password from "../../img/icon_pw.png"
+import confirmPassword from "../../img/icon_pwc.png"
+import user from "../../img/icon_user.png"
+
 
 export const SignUp = () => {
+  const {store, actions} = useContext(Context)
+
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
@@ -30,68 +39,73 @@ export const SignUp = () => {
       : "";
 
   return (
-    <div className="container">
-      <h1 className="mt-5 signup-title">Sign Me Up</h1>
-      <div className="row">
-        <div className="col-2"></div>
-        <div className="col-8">
-          <form>
-            <div className="form-group">
-              <label htmlFor="userName">User Name</label>
-              <input
-                type="text"
-                className="form-control"
-                id="userName"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Choose Password</label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                onChange={handleChange}
-                required
-                minLength={8}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                className={`form-control ${confirmPasswordClass}`}
-                id="confirmPassword"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <input type="checkbox" id="tandc" required />
-            <label htmlFor="tandc">Please confirm the <Link to={'/'}>Terms and Condition</Link></label>
-            <button
-              type="submit"
-              className="btn btn-primary mt-2"
-              style={{ width: "100%" }}
-              disabled={isButtonDisabled}
-            >
-              Sign Up
-            </button>
-          </form>
+    <div className="bg-green">
+      <form className="col-md-4 m-3 gap-4 mx-auto card">
+        <h1>Sign Me Up</h1>
+        <div className="d-inline card">
+          <img className="col-auto"
+            src={user} alt="user icon"
+          />
+          <input
+            type="text"
+            className="col-9"
+            id="userName"
+            placeholder="username"
+            onChange={handleChange}
+            required
+          />
         </div>
-        <div className="col-2"></div>
-      </div>
+        <div className="d-inline card">
+          <img className="col-auto"
+            src={email} alt="email icon"
+          />
+          <input
+            type="email"
+            className="col-9"
+            id="email"
+            placeholder="email"
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="d-inline card">
+          <img className="col-auto"
+            src={password} alt="password icon"
+          />
+            <input
+              type="password"
+              className="col-9"
+              id="password"
+              placeholder="password"
+              onChange={handleChange}
+              required
+              minLength={8}
+            />
+        </div>
+        <div className="d-inline card">
+          <img className="col-auto"
+            src={confirmPassword} alt="conbfirmpassword icon"
+          />
+          <input
+            type="password"
+            className={`col-9 ${confirmPasswordClass}`}
+            id="confirmPassword"
+            placeholder="confirm password"
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <input type="checkbox" id="tandc" required />
+        <label htmlFor="tandc">
+          Please confirm the <Link to={"/"}>Terms and Condition</Link>
+        </label>
+        <button
+          type="submit" 
+          className="card bg-purple"
+        >
+          <h5 className="m-auto">Gotcha</h5>
+        </button>
+      </form>
     </div>
   );
 };
-
