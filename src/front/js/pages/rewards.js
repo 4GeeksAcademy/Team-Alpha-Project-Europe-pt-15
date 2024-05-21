@@ -40,10 +40,7 @@ export const Rewards = () => {
                     <button className="bttn" style={{marginLeft:"30px"}}>Template</button>
                     <button className="bttn" style={{marginLeft:"30px"}}>Template</button>
                 </div>
-            </div>
-
-            {/* this modal is to create rewards */}
-           
+            </div>  
         </div>
     )
 };
