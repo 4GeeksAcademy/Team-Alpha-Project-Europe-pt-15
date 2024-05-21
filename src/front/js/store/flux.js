@@ -8,7 +8,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
-			user: null,
+			//user: null,
+			task:null,
 			
 			roles: [],
 			images: [barbarian, wizard, rogue]
@@ -42,7 +43,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			
 
-			getTask: async () => {
+		/*	 getTask: async () => {
 
 				try
 				{
@@ -65,7 +66,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				
 
 
-			addTask : async () => {
+			addTask : async (label, user_id, task_difficulty_id) => {
 				try {
 					const store = getStore();
 				  	const response = await fetch(process.env.BACKEND_URL + "api/task", {
@@ -73,7 +74,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					headers: {
 					  "Content-Type": "application/json",
 					},
-					body: JSON.stringify(),
+					body: JSON.stringify({
+						label:label,
+						user_id:user_id,
+						task_difficulty_id: task_difficulty_id
+					}),
 				  });
 			  
 				  if (!response.ok) {
@@ -81,7 +86,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  }
 			  
 				  const data = await response.json();
-				  console.log(data)
+				  console.log(data);
+				  getStore();
+					setStore({ tasks: [...store.tasks, data] });
+
 				} catch (error) {
 				  console.error(error);
 				}
@@ -120,7 +128,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			  },
 
 
-			 /* handleChange: (e) => {
+			  handleChange: (e) => {
 				const { id, value } = e.target;
 				const store = getStore()
 				const newTasks = {...store.tasks, [id]: value}

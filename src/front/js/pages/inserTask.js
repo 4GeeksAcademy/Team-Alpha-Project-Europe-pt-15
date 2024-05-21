@@ -8,6 +8,14 @@ export const Tasker = () => {
 
     const { store, actions } = useContext(Context);
     const {tasks} = store;
+      
+  
+    const {addTask, getTask, updateTask, getUsers, getLevel, handleChange, label } = actions;
+
+    const handleSubmit = (e) => {
+		e.preventDefault();
+		actions.addTask(label, userId, taskDifficultyId);
+	};
 
         return <div className="container-fluid text-center"> 
             <div className="row bg-custom-purple">
@@ -23,7 +31,7 @@ export const Tasker = () => {
             required
             //maxLength={}
             //value={label}
-            //onChange={}
+            //onChange={(e) => setTaskLabel(e.target.value)}
 
             ></textarea>
             </div>
@@ -33,18 +41,18 @@ export const Tasker = () => {
             <div className="d-flex justify-content-evenly"> 
         
             <div className="btn bttn"
-            //onclick={}
+            //onclick={() => setTaskDifficulty("Easy")}
             >Easy</div> 
             <div className="btn bttn"
-            //onclick={}
+            //onclick={() => setTaskDifficulty("Medium")}
             >Medium</div> 
             <div className="btn bttn"
-            //onclick={}
+            //onclick={() => setTaskDifficulty("Hard")}
             >Hard</div>
             </div>
 
             <div className="btn bttn text-center bg-custom-yellow m-2 mt-3"
-            //onclick={store.actions.addtask}
+            onclick={handleSubmit}
             ><h3 className="addTaskBtn">Add it!</h3> </div>
 
 
