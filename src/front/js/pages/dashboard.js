@@ -9,11 +9,6 @@ export const Dash = () => {
   const { user } = store;
   const {  getUser } = actions;
 
-  useEffect(() => {
-  
-    actions.getUser(1); 
-  }, [actions])
-
   return (
     <>
       <div className="container">
@@ -52,7 +47,7 @@ export const Dash = () => {
                     <div className="slider"></div>
                   </div>
                </div>
-            <div className="card">getTask(){}</div>
+            <div className="card">getTask{}</div>
           </div>
         </div>
       </div>

@@ -30,16 +30,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getUser: async (userId) => {
-                try {
-                    const resp = await fetch(process.env.BACKEND_URL + `/api/users/${userId}`);
-                    if (!resp.ok) throw new Error('Failed');
-                    const data = await resp.json();
-                    setStore({ user: data });
-                	} catch (error) {
-                    console.log(error);
-                }
-            },
+			getUser: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/`, {
+						method: 'GET',
+						headers: { "Content-Type": "application/json" }
+					});
+			
+					if (!response.ok) {
+						throw new Error(response.status);
+					}
+			
+					const data = await response.json();
+					console.log(data);
+					
+					setStore({ user: data});
+
+				} catch (error) {
+					console.error('Error fetching user:', error);
+				}
+			},
+			
+		
 
 			
 
@@ -141,7 +153,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			  
 
-			/*getRoles: () => {
+			getRoles: () => {
 				fetch(process.env.BACKEND_URL + "api/roles", {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
@@ -155,7 +167,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).catch((err) => {
 					console.error('Couldnt get classes from API', err)
 				})
-			},*/
+			},
 
 			/*addRole: (role) => {
 

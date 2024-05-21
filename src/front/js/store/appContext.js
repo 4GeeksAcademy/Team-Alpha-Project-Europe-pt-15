@@ -30,7 +30,7 @@ const injectContext = PassedComponent => {
 			 **/
 			
 			
-			//state.actions.getMessage();
+			state.actions.getMessage();
 			//state.actions.getRoles();
 			state.actions.getUser();
 		}, []);
