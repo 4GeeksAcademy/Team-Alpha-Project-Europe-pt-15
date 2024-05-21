@@ -6,12 +6,10 @@ export const RewardCard =({label,index,rarityId,id})=>{
 
     const { store, actions } = useContext(Context);
 
-
-    
-    
     const rarityColor=()=>{
 
         if(rarityId == 1){return (
+
             <div className="card-header bg-yellow"><button className="bttn circle"><i className="far fa-star"></i></button>
             <button data-bs-toggle="modal" data-bs-target="#updateReward" className="bttn circle" style={{float:"right"}} onClick={()=>actions.setRewardId(id)}><i className="fas fa-ellipsis-h"></i></button></div>              
          )}
@@ -23,20 +21,15 @@ export const RewardCard =({label,index,rarityId,id})=>{
         else{return (
             <div className="card-header bg-purple"><button className="bttn circle"><i className="fas fa-star"></i></button>
             <button data-bs-toggle="modal" data-bs-target="#updateReward" className="bttn circle" style={{float:"right"}} onClick={()=>actions.setRewardId(id)}><i className="fas fa-ellipsis-h"></i></button></div>                              
+
         )}
 
-    }
-    
-    
-    
-    
-    
-    
+    }  
     
     return (
         <>
         <div className="col" key={index}> 
-            <div className="card mb-3">
+            <div className="card">
                 {rarityColor()}              
                     <div className="card-body">
                     <p className="card-text">{label}</p>

@@ -8,15 +8,15 @@ import "../../styles/index.css"
 import email from "../../img/icon_email.png"
 import password from "../../img/icon_pw.png"
 
-export const LogIn = () => {
+export const Login = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
 		<>
-		<form onSubmit={actions.Login} className="col-md-4 m-3 gap-4 mx-auto card">
+		<form onSubmit={actions.Login} className="col-md-4 mx-auto p-5 gap-4 card">
 			<h1> Log in</h1>
-			<div className="d-inline card">
-				<img className="col-auto"
+			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
+				<img
 					src={email} alt="email icon"
 				/>
 				<input type="text" id="email" placeholder="email" className="col-9"
@@ -24,8 +24,8 @@ export const LogIn = () => {
 				onChange={event => actions.getInput(event)}
 				required/>
 			</div>
-			<div className="d-inline card">
-				<img className="col-auto"
+			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
+				<img
 					src={password} alt="email icon"
 				/>
 				<input type="password" id="password" placeholder="password" className="col-9"
@@ -33,9 +33,9 @@ export const LogIn = () => {
 				onChange={event => actions.getInput(event)}
 				required/>
 			</div>
-			<button type="submit" className="card bg-yellow">
+			<div type="submit" className="card p-3 text-center bg-yellow">
 				<h5>Let's go!</h5>
-			</button>
+			</div>
 			<div className="text-center">
 				<p>Not part of the crew yet?
 					<Link to={'/signUp'} className="txt-purple"> Sign up here!</Link>
