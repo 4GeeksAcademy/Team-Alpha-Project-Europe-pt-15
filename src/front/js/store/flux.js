@@ -12,6 +12,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			encounterPool: null,
 			bestiary: null,
 			rewards: null,
+			rarityId: null,
+			rewardId:null,	
 			roles: [],
 			images: [barbarian, wizard, rogue],
 			inputs: {},
@@ -255,14 +257,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					else{return console.log(false)}
 				}, "500");
 			},
-			createReward: (userId, label, difficulty)=>{
+			createReward: (userId, label, rarity)=>{
 				const store=getStore()
 				const action=getActions()
 
 				const reward ={
 					"label": label,
 					"user_id": userId,
-					"task_difficulty_id": difficulty
+					"rarity_id": rarity
 				}
 
 				fetch(process.env.BACKEND_URL + "/api/rewards", {
@@ -315,6 +317,61 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error('Couldnt delete the reward', err)
 				})
 			},
+			updateReward: (rewardId, label, rarityId)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				const updatedReward= {
+					"label": label,
+					"rarity_id": rarityId
+				}
+				
+				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
+					method: "PUT",
+					body: JSON.stringify(updatedReward),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			selectRarity:(rarity)=>{
+				const store=getStore()
+				const action=getActions()
+				const rarityList= store.allRarities
+				for(let item of rarityList){
+					if(item.rarity_name === rarity){setStore({rarityId: item.id})}
+				}
+				return store.rarityId
+				
+				
+			},
+			getAllRarities: async ()=>{
+				const store=getStore()
+				const action=getActions()
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/rarity")
+					const data = await resp.json()
+					setStore({ allRarities: data})
+					// don't forget to return something, that is how the async resolves
+					console.log(store.allRarities)
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
+			setRewardId: (id)=>{
+				const store=getStore()
+				const action=getActions()
+				setStore({rewardId : id})
+			}
 
 
 		}
