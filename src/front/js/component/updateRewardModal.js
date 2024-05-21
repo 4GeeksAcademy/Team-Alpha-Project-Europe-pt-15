@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState} from "react";
 import { Context } from "../store/appContext";
 
-export const RewardModal=({modalId, modalTittel,placeholder,rewardfunction })=>{
+export const UpdateRewardModal=({modalId, modalTittel,placeholder,rarityId, id})=>{
     const { store, actions } = useContext(Context);
     const [label, setLabel]= useState("")
-    const [rarity, setRarity]= useState()
+    const [rarity, setRarity]= useState("")
 
 
 
@@ -25,9 +25,9 @@ export const RewardModal=({modalId, modalTittel,placeholder,rewardfunction })=>{
                             <button className="bttn" type="button" style={{marginLeft:"15px"}} onClick={()=>setRarity("legendary")}><i className="fas fa-star"></i>Legendary</button>
                         </div>
                         <button type="button" className="bttn bg-yellow" style={{marginTop:"50px", width:"200px", fontWeight:"bold"}}
-                            onClick={()=>{actions.createReward(1,label,actions.selectRarity(rarity))
-                            setTimeout(() =>window.location.reload(), "500")                            
-                            }}>Add It!</button>
+                            onClick={()=>{actions.updateReward(store.rewardId,label,actions.selectRarity(rarity))
+                                setTimeout(() =>window.location.reload() , "500")
+                            }}>Change It!</button>
                     </div>
                 </div>
             </div>

@@ -12,6 +12,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			encounterPool: null,
 			bestiary: null,
 			rewards: null,
+			rarityId: null,
+			rewardId:null,	
 			roles: [],
 			images: [barbarian, wizard, rogue],
 			inputs: {},
@@ -315,7 +317,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error('Couldnt delete the reward', err)
 				})
 			},
-			updateReward: (rewardId, rarityId, label)=>{
+			updateReward: (rewardId, label, rarityId)=>{
 				const store=getStore()
 				const action=getActions()
 				
@@ -323,8 +325,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					"label": label,
 					"rarity_id": rarityId
 				}
-				
-				
 				
 				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
 					method: "PUT",
@@ -339,6 +339,38 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   }).catch(error => {
 					   console.log(error);
 				   });
+			},
+			selectRarity:(rarity)=>{
+				const store=getStore()
+				const action=getActions()
+				const rarityList= store.allRarities
+				for(let item of rarityList){
+					if(item.rarity_name === rarity){setStore({rarityId: item.id})}
+				}
+				return store.rarityId
+				
+				
+			},
+			getAllRarities: async ()=>{
+				const store=getStore()
+				const action=getActions()
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/rarity")
+					const data = await resp.json()
+					setStore({ allRarities: data})
+					// don't forget to return something, that is how the async resolves
+					console.log(store.allRarities)
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
+			setRewardId: (id)=>{
+				const store=getStore()
+				const action=getActions()
+				setStore({rewardId : id})
 			}
 
 
