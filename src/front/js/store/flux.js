@@ -13,7 +13,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			bestiary: null,
 			rewards: null,
 			rarityId: null,
-			rewardId:null,	
+			rewardId:null,
+			tasks: [],
 			roles: [],
 			images: [barbarian, wizard, rogue],
 			inputs: {},
@@ -106,6 +107,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(message)
 				}).catch((err) => {
 					console.error('Couldnt add role to user', err)
+				})
+			},
+
+			getTaskList: async () => {
+
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 1
+
+				fetch(process.env.BACKEND_URL + "api/task/" + user, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response)
+					if(response.ok) return response.json()
+						console.log(response.json);
+					throw Error(response.status)
+				}).then((tasksData) => {
+					console.log(tasksData)
+					setStore({...getStore, tasks: tasksData})
+				}).catch((err) => {
+					console.error('Couldnt get classes from API', err)
 				})
 			},
 
@@ -281,7 +305,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
+
 			getRewards: async (userId)=>{
+
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 1
+
 				const store=getStore()
 				const action=getActions()
 
