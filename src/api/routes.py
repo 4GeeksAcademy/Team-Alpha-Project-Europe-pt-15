@@ -6,6 +6,8 @@ from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiar
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -14,6 +16,19 @@ CORS(api)
 
 
 ##  USER ROUTES  ##
+
+@api.route('/login', methods=['POST'])
+def login_user():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    user = User.query.filter_by(email=email, password=password).first()
+
+    if user is None:
+        return jsonify({"msg": "Email or Password is Wrong!"}), 401
+    
+    jwt_token = create_access_token(identity=user.id)
+    return jsonify({ "token": jwt_token, "user_id": user.id })
 
 @api.route("/users",  methods=['GET'])
 def get_all_users():

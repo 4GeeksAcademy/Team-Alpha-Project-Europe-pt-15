@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom'
 
-import "../../styles/signUp.css";
+import "../../styles/index.css";
 
-const SignUp = () => {
+export const SignUp = () => {
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
@@ -94,5 +94,3 @@ const SignUp = () => {
     </div>
   );
 };
-
-export default SignUp;
