@@ -6,11 +6,12 @@ from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiar
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
-
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -21,8 +22,24 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+
+##  USER ROUTES  ##
+
+@api.route('/login', methods=['POST'])
+def login_user():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    user = User.query.filter_by(email=email, password=password).first()
+
+    if user is None:
+        return jsonify({"msg": "Email or Password is Wrong!"}), 401
+    
+    jwt_token = create_access_token(identity=user.id)
+    return jsonify({ "token": jwt_token, "user_id": user.id })
+
 @api.route("/users",  methods=['GET'])
-def get_users():
+def get_all_users():
     users= User.query.all()
     all_users= list(map(lambda x: x.serialize(), users))
     return jsonify(all_users), 200
@@ -91,18 +108,36 @@ def update_user(user_id):
         old_user_obj.experience = new_updated_user['experience']
 
     if 'password' in new_updated_user:
-        old_user_obj.experience = new_updated_user['password']
+        old_user_obj.password = new_updated_user['password']
 
     db.session.commit()
 
     return jsonify({"msg": "User is Updated"}), 200
 
-@api.route("/roles",  methods=['GET'])
-def get_roles():
+
+##  ROLES ROUTES  ##
+
+@api.route("/roles", methods=['GET'])
+def get_roles_list():
     roles= Role.query.all()
     all_roles= list(map(lambda x: x.serialize(), roles))
     return jsonify(all_roles), 200
 
+@api.route('/roles/<int:user_id>/<int:role_id>', methods=['PUT'])
+def insert_user_role(user_id, role_id):
+    
+    user = User.query.get(user_id)
+
+    if user is None:
+        return "No User with id: " + str(user_id), 400
+
+    user.user_role = role_id
+
+    db.session.commit()
+
+    return jsonify({"msg": "Role added to user"}), 200
+
+## i don't think we need this
 @api.route("/roles",  methods=['POST'])
 def create_roles():
     new_role = request.get_json()
@@ -147,7 +182,7 @@ def get_role(role_id):
 
     return jsonify(one_role), 200
 
-
+# roles table is not meant to be edited 
 @api.route('/role/<int:role_id>', methods=['PUT'])
 def update_role(role_id):
 
@@ -180,12 +215,16 @@ def update_role(role_id):
 
     return jsonify({"msg": "role is Updated"}), 200
 
+
+##  TASK DIFFICULTY ROUTES  ##
+
 @api.route("/difficulty",  methods=['GET'])
 def get_difficulties():
     difficulties= Difficulty.query.all()
     all_difficulties= list(map(lambda x: x.serialize(), difficulties))
     return jsonify(all_difficulties), 200
 
+# i don't think we need this
 @api.route("/difficulty",  methods=['POST'])
 def create_difficulty():
     new_difficulty = request.get_json()
@@ -212,7 +251,7 @@ def create_difficulty():
     return jsonify({"msg": "New Difficulty is Created"}), 201
 
 @api.route('/difficulty/<int:difficulty_id>', methods=['GET'])
-def get_difficulty(difficulty_id):
+def get_single_difficulty(difficulty_id):
 
     difficulty = Difficulty.query.get(difficulty_id)
     if difficulty is None:
@@ -222,6 +261,7 @@ def get_difficulty(difficulty_id):
 
     return jsonify(one_difficulty), 200
 
+# i don't think we need this
 @api.route('/difficulty/<int:difficulty_id>', methods=['PUT'])
 def update_difficulty(difficulty_id):
 
@@ -244,6 +284,8 @@ def update_difficulty(difficulty_id):
 
     return jsonify({"msg": "difficulty is Updated"}), 200
 
+
+##  TASKS ROUTES  ##
 
 @api.route("/task",  methods=['GET'])
 def get_tasks():
@@ -322,12 +364,16 @@ def delete_task(task_id):
 
     return jsonify({"msg": "task is Deleted"}), 200
 
+
+##  REWARD RARITY ROUTES  ##
+
 @api.route("/rarity",  methods=['GET'])
 def get_rarities():
     rarity= Rarity.query.all()
     all_rarities= list(map(lambda x: x.serialize(), rarity))
     return jsonify(all_rarities), 200
 
+# i don't think we need this
 @api.route("/rarity",  methods=['POST'])
 def create_rarity():
     new_rarity = request.get_json()
@@ -360,6 +406,7 @@ def get_single_rarity(rarity_id):
 
     return jsonify(single_rarity), 200
 
+# i don't think we need this
 @api.route('/rarity/<int:rarity_id>', methods=['PUT'])
 def update_rarity(rarity_id):
 
@@ -380,6 +427,10 @@ def update_rarity(rarity_id):
 
     return jsonify({"msg": "rarity is Updated"}), 200
 
+
+##  REWARD ROUTES  ##
+
+# i don't think we need this
 @api.route("/rewards",  methods=['GET'])
 def get_rewards():
     rewards= Reward.query.all()
@@ -457,6 +508,10 @@ def delete_reward(reward_id):
 
     return jsonify({"msg": "reward is Deleted"}), 200
 
+
+##  MONSTERS ROUTES  ##
+
+# i don't think we need this
 @api.route("/bestiary",  methods=['GET'])
 def get_monsters():
     bestiary= Bestiary.query.all()
@@ -464,7 +519,7 @@ def get_monsters():
     return jsonify(all_monsters), 200
 
 @api.route("/bestiary",  methods=['POST'])
-def create_mosnter():
+def new_monster_aquired():
     new_monster = request.get_json()
 
     if 'monster_name' not in new_monster:
