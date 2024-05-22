@@ -1,0 +1,80 @@
+.bg-custom-red {
+    background: #eb1652 !important;
+  }
+  
+  .bg-custom-white {
+    background: #ffffff !important;
+  }
+  
+.user-panel{
+    max-width: 400px;
+    height: 100vh;
+    background: #eb1652 !important;
+    border-right: 3px solid black;
+}
+
+.img{
+    height: 150px;
+}
+
+.card-userName{
+    margin: 30px;  
+}
+
+.lvl-role{
+
+ display: flex;
+ justify-content: space-around;
+
+}
+
+.card-lvl{
+
+    width: 140px;
+}
+.card-role{
+    
+    width: 140px;
+}
+
+.card-user-power {
+
+    margin: 30px;  
+}
+
+.beast-board{
+
+    display: flex;
+} 
+
+.card-bestiary {
+
+    margin: 30px;
+    height: 80px;
+    width: 80px;
+
+}
+
+
+.card-beast{
+    width: 160px;
+    margin: 30px;
+    margin-bottom: 0px;
+}
+
+.card-something-else{
+
+    width: 160px;
+    margin: 30px;
+   margin-top: 10px;
+
+}
+
+.card-edit{
+
+    margin: 30px;
+}
+
+.card-edit{
+    background-color:  #FFC444;
+}

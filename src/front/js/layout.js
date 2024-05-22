@@ -4,17 +4,15 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
-
-import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 
 import { Login } from "./pages/logIn";
 import { SignUp } from "./pages/signUp";
 import { Role } from "./pages/choose_role";
 import { Quests } from "./pages/quests";
-import {Dash} from "./pages/dashboard";
+import { Dash } from "./pages/dashboard";
 import { Tasker } from "./pages/inserTask";
-import { Rewards } from "./pages/rewards"; 
+import { Rewards } from "./pages/rewards";
 
 import injectContext from "./store/appContext";
 
@@ -23,10 +21,10 @@ import injectContext from "./store/appContext";
 const Layout = () => {
     const basename = process.env.BASENAME || "";
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div>
+        <div className="h-100">
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Routes>
