@@ -8,9 +8,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				userName: "",
 				email: "",
 				password: "",
-				confirmPassword: "",
 			},
-			isButtonDisabled: true,
 			demo: [
 				{
 					title: "FIRST",
@@ -90,38 +88,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.then((result) => console.log(result))
 				.catch((error) => console.error(error));	
 			},
-			handleChange: (e) => {
-				const {id, value} = e.target
-				const store = getStore()
-				const newFormData = {...store.formData, [id]: value}
-
-				setStore({formData: newFormData})
-
-				if (id === "confirmPassword" && value !== store.formData.password) {
-					setStore({isButtonDisabled:true})
-				}else {
-					const isFormValid =
-						newFormData.userName &&
-						newFormData.email &&
-						newFormData.password &&
-						newFormData.confirmPassword &&
-						newFormData.password === newFormData.confirmPassword &&
-						newFormData.password.length >= 8
-					
-					setStore({ isButtonDisabled: !isFormValid });
+			/*createUser: async () => {
+				const store = getStore();
+				try {
+					const resp = await fetch(process.env.BACKEND_URL + "/api/users", {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							userName: store.formData.userName,
+							email: store.formData.email,
+							password: store.formData.password,
+						}),
+					})
+					if (!resp.ok) {
+						throw new Error("Failed to create user");
+					  }
+					const data = await resp.json();
+					console.log(data)
+				} catch (err) {
+					console.error(err)
 				}
-			},
-			handleSubmit: (e) => {
-				e.preventDefault()
-				const store = getStore()
-
-				if (store.formData.password !== store.formData.confirmPassword) {
-					alert("Passwords not match!")
-					return
-				}
-
-				console.log("Form submitted", store.formData);
-			}
+			}*/
+			
 		}
 	};
 };

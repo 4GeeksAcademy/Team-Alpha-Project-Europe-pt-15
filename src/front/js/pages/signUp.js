@@ -38,9 +38,15 @@ export const SignUp = () => {
       ? "border border-danger"
       : "";
 
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(store.formData);
+        await actions.createUser();
+      };
+
   return (
-    <div className="bg-green">
-      <form className="col-md-4 m-3 gap-4 mx-auto card">
+    <div className="m-0">
+      <form className="col-md-4 m-3 gap-1 mx-auto card" onSubmit={handleSubmit}>
         <h1>Sign Me Up</h1>
         <div className="d-inline card">
           <img className="col-auto"
@@ -52,6 +58,7 @@ export const SignUp = () => {
             id="userName"
             placeholder="username"
             onChange={handleChange}
+            value={formData.userName}
             required
           />
         </div>
@@ -65,6 +72,7 @@ export const SignUp = () => {
             id="email"
             placeholder="email"
             onChange={handleChange}
+            value={formData.email}
             required
           />
         </div>
@@ -78,6 +86,7 @@ export const SignUp = () => {
               id="password"
               placeholder="password"
               onChange={handleChange}
+              value={formData.password}
               required
               minLength={8}
             />
@@ -92,13 +101,16 @@ export const SignUp = () => {
             id="confirmPassword"
             placeholder="confirm password"
             onChange={handleChange}
+            value={formData.confirmPassword}
             required
           />
         </div>
-        <input type="checkbox" id="tandc" required />
-        <label htmlFor="tandc">
-          Please confirm the <Link to={"/"}>Terms and Condition</Link>
-        </label>
+        <div className="d-flex">
+          <input type="checkbox" id="tandc" required />
+          <label htmlFor="tandc" className="mx-2">
+            Please confirm the <Link to={"/"}>Terms and Condition</Link>
+          </label>
+        </div>
         <button
           type="submit" 
           className="card bg-purple"
