@@ -8,43 +8,49 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
-			user: null,
 			task: null,
-			
 			roles: [],
-			images: [barbarian, wizard, rogue]
+			images: [barbarian, wizard, rogue],
+			users:[],
+			user:null,
+			loggedInUser:null
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + 'api/hello')
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
-
-			getUser: async () => {
+			getUsers: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/`, {
-						method: 'GET',
-						headers: { "Content-Type": "application/json" }
-					});
+					 const response = await fetch(`${process.env.BACKEND_URL}/api/users/`, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" }
+					 });
 			
 					if (!response.ok) {
 						throw new Error(response.status);
 					}
 			
-					const data = await response.json();
-					console.log(data);
+					 const data = await response.json();
+				
 					
-					setStore({ user: data});
+					setStore({ ...getStore(),users: data});
+
+				} catch (error) {
+					console.error('Error fetching user:', error);
+				}
+			},
+			getUser: async (userId) => {
+				try {
+					 const response = await fetch(`${process.env.BACKEND_URL}/api/user/${userId}`, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" }
+					 });
+			
+					if (!response.ok) {
+						throw new Error(response.status);
+					}
+			
+					 const data = await response.json();
+					
+					
+					setStore({ ...getStore(),user: data});
 
 				} catch (error) {
 					console.error('Error fetching user:', error);

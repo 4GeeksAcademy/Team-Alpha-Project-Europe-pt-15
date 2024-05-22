@@ -31,6 +31,7 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
 
                         <Route element={<Role />} path="/chooseOne" />
+                       
 
                         <Route element={<Dash />} path="/dashboard" />
                         <Route element={<Tasker />} path="/inserTask" />

@@ -7,7 +7,9 @@ import { Link } from "react-router-dom";
 export const Dash = () => {
   const { store, actions } = useContext(Context);
   const { user } = store;
-  const {  getUser } = actions;
+   const {  getUser } = actions;
+
+
 
   return (
     <>
