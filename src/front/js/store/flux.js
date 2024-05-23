@@ -21,7 +21,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rarityId: null,
 			rewardId: null,
 			roles: [],
-			images: [barbarian, wizard, rogue],
 			inputs: {},
 
 		},

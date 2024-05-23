@@ -1,4 +1,5 @@
 import React from "react";
+//import iconUser from '../../img/icon_user.png';
 
 // import "../../../styles/index.css";
 // import "../../../styles/dashboard.css";
@@ -8,13 +9,15 @@ import "./styles.css";
 export const UserPanel = (props) => {
     const { user } = props
 
+
     return (
 
 
         <div className="user-panel">
             <div className="imageRole">
-                <div className="align-items-center">
-                    <div className="img"></div>
+                <i className="fa-solid fa-remove icone btn"></i>
+                <div className="img align-items-center">
+                    <img />
                 </div>
 
                 <div className="headerDashBoard">
