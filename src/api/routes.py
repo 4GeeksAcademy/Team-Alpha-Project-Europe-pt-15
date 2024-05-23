@@ -74,8 +74,11 @@ def get_user(user_id):
     user = User.query.get(user_id)
     if user is None:
         return "No People with id: " + str(user_id), 400
-    
+
+    role = Role.query.get(user.user_role)
+
     one_user = user.serialize()
+    one_user.update({"role": role.name})
 
     return jsonify(one_user), 200
 

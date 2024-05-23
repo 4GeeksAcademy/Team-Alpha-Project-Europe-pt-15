@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 
 import { Navbar } from "../component/navbar_dashboard";
@@ -11,7 +11,7 @@ export const Rewards = () => {
     const { store, actions } = useContext(Context);
    
     
-    useEffect(()=>{
+    useEffect(() => {
         actions.getRewards()
         actions.getAllRarities()
     },[]);
@@ -20,13 +20,14 @@ export const Rewards = () => {
     
     return (
 		<>
-        <Navbar />
+        <Navbar use="rewards"/>
 		<div className="row row-cols-1 row-cols-md-4 g-4">
 			{store.rewards?.map((item,index)=>(
 				<DashCard
+					use="rewards"
 					id={item.id}
-					label={item.label}
 					key={index}
+					label={item.label}
 					rank={item.rarity_id}
 				/>
 			))}
@@ -34,5 +35,3 @@ export const Rewards = () => {
 		</>
 	);
 };
-
-//<RewardModal modalId="createReward" modalTittel="New Loot" placeholder="Here you can enter a new reward in to your loot table, these are incentives to get you motivated to finish your tasks, remember to chosee the rarity of your loot acording with the value it has to you and how hard it is to get."/>

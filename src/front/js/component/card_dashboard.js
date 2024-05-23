@@ -1,35 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 
-export const DashCard =({id,label,index,rank})=>{
+export const DashCard =({use, id, key, label, rank, done})=>{
 
     const { store, actions } = useContext(Context);
 
-    let cardClass="";
-    let iconClass="";
+    let cardColor = actions.getCardColor(use, rank, done)
+    let cardIcon = actions.getCardIcon(use, rank, done)
 
-    switch(rank){
-        case 1:
-            cardClass = "bg-yellow"
-            iconClass = "far fa-star"
-            break;
-        case 2:
-            cardClass = "bg-green"
-            iconClass = "fas fa-star-half-alt"
-            break;
-        default:
-            cardClass = "bg-purple"
-            iconClass = "fas fa-star"
-            break;
-    }
-    
     return (
         <>
-        <div className="col" key={index}> 
+        <div className="col" key={key}> 
             <div className="card">
-            <div className={`card-header d-flex flex-row justify-content-between p-3 ${cardClass}`}>
+            <div className={`card-header d-flex flex-row justify-content-between p-3 ${cardColor}`}>
                 <div className="card circle">
-                <i className={iconClass}></i>
+                <i className={cardIcon}></i>
                 </div>
                 <button className="card circle"
                     data-bs-toggle="modal" data-bs-target="">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import barbarian from "../../img/icon_user.png"
-import wizard from "../../img/icon_email.png"
+import barbarian from "../../img/axe1.png"
+import wizard from "../../img/magic2.png"
 import rogue from "../../img/icon_pwc.png"
 
 
@@ -14,6 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rewards: null,
 			rarityId: null,
 			rewardId:null,
+			user: [],
 			tasks: [],
 			roles: [],
 			images: [barbarian, wizard, rogue],
@@ -47,6 +48,56 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({...getStore,inputs: {}})
 			},
 
+			getCardColor: (use, rank, done) => {
+
+				let cardColor="";
+
+				if (use === "rewards" || use === "tasks" && done === true) {
+					switch(rank){
+						case 1:
+							cardColor = "bg-yellow"
+							break;
+						case 2:
+							cardColor = "bg-green"
+							break;
+						case 3:
+							cardColor = "bg-purple"
+							break;
+						default:
+							cardColor = null
+							break;
+					}
+				} else cardColor= null
+		
+				return cardColor
+			},
+
+			getCardIcon: (use, rank, done) => {
+
+				let cardIcon="";
+
+				if (use === "rewards" || use === "tasks" && done === false) {
+					switch(rank){
+						case 1:
+							cardIcon = "far fa-star"
+							break;
+						case 2:
+							cardIcon = "fas fa-star-half-alt"
+							break;
+						case 3:
+							cardIcon = "fas fa-star"
+							break;
+						default:
+							cardIcon = "fa-solid fa-question"
+							break;
+					}
+				} else {
+					cardIcon = "fa-solid fa-check"
+				}
+		
+				return cardIcon
+			},
+
 			Login: (event) => {
 				event.preventDefault()
 
@@ -60,12 +111,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}),
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response);
 					getActions().resetInput();
 					if(response.ok) return response.json();
 					throw Error(response.status)
 				}).then((loginData) => {
-					console.log(' Response From Backend', loginData)
 					localStorage.setItem('jwt-token', loginData.token)
 					localStorage.setItem('user', loginData.user_id)
 				}).catch((err) => {
@@ -78,11 +127,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response);
 					if(response.ok) return response.json()
 					throw Error(response.status)
 				}).then((rolesData) => {
-					console.log(rolesData);
 					setStore({...getStore, roles: rolesData})
 				}).catch((err) => {
 					console.error('Couldnt get classes from API', err)
@@ -100,13 +147,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 					method: 'PUT',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response);
 					if(response.ok) return response.json()
 					throw Error(response.status)
 				}).then((message) => {
 					console.log(message)
 				}).catch((err) => {
 					console.error('Couldnt add role to user', err)
+				})
+			},
+
+			getUserData: async () => {
+
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 1
+
+				fetch(process.env.BACKEND_URL + "api/user/" + user, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					if(response.ok) return response.json()
+						console.log(response.json);
+					throw Error(response.status)
+				}).then((userData) => {
+					setStore({...getStore, user: userData})
+				}).catch((err) => {
+					console.error('Couldnt get classes from API', err)
 				})
 			},
 
@@ -121,12 +188,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response)
 					if(response.ok) return response.json()
 						console.log(response.json);
 					throw Error(response.status)
 				}).then((tasksData) => {
-					console.log(tasksData)
 					setStore({...getStore, tasks: tasksData})
 				}).catch((err) => {
 					console.error('Couldnt get classes from API', err)
@@ -306,7 +371,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   });
 			},
 
-			getRewards: async (userId)=>{
+			getRewards: async ()=>{
 
 				//const user = localStorage.getItem('user_id')
 
@@ -316,16 +381,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store=getStore()
 				const action=getActions()
 
-				fetch(process.env.BACKEND_URL + "/api/rewards/"+userId, {
+				fetch(process.env.BACKEND_URL + "/api/rewards/" + user, {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response);
 					if(response.ok) return response.json()
 					throw Error(response.status)
 				}).then((rewardList) => {
 					setStore({rewards: rewardList })
-					console.log(store.rewards);
 				}).catch((err) => {
 					console.error('Couldnt get rewards from API', err)
 				})
@@ -392,7 +455,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					setStore({ allRarities: data})
 					// don't forget to return something, that is how the async resolves
-					console.log(store.allRarities)
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)

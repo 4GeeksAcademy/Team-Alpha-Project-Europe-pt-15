@@ -15,27 +15,27 @@ export const Login = () => {
 		<>
 		<form onSubmit={actions.Login} className="col-md-4 mx-auto p-5 gap-4 card">
 			<h1> Log in</h1>
+			{/* email input */}
 			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
-				<img
-					src={email} alt="email icon"
-				/>
+				<img src={email} alt="email icon" />
 				<input type="text" id="email" placeholder="email" className="col-9"
 				value={store.inputs.email || ""} 
 				onChange={event => actions.getInput(event)}
 				required/>
 			</div>
+			{/* password input */}
 			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
-				<img
-					src={password} alt="email icon"
-				/>
+				<img src={password} alt="email icon" />
 				<input type="password" id="password" placeholder="password" className="col-9"
 				value={store.inputs.password || ""} 
 				onChange={event => actions.getInput(event)}
 				required/>
 			</div>
+			{/* submit */}
 			<div type="submit" className="card p-3 text-center bg-yellow">
 				<h5>Let's go!</h5>
 			</div>
+			{/* signup and forgot */}
 			<div className="text-center">
 				<p>Not part of the crew yet?
 					<Link to={'/signUp'} className="txt-purple"> Sign up here!</Link>

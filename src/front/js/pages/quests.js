@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 
@@ -9,20 +9,22 @@ import { DashCard } from "../component/card_dashboard";
 export const Quests = () => {
 	const { store, actions } = useContext(Context);
 
-	useEffect(()=>{
+	useEffect(() => {
         actions.getTaskList()
     },[]);
 
 	return (
 		<>
-        <Navbar />
+        <Navbar use="tasks"/>
 		<div className="row row-cols-1 row-cols-md-4 g-4">
 			{store.tasks?.map((item,index)=>(
 				<DashCard
+					use="tasks"
 					id={item.id}
-					label={item.label}
 					key={index}
+					label={item.label}
 					rank={item.task_difficulty_id}
+					done={item.done}
 				/>
 			))}
 		</div>
