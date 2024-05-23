@@ -9,9 +9,6 @@ class Role(db.Model):
     name = db.Column(db.String(120), unique=True, nullable=False)
     description = db.Column(db.String(1000))
     passive = db.Column(db.String(120), unique=True, nullable=False)
-    hability_1 = db.Column(db.String(120), unique=True, nullable=False)
-    hability_2 = db.Column(db.String(120), unique=True, nullable=False)
-    hability_3 = db.Column(db.String(120), unique=True, nullable=False)
     
     def __repr__(self):
         return f'<Role {self.name}>'
@@ -21,15 +18,8 @@ class Role(db.Model):
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "passive": self.passive,
-            "hability_1": self.hability_1,
-            "hability_2": self.hability_2,
-            "hability_3": self.hability_3,
-
-           
+            "passive": self.passive,         
         }
-
-
 
 
 class User(db.Model):
@@ -60,6 +50,7 @@ class User(db.Model):
             # do not serialize the password, its a security breach
         }
 
+
 class Difficulty(db.Model):
     __tablename__ = "difficulty"
     id = db.Column(db.Integer, primary_key=True)
@@ -76,16 +67,15 @@ class Difficulty(db.Model):
             "id": self.id,
             "difficulty_name": self.difficulty_name,
             "experience_given": self.experience_given,
-            "energy_given": self.energy_given
-           
+            "energy_given": self.energy_given           
         }
     
-
 
 class Task(db.Model):
     __tablename__ = "task"
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(120), nullable=False)
+    done = db.Column(db.Boolean(), unique=False, nullable=False)
     task_difficulty_id = db.Column(db.Integer, db.ForeignKey('difficulty.id'))
     task_difficulty = db.relationship(Difficulty)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -98,6 +88,7 @@ class Task(db.Model):
         return {
             "id": self.id,
             "label": self.label,
+            "done": self.done,
             "user_id": self.user_id,
             "task_difficulty_id": self.task_difficulty_id
            
@@ -118,8 +109,7 @@ class Rarity(db.Model):
         return {
             "id": self.id,
             "rarity_name": self.rarity_name,
-            "energy_required": self.energy_required
-            
+            "energy_required": self.energy_required            
         }
 
 
@@ -140,10 +130,30 @@ class Reward(db.Model):
             "id": self.id,
             "label": self.label,
             "user_id": self.user_id,
-            "rarity_id": self.rarity_id
-
-            
+            "rarity_id": self.rarity_id            
         }
+
+
+class Hability(db.Model):
+    __tablename__ = "hability"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    effect = db.Column(db.Integer, db.ForeignKey('rarity.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    rarity = db.relationship(Rarity)
+    role = db.relationship(Role)
+    
+    def __repr__(self):
+        return f'<Hability {self.name}>'
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "effect": self.effect,  
+            "role": self.role_id,        
+        }
+
     
 class Bestiary(db.Model):
     __tablename__ = "bestiary"
@@ -161,6 +171,4 @@ class Bestiary(db.Model):
             "id": self.id,
             "monster_name": self.monster_name,
             "user_id": self.user_id,
-            
-
         }
