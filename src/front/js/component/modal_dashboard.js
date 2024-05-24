@@ -5,6 +5,8 @@ import { Context } from "../store/appContext";
 export const DashModal = ({id, label, tier, submit}) => {
     const { store, actions } = useContext(Context);
 
+    console.log(id, label, tier);
+
     return (
         <div className="modal fade" id={id} tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
@@ -20,7 +22,7 @@ export const DashModal = ({id, label, tier, submit}) => {
                             id="label"
                             value={store.inputs.label || ""}
                             onChange={event => actions.getInput(event)}
-                            required />
+                             />
                         {/* tier input */}
                         <div>
                             <h5>Tier</h5>
@@ -28,7 +30,7 @@ export const DashModal = ({id, label, tier, submit}) => {
                                 id="tier"
                                 value={store.inputs.tier || ""}
                                 onChange={event => actions.getInput(event)}
-                                required>
+                                 >
                                     {/* tier options */}
                                     {tier?.map( item => (
                                         <option value={item.id} key={item.id}>{item.name}</option>
@@ -36,7 +38,8 @@ export const DashModal = ({id, label, tier, submit}) => {
                             </select>
                         </div>                        
                         {/* submit */}
-                        <div type="submit" className="card p-2 text-center bg-yellow">
+                        <div type="submit" className="card p-2 text-center bg-yellow"
+                            data-bs-dismiss="modal" onClick={submit}>
                             <h5>Let's go!</h5>
                         </div>
                         {/* cancel */}
@@ -44,6 +47,17 @@ export const DashModal = ({id, label, tier, submit}) => {
                             data-bs-dismiss="modal" onClick={actions.resetInput}>
                             <h5>Nevermind</h5>
                         </div>
+                        {/* delete */}
+                        {view === "tasks"
+                        ?   <div type="reset" className="card p-2 text-center bg-red"
+                            data-bs-dismiss="modal" onClick={() => actions.deleteQuest(id)}>
+                                <h5>Delete</h5>
+                            </div>
+                        :   <div type="reset" className="card p-2 text-center bg-red"
+                            data-bs-dismiss="modal" onClick={() => actions.deleteReward(id)}>
+                                <h5>Delete</h5>
+                            </div>                        
+                        }
                     </form>
                 </div>
             </div>

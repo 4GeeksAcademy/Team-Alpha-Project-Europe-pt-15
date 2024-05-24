@@ -12,7 +12,7 @@ export const Rewards = () => {
     const { store, actions } = useContext(Context);
    
     useEffect(() => {
-        actions.getRewards()
+        actions.getRewardList()
 		actions.getRarities()
     },[]);
 
@@ -35,7 +35,7 @@ export const Rewards = () => {
 					id={item.id}
 					label={item.label}
 					tier={item.rarity_id}
-					modal={`#${editModal}`}
+					modal={`#editModal${item.id}`}
 				/>
 			))}
 		</div>
@@ -44,15 +44,18 @@ export const Rewards = () => {
 			id={createModal}
 			label="New Reward"
 			tier={store.rarities}
-			submit=""
+			submit={actions.createReward}
+			delete={actions.delete}
 		/>
 		{/* edit reward */}
+		{store.rewards?.map((item,index)=>(
 		<DashModal
-			id={editModal}
+			id={`#editModal${item.id}`}
 			label="Edit Reward"
 			tier={store.rarities}
 			submit=""
 		/>
+		))}
 		</>
 	);
 };

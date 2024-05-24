@@ -14,11 +14,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rewards: null,
 			rarityId: null,
 			rewardId:null,
+			difficulties: [],
 			rarities: [],
 			user: [],
 			tasks: [],
 			roles: [],
-			images: {"Barbarian": barbarian, "Wizard": wizard, "Rogue": rogue},
+			images: [barbarian, wizard, rogue],
 			inputs: {},
 
 		},
@@ -38,6 +39,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			// FORMS //
+
 			getInput: (event) => {
 				const name = event.target.id;
 				const value = event.target.value;
@@ -54,7 +57,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				if (passwordInput.type === "password") passwordInput.type = "text";
 				else passwordInput.type = "password";
-			},			  
+			},	
+			
+			// CONDITIONAL RENDERING //
 
 			getCardColor: (view, tier, done) => {
 
@@ -62,13 +67,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				if (view === "rewards" || view === "tasks" && done === true) {
 					switch(tier){
-						case 4:
+						case 1:
 							cardColor = "bg-yellow"
 							break;
-						case 5:
+						case 2:
 							cardColor = "bg-green"
 							break;
-						case 6:
+						case 3:
 							cardColor = "bg-purple"
 							break;
 						default:
@@ -86,13 +91,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				if (view === "rewards" || view === "tasks" && done === false) {
 					switch(tier){
-						case 4:
+						case 1:
 							cardIcon = "far fa-star"
 							break;
-						case 5:
+						case 2:
 							cardIcon = "fas fa-star-half-alt"
 							break;
-						case 6:
+						case 3:
 							cardIcon = "fas fa-star"
 							break;
 						default:
@@ -105,6 +110,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 		
 				return cardIcon
 			},
+
+			// AUTHENTICATION //
 
 			Login: (event) => {
 				event.preventDefault()
@@ -130,6 +137,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			},
 
+			// DB DATA //
+
+			getDifficulties: async ()=>{
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "api/difficulty")
+					const data = await resp.json()
+					setStore({...getStore, difficulties: data})
+					// don't forget to return something, that is how the async resolves
+					return data;
+				}catch(error){
+					console.log("Error loading difficulty table", error)
+				}
+			},
+			
 			getRarities: async ()=>{
 				try{
 					// fetching data from the backend
@@ -139,7 +161,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// don't forget to return something, that is how the async resolves
 					return data;
 				}catch(error){
-					console.log("Error loading message from backend", error)
+					console.log("Error loading rarity table", error)
 				}
 			},
 
@@ -157,12 +179,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			},
 
+			// USER //
+
 			addRole: (role) => {
+
+				//Yet to be changed to use update user route
 
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				const user = 1
 
 				fetch(process.env.BACKEND_URL + "roles/" + user + "/" + role, {
 					method: 'PUT',
@@ -182,7 +208,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				const user = 1
 
 				fetch(process.env.BACKEND_URL + "api/user/" + user, {
 					method: 'GET',
@@ -198,12 +224,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			},
 
+			// QUESTS //
+
 			getTaskList: async () => {
 
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				const user = 1
 
 				fetch(process.env.BACKEND_URL + "api/task/" + user, {
 					method: 'GET',
@@ -219,12 +247,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			},
 
-			getRewards: async ()=>{
+			// REWARDS //
+
+			getRewardList: async ()=>{
 
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				const user = 1
 
 				fetch(process.env.BACKEND_URL + "api/rewards/" + user, {
 					method: 'GET',
@@ -245,35 +275,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				const user = 1
 				const input = getStore().inputs
+
+				input.tier === undefined? input.tier = 1 : null
 
 				const reward ={
 					"label": input.label,
 					"user_id": user,
-					"rarity_id": input.rank
+					"rarity_id": input.tier
 				}
 
 				fetch(process.env.BACKEND_URL + "api/rewards", {
 					method: "POST",
 					body: JSON.stringify(reward),
 				   	headers: {"Content-Type": "application/json"}
-				   }).then(resp => {
-					   console.log(resp.ok);
-					   console.log(resp.status);
-					 return resp.json(); 
-				   }).then(data => {
-					   console.log(data); 
+				   }).then((response) => {
+					if(response.ok) return response.json()
+				   }).then(() => {
+					   getActions().getRewardList()
+					   getActions().resetInput()
 				   }).catch(error => {
 					   console.log(error);
 				   });
 			},
 
-			deleteRewards: (rewardId)=>{
-				const store=getStore()
-				const action=getActions()
+			deleteReward: (rewardId)=>{
 				
-				fetch(process.env.BACKEND_URL + "api/rewards/"+rewardId, {
+				fetch(process.env.BACKEND_URL + "api/rewards/" + rewardId, {
 					method: 'DELETE',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {

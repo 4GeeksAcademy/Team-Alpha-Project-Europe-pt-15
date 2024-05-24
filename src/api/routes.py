@@ -291,13 +291,13 @@ def update_difficulty(difficulty_id):
 '''
 
 ##  TASKS ROUTES  ##
-'''
+
 @api.route("/task",  methods=['GET'])
 def get_tasks():
     tasks= Task.query.all()
     all_tasks= list(map(lambda x: x.serialize(), tasks))
     return jsonify(all_tasks), 200
-'''
+
 
 @api.route("/task",  methods=['POST'])
 def create_task():
@@ -438,13 +438,13 @@ def update_rarity(rarity_id):
 ##  REWARD ROUTES  ##
 
 # i don't think we need this
-'''
+
 @api.route("/rewards",  methods=['GET'])
 def get_rewards():
     rewards= Reward.query.all()
     all_rewards= list(map(lambda x: x.serialize(), rewards))
     return jsonify(all_rewards), 200
-'''
+
 
 @api.route("/rewards",  methods=['POST'])
 def create_reward():

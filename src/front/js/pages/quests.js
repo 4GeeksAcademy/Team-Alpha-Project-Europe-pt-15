@@ -12,7 +12,7 @@ export const Quests = () => {
 
 	useEffect(() => {
         actions.getTaskList()
-		//actions.getDifficulties()
+		actions.getDifficulties()
     },[]);
 
     let view = "tasks"
@@ -35,7 +35,7 @@ export const Quests = () => {
 					label={item.label}
 					tier={item.task_difficulty_id}
 					done={item.done}
-					modal={`#${editModal}`}
+					modal={`#${item.id}`}
 				/>
 			))}
 		</div>
@@ -47,12 +47,15 @@ export const Quests = () => {
 			submit=""
 		/>
 		{/* edit quest */}
+		{store.tasks?.map(item =>(
 		<DashModal
-			id={editModal}
+			id={item.id}
+			view={view}
 			label="Edit Quest"
 			tier={store.difficulties}
 			submit=""
 		/>
+		))}
 		</>
 	);
 };
