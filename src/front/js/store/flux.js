@@ -12,6 +12,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			encounterPool: null,
 			task: null,
 			difficulty: null,
+			energy: null,
+			experience: null,
 			roles: [],
 			images: [barbarian, wizard, rogue],
 			users: [],
@@ -67,34 +69,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			addDif: async (difficulty_name, experience_given, energy_given) => {
+			updateUserExpDif: async (user_id, user, experience, energy) => {
 				try {
-					const store = getStore();
-					const response = await fetch(process.env.BACKEND_URL + "api/difficulty", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${user_id}`, {
+						method: 'PUT',
+						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({
-							'difficulty_name': difficulty_name,
-							'experience_given': experience_given,
-							'energy_given': energy_given
-						}),
+							...user,
+							experience: experience,
+							energy: energy
+						})
 					});
 
-					if (!response.ok) {
-						throw new Error("Failed to add task");
+					if (!resp.ok) {
+						throw new Error(`HTTP error! status: ${resp.status}`);
+
 					}
 
-					const data = await response.json();
-					console.log(data);
-					getStore();
-					setStore({ tasks: [...store.difficulty, data] });
-
+					const data = await resp.json();
+					console.log(data)
+					return data;
 				} catch (error) {
-					console.error(error);
+					console.error('Error updating user experience and energy:', error);
 				}
 			},
+
 
 
 
@@ -107,25 +106,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"Content-Type": "application/json",
 						},
 						body: JSON.stringify({
-							'label': label,
-							'user_id': user_id,
-							'task_difficulty_id': task_difficulty_id
+							label: label,
+							user_id: user_id,
+							task_difficulty_id: task_difficulty_id
 						}),
 					});
 
 					if (!response.ok) {
-						throw new Error("Failed to add task");
+						// Log the response status and status text for better debugging
+						throw new Error(`Failed to add task: ${response.status} ${response.statusText}`);
 					}
 
 					const data = await response.json();
 					console.log(data);
-					getStore();
+
+					// Update the store with the new task
 					setStore({ tasks: [...store.tasks, data] });
 
 				} catch (error) {
-					console.error(error);
+					console.error("Error adding task:", error);
 				}
 			},
+
 
 			/* getTask: async () => {
 				

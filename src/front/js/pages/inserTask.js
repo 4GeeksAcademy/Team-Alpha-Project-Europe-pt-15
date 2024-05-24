@@ -9,7 +9,8 @@ export const Tasker = () => {
     const { store, actions } = useContext(Context);
     const { task, difficulty } = store;
 
-
+    const [experience, setExperience] = useState(null);
+    const [energy, setEnergy] = useState(null);
     const [taskLabel, setTaskLabel] = useState('');
     const [taskDifficulty, setTaskDifficulty] = useState('');
     const [userId, setUserId] = useState('');
@@ -19,18 +20,31 @@ export const Tasker = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(taskDifficulty === 'easy') {
-            actions.addDif()
+
+        const difficultyLevels = {
+            easy: 12,
+            medium: 24,
+            hard: 60,
+        };
+
+        const value = difficultyLevels[taskDifficulty];
+
+        if (value) {
+            store.difficulty(value);
+            setExperience(value);
+            setEnergy(value);
+            store.energy();
+            store.experience();
         }
+
         if (taskLabel && taskDifficulty) {
-
-           // actions.addDif();
             actions.addTask(taskLabel, userId, taskDifficulty);
-
+            console.log(taskLabel);
         } else {
             alert("Please fill in all fields.");
         }
     };
+
 
 
     return <div className="container-fluid text-center">
