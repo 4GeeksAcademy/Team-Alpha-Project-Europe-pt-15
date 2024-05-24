@@ -24,16 +24,16 @@ export const Tasker = () => {
     };
 
 
-    return <div className="container-fluid text-center p-0 m-0 h-100">
+    return <div className="container-fluid text-center h-100">
         <div className="row bg-custom-purple h-100">
-            <div className="col h-100 align-self-center">
+            <div className="align-self-center">
 
-                <div className="card col-lg-3 d-lg-inline-flex h-75 gap-3 m-5 p-2">
+                <div className="card col-lg-3 d-lg-inline-flex h-75 gap-3 m-3 p-3">
 
                     <div className="title mt-5">
                         <h1 className="quest text-center font-weight-bold"> New Quest</h1></div>
 
-                    <div className="card cardLabel m-4">Name your quest over here!
+                    <div className="card cardLabel m-3 mb-1">Name your quest over here!
                         <textarea className="inpuTasker form-control border-0 shadow-none"
                             type="text"
                             required
@@ -44,7 +44,9 @@ export const Tasker = () => {
                         ></textarea>
                     </div>
 
-                    <div className="dif-title mt-1 mb-0"><h4 className="quest align-items-center mb-0 mt-3"> Difficulty</h4></div>
+                    <div className="dif-title mt-1 mb-0">
+                        <h4 className="quest align-items-center mb-0"> Difficulty</h4>
+                    </div>
 
                     <div className="d-flex justify-content-evenly">
 
@@ -59,7 +61,7 @@ export const Tasker = () => {
                         >Hard</div>
                     </div>
 
-                    <div className="card btn bttn text-center bg-custom-yellow m-2 mt-3"
+                    <div className="card btn bttn text-center bg-custom-yellow m-2 mt-5 mb-4 "
                         onClick={handleSubmit}
                     ><h3 className="addTaskBtn">Add it!</h3> </div>
 
