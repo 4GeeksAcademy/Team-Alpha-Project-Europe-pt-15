@@ -7,11 +7,12 @@
 }
 
 .icone{
+    
     display: flex;
     justify-content: end;
     margin-right: 80px;
     padding-top: 20px;
-    
+    border: hidden
     
 }
 
