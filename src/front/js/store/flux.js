@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import barbarian from "../../img/icon_user.png"
-import wizard from "../../img/icon_email.png"
+import barbarian from "../../img/axe.png"
+import wizard from "../../img/magic.png"
 import rogue from "../../img/icon_pwc.png"
 
 
@@ -14,9 +14,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rewards: null,
 			rarityId: null,
 			rewardId:null,
+			rarities: [],
+			user: [],
 			tasks: [],
 			roles: [],
-			images: [barbarian, wizard, rogue],
+			images: {"Barbarian": barbarian, "Wizard": wizard, "Rogue": rogue},
 			inputs: {},
 
 		},
@@ -26,7 +28,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
+					const resp = await fetch(process.env.BACKEND_URL + "api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
@@ -47,6 +49,63 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({...getStore,inputs: {}})
 			},
 
+			seePassword: () => {
+				let passwordInput = document.getElementById("password");
+
+				if (passwordInput.type === "password") passwordInput.type = "text";
+				else passwordInput.type = "password";
+			},			  
+
+			getCardColor: (view, tier, done) => {
+
+				let cardColor="";
+
+				if (view === "rewards" || view === "tasks" && done === true) {
+					switch(tier){
+						case 4:
+							cardColor = "bg-yellow"
+							break;
+						case 5:
+							cardColor = "bg-green"
+							break;
+						case 6:
+							cardColor = "bg-purple"
+							break;
+						default:
+							cardColor = null
+							break;
+					}
+				} else cardColor= null
+		
+				return cardColor
+			},
+
+			getCardIcon: (view, tier, done) => {
+
+				let cardIcon="";
+
+				if (view === "rewards" || view === "tasks" && done === false) {
+					switch(tier){
+						case 4:
+							cardIcon = "far fa-star"
+							break;
+						case 5:
+							cardIcon = "fas fa-star-half-alt"
+							break;
+						case 6:
+							cardIcon = "fas fa-star"
+							break;
+						default:
+							cardIcon = "fa-solid fa-question"
+							break;
+					}
+				} else {
+					cardIcon = "fa-solid fa-check"
+				}
+		
+				return cardIcon
+			},
+
 			Login: (event) => {
 				event.preventDefault()
 
@@ -60,12 +119,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}),
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response);
 					getActions().resetInput();
 					if(response.ok) return response.json();
 					throw Error(response.status)
 				}).then((loginData) => {
-					console.log(' Response From Backend', loginData)
 					localStorage.setItem('jwt-token', loginData.token)
 					localStorage.setItem('user', loginData.user_id)
 				}).catch((err) => {
@@ -73,16 +130,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			},
 
-			getRoles: () => {
+			getRarities: async ()=>{
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "api/rarity")
+					const data = await resp.json()
+					setStore({...getStore, rarities: data})
+					// don't forget to return something, that is how the async resolves
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
+
+			getRoles: async () => {
 				fetch(process.env.BACKEND_URL + "api/roles", {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response);
 					if(response.ok) return response.json()
 					throw Error(response.status)
 				}).then((rolesData) => {
-					console.log(rolesData);
 					setStore({...getStore, roles: rolesData})
 				}).catch((err) => {
 					console.error('Couldnt get classes from API', err)
@@ -94,13 +162,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 1
+				const user = 3
 
 				fetch(process.env.BACKEND_URL + "roles/" + user + "/" + role, {
 					method: 'PUT',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response);
 					if(response.ok) return response.json()
 					throw Error(response.status)
 				}).then((message) => {
@@ -110,27 +177,156 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			},
 
+			getUserData: async () => {
+
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 3
+
+				fetch(process.env.BACKEND_URL + "api/user/" + user, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					if(response.ok) return response.json()
+						console.log(response.json);
+					throw Error(response.status)
+				}).then((userData) => {
+					setStore({...getStore, user: userData})
+				}).catch((err) => {
+					console.error('Couldnt get classes from API', err)
+				})
+			},
+
 			getTaskList: async () => {
 
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 1
+				const user = 3
 
 				fetch(process.env.BACKEND_URL + "api/task/" + user, {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
-					console.log(response)
 					if(response.ok) return response.json()
 						console.log(response.json);
 					throw Error(response.status)
 				}).then((tasksData) => {
-					console.log(tasksData)
 					setStore({...getStore, tasks: tasksData})
 				}).catch((err) => {
 					console.error('Couldnt get classes from API', err)
 				})
+			},
+
+			getRewards: async ()=>{
+
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 3
+
+				fetch(process.env.BACKEND_URL + "api/rewards/" + user, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rewardList) => {
+					setStore({rewards: rewardList })
+				}).catch((err) => {
+					console.error('Couldnt get rewards from API', err)
+				})
+			
+			},
+
+			createReward: ()=>{
+
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 3
+				const input = getStore().inputs
+
+				const reward ={
+					"label": input.label,
+					"user_id": user,
+					"rarity_id": input.rank
+				}
+
+				fetch(process.env.BACKEND_URL + "api/rewards", {
+					method: "POST",
+					body: JSON.stringify(reward),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+
+			deleteRewards: (rewardId)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				fetch(process.env.BACKEND_URL + "api/rewards/"+rewardId, {
+					method: 'DELETE',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rewardList) => {
+					console.log(rewardList)
+				}).catch((err) => {
+					console.error('Couldnt delete the reward', err)
+				})
+			},
+
+			updateReward: (rewardId, label, rarityId)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				const updatedReward= {
+					"label": label,
+					"rarity_id": rarityId
+				}
+				
+				fetch(process.env.BACKEND_URL + "api/rewards/"+rewardId, {
+					method: "PUT",
+					body: JSON.stringify(updatedReward),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+
+			selectRarity:(rarity)=>{
+				const store=getStore()
+				const action=getActions()
+				const rarityList= store.rarities
+				for(let item of rarityList){
+					if(item.rarity_name === rarity){setStore({rarityId: item.id})}
+				}
+				return store.rarityId
+				
+				
+			},
+
+			setRewardId: (id)=>{
+				const store=getStore()
+				const action=getActions()
+				setStore({rewardId : id})
 			},
 
 			getallMonsters: async ()=>{
@@ -218,7 +414,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 				try{
 					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/bestiary/"+userId)
+					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/"+userId)
 					const data = await resp.json()
 					setStore({ bestiary: data})
 					// don't forget to return something, that is how the async resolves
@@ -254,7 +450,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					user_id: userId
 				}
 				
-				fetch(process.env.BACKEND_URL + "/api/bestiary", {
+				fetch(process.env.BACKEND_URL + "api/bestiary", {
 					method: "POST",
 					body: JSON.stringify(bestiaryEntry),
 				   	headers: {"Content-Type": "application/json"}
@@ -281,130 +477,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					else{return console.log(false)}
 				}, "500");
 			},
-			createReward: (userId, label, rarity)=>{
-				const store=getStore()
-				const action=getActions()
-
-				const reward ={
-					"label": label,
-					"user_id": userId,
-					"rarity_id": rarity
-				}
-
-				fetch(process.env.BACKEND_URL + "/api/rewards", {
-					method: "POST",
-					body: JSON.stringify(reward),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(resp => {
-					   console.log(resp.ok);
-					   console.log(resp.status);
-					 return resp.json(); 
-				   }).then(data => {
-					   console.log(data); 
-				   }).catch(error => {
-					   console.log(error);
-				   });
-			},
-
-			getRewards: async (userId)=>{
-
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
-
-				const store=getStore()
-				const action=getActions()
-
-				fetch(process.env.BACKEND_URL + "/api/rewards/"+userId, {
-					method: 'GET',
-					headers: { "Content-Type": "application/json" },
-				}).then((response) => {
-					console.log(response);
-					if(response.ok) return response.json()
-					throw Error(response.status)
-				}).then((rewardList) => {
-					setStore({rewards: rewardList })
-					console.log(store.rewards);
-				}).catch((err) => {
-					console.error('Couldnt get rewards from API', err)
-				})
-			
-			},
-			deleteRewards: (rewardId)=>{
-				const store=getStore()
-				const action=getActions()
-				
-				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
-					method: 'DELETE',
-					headers: { "Content-Type": "application/json" },
-				}).then((response) => {
-					console.log(response);
-					if(response.ok) return response.json()
-					throw Error(response.status)
-				}).then((rewardList) => {
-					console.log(rewardList)
-				}).catch((err) => {
-					console.error('Couldnt delete the reward', err)
-				})
-			},
-			updateReward: (rewardId, label, rarityId)=>{
-				const store=getStore()
-				const action=getActions()
-				
-				const updatedReward= {
-					"label": label,
-					"rarity_id": rarityId
-				}
-				
-				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
-					method: "PUT",
-					body: JSON.stringify(updatedReward),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(resp => {
-					   console.log(resp.ok);
-					   console.log(resp.status);
-					 return resp.json(); 
-				   }).then(data => {
-					   console.log(data); 
-				   }).catch(error => {
-					   console.log(error);
-				   });
-			},
-			selectRarity:(rarity)=>{
-				const store=getStore()
-				const action=getActions()
-				const rarityList= store.allRarities
-				for(let item of rarityList){
-					if(item.rarity_name === rarity){setStore({rarityId: item.id})}
-				}
-				return store.rarityId
-				
-				
-			},
-			getAllRarities: async ()=>{
-				const store=getStore()
-				const action=getActions()
-				
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/rarity")
-					const data = await resp.json()
-					setStore({ allRarities: data})
-					// don't forget to return something, that is how the async resolves
-					console.log(store.allRarities)
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
-			setRewardId: (id)=>{
-				const store=getStore()
-				const action=getActions()
-				setStore({rewardId : id})
-			}
-
-
 		}
 	};
 };
