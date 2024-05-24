@@ -7,59 +7,21 @@ import { exact } from "prop-types";
 
 export const Tasker = () => {
 
-    const { store, actions } = useContext(Context);
-    const { task, difficulty } = store;
+    const { actions } = useContext(Context);
 
-    const [experience, setExperience] = useState(null);
-    const [energy, setEnergy] = useState(null);
     const [taskLabel, setTaskLabel] = useState('');
     const [taskDifficulty, setTaskDifficulty] = useState('');
     const [userId, setUserId] = useState('');
 
-    const { addTask, getTask, updateTask, getUsers } = actions
-
     const TEST_USER_ID = 1
 
 
-    React.useEffect(() => {
-        console.log("taskLabel")
-        console.log(taskLabel)
-        console.log("taskDifficulty")
-        console.log(taskDifficulty)
-        console.log("userId")
-        console.log(userId)
 
-    }
-        , [taskLabel, energy, taskDifficulty, userId])
-
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        await actions.addTask(taskLabel, TEST_USER_ID, taskDifficulty);
 
-        const difficultyLevels = {
-            easy: 12,
-            medium: 24,
-            hard: 60,
-        };
-
-        const value = difficultyLevels[taskDifficulty];
-
-        if (value) {
-            // store.difficulty(value);
-            setExperience(value);
-            setEnergy(value);
-            // store.energy();
-            // store.experience();
-        }
-
-        if (taskLabel && taskDifficulty) {
-            actions.addTask(taskLabel, userId, taskDifficulty);
-            console.log(taskLabel);
-        } else {
-            alert("Please fill in all fields.");
-        }
     };
-
 
 
     return <div className="container-fluid text-center">
@@ -85,22 +47,20 @@ export const Tasker = () => {
 
                     <div className="d-flex justify-content-evenly">
 
-                        <div className={`btn bttn{${taskDifficulty === 'Easy' ? 'selected' : ''}`}
-                            onClick={() => setTaskDifficulty("Easy")}
+                        <div className={`btn bttn{${taskDifficulty === 1 ? 'selected' : ''}`}
+                            onClick={() => setTaskDifficulty(1)}
                         >Easy</div>
-                        <div className={`btn bttn{${taskDifficulty === 'Medium' ? 'selected' : ''}`}
-                            onClick={() => setTaskDifficulty("Medium")}
+                        <div className={`btn bttn{${taskDifficulty === 2 ? 'selected' : ''}`}
+                            onClick={() => setTaskDifficulty(2)}
                         >Medium</div>
-                        <div className={`btn bttn{${taskDifficulty === 'Hard' ? 'selected' : ''}`}
-                            onClick={() => setTaskDifficulty("Hard")}
+                        <div className={`btn bttn{${taskDifficulty === 3 ? 'selected' : ''}`}
+                            onClick={() => setTaskDifficulty(3)}
                         >Hard</div>
                     </div>
 
                     <div className="btn bttn text-center bg-custom-yellow m-2 mt-3"
                         onClick={handleSubmit}
                     ><h3 className="addTaskBtn">Add it!</h3> </div>
-
-
 
                 </div>
             </div>

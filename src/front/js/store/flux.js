@@ -100,7 +100,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			addTask: async (label, user_id, task_difficulty_id) => {
 				try {
 					const store = getStore();
-					const response = await fetch(process.env.BACKEND_URL + "api/task", {
+					const response = await fetch(process.env.BACKEND_URL + "/api/task", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
