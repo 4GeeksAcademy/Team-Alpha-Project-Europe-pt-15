@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import "../../styles/index.css";
 import "../../styles/insertask.css";
 import { Link } from "react-router-dom";
+import { exact } from "prop-types";
 
 export const Tasker = () => {
 
@@ -15,7 +16,21 @@ export const Tasker = () => {
     const [taskDifficulty, setTaskDifficulty] = useState('');
     const [userId, setUserId] = useState('');
 
-    const { addTask, getTask, updateTask, getUsers, getLevel, handleChange, label } = actions;
+    const { addTask, getTask, updateTask, getUsers } = actions
+
+    const TEST_USER_ID = 1
+
+
+    React.useEffect(() => {
+        console.log("taskLabel")
+        console.log(taskLabel)
+        console.log("taskDifficulty")
+        console.log(taskDifficulty)
+        console.log("userId")
+        console.log(userId)
+
+    }
+        , [taskLabel, energy, taskDifficulty, userId])
 
 
     const handleSubmit = (e) => {
@@ -30,11 +45,11 @@ export const Tasker = () => {
         const value = difficultyLevels[taskDifficulty];
 
         if (value) {
-            store.difficulty(value);
+            // store.difficulty(value);
             setExperience(value);
             setEnergy(value);
-            store.energy();
-            store.experience();
+            // store.energy();
+            // store.experience();
         }
 
         if (taskLabel && taskDifficulty) {
