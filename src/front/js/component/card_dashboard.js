@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 
-export const DashCard =({id,label,index,rank})=>{
+export const DashCard =({id,label,index,rank, modalId, buttonFunction})=>{
 
     const { store, actions } = useContext(Context);
 
@@ -32,7 +32,7 @@ export const DashCard =({id,label,index,rank})=>{
                 <i className={iconClass}></i>
                 </div>
                 <button className="card circle"
-                    data-bs-toggle="modal" data-bs-target="">
+                    data-bs-toggle="modal" data-bs-target={modalId} onClick={buttonFunction}>
                     <i className="fas fa-ellipsis-h"></i>
                 </button>
             </div>               

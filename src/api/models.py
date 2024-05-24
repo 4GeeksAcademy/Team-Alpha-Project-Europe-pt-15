@@ -105,6 +105,8 @@ class Rarity(db.Model):
     def __repr__(self):
         return f'<Rarity {self.rarity_name}>'
     
+
+    
     def serialize(self):
         return {
             "id": self.id,

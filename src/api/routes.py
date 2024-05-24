@@ -59,8 +59,9 @@ def create_user():
         name = new_user['name'],
         password = new_user['password'],
         email = new_user['email'],
-        level= 1
-        
+        level= 1,
+        experience = 0,
+        energy = 0
         )
 
     db.session.add(new_user)
@@ -148,22 +149,13 @@ def create_roles():
         return "description should be in New class Body", 400
     if 'passive' not in new_role:
         return "passive should be in New class Body", 400
-    if 'hability_1' not in new_role:
-        return "hability_1 should be in New class Body", 400
-    if 'hability_2' not in new_role:
-        return "habiliy_2 should be in New class Body", 400
-    if 'hability_3' not in new_role:
-        return "habiliy_3 should be in New class Body", 400
+
   
 
     new_role = Role(
         name = new_role['name'],
         description = new_role['description'],
-        passive = new_role['passive'],
-        hability_1 = new_role['hability_1'],
-        hability_2 = new_role["hability_2"],
-        hability_3= new_role["hability_3"] 
-        
+        passive = new_role['passive'],  
         )
 
     db.session.add(new_role)
@@ -200,15 +192,6 @@ def update_role(role_id):
 
     if 'passive' in new_updated_role:
         old_role_obj.passive = new_updated_role['passive']
-
-    if 'hability_1' in new_updated_role:
-        old_role_obj.hability_1 = new_updated_role['hability_1']
-
-    if 'hability_2' in new_updated_role:
-        old_role_obj.hability_2 = new_updated_role['hability_2']
-
-    if 'hability_3' in new_updated_role:
-        old_role_obj.hability_3 = new_updated_role['hability_3']
 
 
     db.session.commit()
@@ -309,8 +292,8 @@ def create_task():
     new_task = Task(
         label = new_task['label'],
         user_id = new_task['user_id'],
-        task_difficulty_id = new_task['task_difficulty_id']
-        
+        task_difficulty_id = new_task['task_difficulty_id'],
+        done = False
         )
 
     db.session.add(new_task)
@@ -345,6 +328,10 @@ def update_task(task_id):
     
     if 'task_difficulty_id' in new_updated_task:
         old_task_obj.task_difficulty_id = new_updated_task['task_difficulty_id']
+
+    if 'done' in new_updated_task:
+        old_task_obj.done = new_updated_task['done']
+
 
 
     db.session.commit()
@@ -548,3 +535,11 @@ def get_monster_list(the_user_id):
     monster_list = list(map(lambda x: x.serialize(), monster))
 
     return jsonify(monster_list), 200
+
+#hability routes#
+
+@api.route("/hability",  methods=['GET'])
+def get_all_habilities():
+    hability= Hability.query.all()
+    all_habilities= list(map(lambda x: x.serialize(), hability))
+    return jsonify(all_habilities), 200

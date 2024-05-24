@@ -10,10 +10,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
-			bestiary: null,
+			bestiary: [],
 			rewards: null,
 			rarityId: null,
 			rewardId:null,
+			creatureType: ["aberration","beast","celestial","construct","dragon","elemental","fey","fiend","giant","humanoid","monstrosity","ooze","plant","undead"],
+			creatureInfo:[],
 			tasks: [],
 			roles: [],
 			images: [barbarian, wizard, rogue],
@@ -117,7 +119,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//just to test
 				const user = 1
 
-				fetch(process.env.BACKEND_URL + "api/task/" + user, {
+				fetch(process.env.BACKEND_URL + "/api/task/" + user, {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
@@ -142,8 +144,6 @@ const getState = ({ getStore, getActions, setStore }) => {
   					headers: myHeaders,
   					redirect: "follow"
 				};
-
-
 				fetch("https://www.dnd5eapi.co/api/monsters", requestOptions)
   				.then((response) => response.json())
   				.then((result) => {setStore({allMonsters: result.results})
@@ -161,8 +161,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				headers: myHeaders,
 				redirect: "follow"
 				};
-
-
 				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
 				.then((response) => response.json())
 				.then((result) => {setStore({encounterPool: result.results})
@@ -180,12 +178,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				headers: myHeaders,
 				redirect: "follow"
 				};
-
-
 				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
 				.then((response) => response.json())
-				.then((result) => console.log(result))
+				.then((result) =>{ setStore({creatureInfo:[...store.creatureInfo,result]})})
 				.catch((error) => console.error(error));	
+			},
+			getBestiaryInfo:()=>{
+				const store=getStore()
+				const action=getActions()
+
+				const myBestiary = store.bestiary
+				for(let item of myBestiary){
+					return action.getMonsterByIndex(item.monster_name)
+				}
+
+
+
 			},
 			getEncounter: (userLevel)=>{
 				const store=getStore()
@@ -222,11 +230,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					setStore({ bestiary: data})
 					// don't forget to return something, that is how the async resolves
-					console.log(store.bestiary)
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
-				}	
+				}
+
 			},
 			decideEncounter: (userlvl,userId)=>{
 				const store=getStore()
@@ -402,9 +410,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store=getStore()
 				const action=getActions()
 				setStore({rewardId : id})
+			},
+			getimage:(type,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
+				const store=getStore()
+				const action=getActions()
+
+				if (type == "aberration"){return img1}
+				if (type == "beast"){return img2}
+				if (type == "celestial"){return img3}
+				if (type == "construct"){return img4}
+				if (type == "dragon"){return img5}
+				if (type == "elemental"){return img6}
+				if (type == "fey"){return img7}
+				if (type == "fiend"){return img8}
+				if (type == "giant"){return img9}
+				if (type == "humanoid"){return img10}
+				if (type == "monstrosity"){return img11}
+				if (type == "ooze"){return img12}
+				if (type == "plant"){return img13}
+				if (type == "undead"){return img14}
 			}
-
-
+			
 		}
 	};
 };
