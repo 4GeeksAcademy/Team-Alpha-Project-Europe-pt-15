@@ -4,17 +4,17 @@ import { Context } from "../store/appContext"
 
 import "../../styles/index.css";
 
-import email from "../../img/icon_email.png"
-import password from "../../img/icon_pw.png"
-import confirmPassword from "../../img/icon_pwc.png"
-import user from "../../img/icon_user.png"
+import emailIcon from "../../img/icon_email.png"
+import passwordIcon from "../../img/icon_pw.png"
+import confirmPasswordIcon from "../../img/icon_pwc.png"
+import nameIcon from "../../img/icon_user.png"
 
 
 export const SignUp = () => {
   const {store, actions} = useContext(Context)
 
   const [formData, setFormData] = useState({
-    userName: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -33,38 +33,42 @@ export const SignUp = () => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      actions.setFormData(formData); 
+      await actions.createUser();    
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const confirmPasswordClass =
     formData.password !== formData.confirmPassword
       ? "border border-danger"
       : "";
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(store.formData);
-        await actions.createUser();
-      };
-
   return (
-    <div className="m-0">
-      <form className="col-md-4 m-3 gap-1 mx-auto card" onSubmit={handleSubmit}>
-        <h1>Sign Me Up</h1>
-        <div className="d-inline card">
+    <>
+      <form className="col-md-4 mx-auto px-5 py-3 gap-4 card" onSubmit={handleSubmit}>
+        <h1 className="m-0">Sign Me Up</h1>
+        <div className="d-inline-flex flex-row justify-content-evenly p-2 card">
           <img className="col-auto"
-            src={user} alt="user icon"
+            src={nameIcon} alt="user icon"
           />
           <input
             type="text"
             className="col-9"
-            id="userName"
+            id="name"
             placeholder="username"
             onChange={handleChange}
-            value={formData.userName}
+            value={formData.name}
             required
           />
         </div>
-        <div className="d-inline card">
+        <div className="d-inline-flex flex-row justify-content-evenly p-2 card">
           <img className="col-auto"
-            src={email} alt="email icon"
+            src={emailIcon} alt="email icon"
           />
           <input
             type="email"
@@ -76,9 +80,9 @@ export const SignUp = () => {
             required
           />
         </div>
-        <div className="d-inline card">
+        <div className="d-inline-flex flex-row justify-content-evenly p-2 card">
           <img className="col-auto"
-            src={password} alt="password icon"
+            src={passwordIcon} alt="password icon"
           />
             <input
               type="password"
@@ -91,9 +95,9 @@ export const SignUp = () => {
               minLength={8}
             />
         </div>
-        <div className="d-inline card">
+        <div className="d-inline-flex flex-row justify-content-evenly p-2 card">
           <img className="col-auto"
-            src={confirmPassword} alt="conbfirmpassword icon"
+            src={confirmPasswordIcon} alt="conbfirmpassword icon"
           />
           <input
             type="password"
@@ -113,11 +117,11 @@ export const SignUp = () => {
         </div>
         <button
           type="submit" 
-          className="card bg-purple"
+          className="card p-3 m-0 text-center bg-purple"
         >
           <h5 className="m-auto">Gotcha</h5>
         </button>
       </form>
-    </div>
+    </>
   );
 };
