@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 
 import "../../styles/index.css";
@@ -6,17 +6,18 @@ import { Link } from "react-router-dom";
 
 import beastiary from "../../img/beast.png"
 
-export const Navbar = ({use}) => {
+export const Navbar = ({view, modal}) => {
 	const { store, actions } = useContext(Context);
 
     useEffect(() => {
         actions.getUserData()
     },[]);
 
+    {/* active view css*/}
     let focusQ=""
     let focusR=""
 
-    switch(use){
+    switch(view){
         case "rewards":
             focusQ = null
             focusR = "bg-active"
@@ -33,22 +34,22 @@ export const Navbar = ({use}) => {
         <div className="d-flex flex-row justify-content-between">
                 <div className="d-flex flex-row gap-3">
                     {/* profile button */}
-                    <div className="card circle" data-bs-toggle="offcanvas" data-bs-target="#Profile" aria-controls="Profile">
+                    <button className="card circle" data-bs-toggle="offcanvas" data-bs-target="#Profile" aria-controls="Profile">
                         <i className="fa-solid fa-user"></i>
-                    </div>
-                    {/* add task button */}
-                    <div className="card circle">
+                    </button>
+                    {/* create task/reward button */}
+                    <button className="card circle" data-bs-toggle="modal" data-bs-target={modal}>
                         <i className="fa-solid fa-plus"></i>
-                    </div>
+                    </button>
                     {/* clean dashboard button */}
-                    <div className="card circle">
+                    <button className="card circle">
                         <i className="fa-solid fa-arrows-rotate"></i>
-                    </div>
+                    </button>
                 </div>
                 {/* log out */}
-                <div className="card circle bg-black">
+                <button className="card circle bg-black">
                     <i className="fa-solid fa-power-off"></i>
-                </div>
+                </button>
         </div>
         {/* views */}
         <div className="card round col-lg-3 mx-auto mt-4 d-flex flex-row justify-content-evenly">
@@ -96,10 +97,10 @@ export const Navbar = ({use}) => {
             </div>
             {/* beastiary */}
             <div className="d-flex gap-3 my-3">
-                <div className="card col-5 p-3">
+                <Link to="/" className="card col-5 p-3">
                     <img src={beastiary} />
                     <h5>Beastiary</h5>
-                </div>
+                </Link>
                 {/* count */}
                 <div className="col">
                     <div className="card p-1">
@@ -114,10 +115,13 @@ export const Navbar = ({use}) => {
                 </div>
             </div>
         </div>
+        {/* edit profile */}
         <div className="offcanvas-footer p-4">
-            <div className="card col p-2 bg-yellow">
-                <h5>Edit Profile</h5>
-            </div>
+            <Link to="/editprofile">
+                <div className="card col p-2 bg-yellow" data-bs-dismiss="offcanvas">
+                    <h5>Edit Profile</h5>
+                </div>
+            </Link>
         </div>
   </div>
   </>

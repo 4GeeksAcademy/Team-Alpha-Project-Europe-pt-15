@@ -54,18 +54,18 @@ class User(db.Model):
 class Difficulty(db.Model):
     __tablename__ = "difficulty"
     id = db.Column(db.Integer, primary_key=True)
-    difficulty_name = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.String(120), unique=True, nullable=False)
     experience_given = db.Column(db.Integer, unique=True, nullable=False) 
     energy_given = db.Column(db.Integer, unique=True, nullable=False) 
     
 
     def __repr__(self):
-        return f'<Difficulty {self.difficulty_name}>'
+        return f'<Difficulty {self.name}>'
     
     def serialize(self):
         return {
             "id": self.id,
-            "difficulty_name": self.difficulty_name,
+            "name": self.name,
             "experience_given": self.experience_given,
             "energy_given": self.energy_given           
         }
@@ -98,17 +98,17 @@ class Task(db.Model):
 class Rarity(db.Model):
     __tablename__ = "rarity"
     id = db.Column(db.Integer, primary_key=True)
-    rarity_name = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.String(120), unique=True, nullable=False)
     energy_required = db.Column(db.Integer, unique=True, nullable=False) 
     
 
     def __repr__(self):
-        return f'<Rarity {self.rarity_name}>'
+        return f'<Rarity {self.name}>'
     
     def serialize(self):
         return {
             "id": self.id,
-            "rarity_name": self.rarity_name,
+            "name": self.name,
             "energy_required": self.energy_required            
         }
 
@@ -134,7 +134,7 @@ class Reward(db.Model):
         }
 
 
-class Hability(db.Model):
+class Ability(db.Model):
     __tablename__ = "hability"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
