@@ -188,11 +188,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 
 				const myBestiary = store.bestiary
-				for(let item of myBestiary){
-					return action.getMonsterByIndex(item.monster_name)
-				}
-
-
+				console.log(myBestiary)
+				myBestiary.map((item)=>action.getMonsterByIndex(item.monster_name))
+				setTimeout(() => { 
+					console.log(store.creatureInfo)
+				}, "500");
+				
 
 			},
 			getEncounter: (userLevel)=>{
@@ -229,12 +230,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(process.env.BACKEND_URL + "/api/bestiary/"+userId)
 					const data = await resp.json()
 					setStore({ bestiary: data})
+					console.log(store.bestiary)
 					// don't forget to return something, that is how the async resolves
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}
-
 			},
 			decideEncounter: (userlvl,userId)=>{
 				const store=getStore()
@@ -411,24 +412,110 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 				setStore({rewardId : id})
 			},
-			getimage:(type,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
+			getimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
 				const store=getStore()
 				const action=getActions()
+				
+				if(creature.image){return `https://www.dnd5eapi.co${creature.image}`}
+				if (creature.type == "aberration"){return img1}
+				if (creature.type == "beast"){return img2}
+				if (creature.type == "celestial"){return img3}
+				if (creature.type == "construct"){return img4}
+				if (creature.type == "dragon"){return img5}
+				if (creature.type == "elemental"){return img6}
+				if (creature.type == "fey"){return img7}
+				if (creature.type == "fiend"){return img8}
+				if (creature.type == "giant"){return img9}
+				if (creature.type == "humanoid"){return img10}
+				if (creature.type == "monstrosity"){return img11}
+				if (creature.type == "ooze"){return img12}
+				if (creature.type == "plant"){return img13}
+				if (creature.type == "undead"){return img14}
+			},
+			addExperience:(experience)=>{
+				const store=getStore()
+				const action=getActions()
+				const user =store.user
+				const newExp = user.experience + experience
+				
+				if(newExp > 100){return action.updateUserLevel((newExp -100), (user.level + 1))}
+				else {return action.updateUserLevel(newExp, user.level) }
 
-				if (type == "aberration"){return img1}
-				if (type == "beast"){return img2}
-				if (type == "celestial"){return img3}
-				if (type == "construct"){return img4}
-				if (type == "dragon"){return img5}
-				if (type == "elemental"){return img6}
-				if (type == "fey"){return img7}
-				if (type == "fiend"){return img8}
-				if (type == "giant"){return img9}
-				if (type == "humanoid"){return img10}
-				if (type == "monstrosity"){return img11}
-				if (type == "ooze"){return img12}
-				if (type == "plant"){return img13}
-				if (type == "undead"){return img14}
+			},
+			addEnergy:(energy)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				const newEnergy= user.energy + energy
+				if (newEnergy >= 40){return action.updateEnergy(40)}
+				else {return action.updateEnergy(newEnergy)}
+			},
+			onQuestCompletion:(experience, energy)=>{
+				const store=getStore()
+				const action=getActions()
+				action.addExperience(experience)
+				action.addEnergy(energy)
+			},
+			getUser:async (userId)=>{
+				const store=getStore()
+				const action=getActions()
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/user/"+userId)
+					const data = await resp.json()
+					setStore({user: data})
+					console.log(store.user)
+					// don't forget to return something, that is how the async resolves
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
+			updateUserLevel:(experience, level)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				
+					const updatedExpAndLevel = {
+						"experience": experience,
+						"level": level
+					}
+				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
+					method: "PUT",
+					body: JSON.stringify(updatedExpAndLevel),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			updateEnergy:(energy)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				
+					const updatedEnergy = {
+						"energy": energy
+						
+					}
+				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
+					method: "PUT",
+					body: JSON.stringify(updatedEnergy),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
 			}
 			
 		}

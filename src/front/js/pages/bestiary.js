@@ -25,25 +25,28 @@ export const Bestiary = () =>{
     const { store, actions } = useContext(Context);
     const navigate = useNavigate()
   
-
+    useEffect(()=>{
+      setTimeout(() => { 
+        actions.getBestiaryInfo()
+      }, "1000");
+      
+  },[]);
 
     return (
     <>
      <div className="container">
         <Navbar />
         <div className="row row-cols-1 row-cols-md-5 g-4">
-            {store.bestiary?.map((item,index)=>(
+            {store.creatureInfo?.map((item,index)=>(
               <div className="col" key={index}>
                   <div className="card p-2">
-                  <img src="..." className="card-img-top monsterImage" alt="..."/>
+                  <img src={actions.getimage(item,aberration,beast,celestial,construct,dragon,elemental,fey,fiend,giant,humanoid,monstrosity,ooze,plant,undead)} className="card-img-top monsterImage" alt="..."/>
                   <div className="card-body">
-                    <h5 className="card-title">{item.monster_name}</h5>
+                    <h5 className="card-title">{item.name}</h5>
                   </div>
                 </div>
               </div>
             ))}
-            <button onClick={()=>actions.decideVictory(20,1)}>encounter</button>
-            <button onClick={()=>actions.getCreatureType()}>haha</button>
         </div>
      </div>
     </>

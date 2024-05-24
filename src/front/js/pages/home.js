@@ -13,7 +13,8 @@ export const Home = () => {
 				<img src={rigoImageUrl} />
 			</p>
 			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
+				{store.message || "Loading message from the backend (make sure your python backend is running)..."}<br></br>
+				<button onClick={()=>actions.addExperience(100)}>press me to test</button>
 			</div>
 			<p>
 				This boilerplate comes with lots of documentation:{" "}
