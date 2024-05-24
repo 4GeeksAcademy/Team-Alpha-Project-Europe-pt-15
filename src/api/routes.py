@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary
+from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -66,8 +66,11 @@ def get_user(user_id):
     user = User.query.get(user_id)
     if user is None:
         return "No People with id: " + str(user_id), 400
-    
+
+    role = Role.query.get(user.user_role)
+
     one_user = user.serialize()
+    one_user.update({"role": role.name})
 
     return jsonify(one_user), 200
 
@@ -130,6 +133,7 @@ def insert_user_role(user_id, role_id):
     return jsonify({"msg": "Role added to user"}), 200
 
 ## i don't think we need this
+'''
 @api.route("/roles",  methods=['POST'])
 def create_roles():
     new_role = request.get_json()
@@ -140,11 +144,11 @@ def create_roles():
         return "description should be in New class Body", 400
     if 'passive' not in new_role:
         return "passive should be in New class Body", 400
-    if 'hability_1' not in new_role:
-        return "hability_1 should be in New class Body", 400
-    if 'hability_2' not in new_role:
+    if 'ability_1' not in new_role:
+        return "ability_1 should be in New class Body", 400
+    if 'ability_2' not in new_role:
         return "habiliy_2 should be in New class Body", 400
-    if 'hability_3' not in new_role:
+    if 'ability_3' not in new_role:
         return "habiliy_3 should be in New class Body", 400
   
 
@@ -152,9 +156,9 @@ def create_roles():
         name = new_role['name'],
         description = new_role['description'],
         passive = new_role['passive'],
-        hability_1 = new_role['hability_1'],
-        hability_2 = new_role["hability_2"],
-        hability_3= new_role["hability_3"] 
+        ability_1 = new_role['ability_1'],
+        ability_2 = new_role["ability_2"],
+        ability_3= new_role["ability_3"] 
         
         )
 
@@ -193,20 +197,20 @@ def update_role(role_id):
     if 'passive' in new_updated_role:
         old_role_obj.passive = new_updated_role['passive']
 
-    if 'hability_1' in new_updated_role:
-        old_role_obj.hability_1 = new_updated_role['hability_1']
+    if 'ability_1' in new_updated_role:
+        old_role_obj.ability_1 = new_updated_role['ability_1']
 
-    if 'hability_2' in new_updated_role:
-        old_role_obj.hability_2 = new_updated_role['hability_2']
+    if 'ability_2' in new_updated_role:
+        old_role_obj.ability_2 = new_updated_role['ability_2']
 
-    if 'hability_3' in new_updated_role:
-        old_role_obj.hability_3 = new_updated_role['hability_3']
+    if 'ability_3' in new_updated_role:
+        old_role_obj.ability_3 = new_updated_role['ability_3']
 
 
     db.session.commit()
 
     return jsonify({"msg": "role is Updated"}), 200
-
+'''
 
 ##  TASK DIFFICULTY ROUTES  ##
 
@@ -217,12 +221,13 @@ def get_difficulties():
     return jsonify(all_difficulties), 200
 
 # i don't think we need this
+'''
 @api.route("/difficulty",  methods=['POST'])
 def create_difficulty():
     new_difficulty = request.get_json()
 
-    if 'difficulty_name' not in new_difficulty:
-        return "difficulty_name should be in New difficulty Body", 400
+    if 'name' not in new_difficulty:
+        return "name should be in New difficulty Body", 400
     if 'experience_given' not in new_difficulty:
         return "experience_given should be in New difficulty Body", 400
     if 'energy_given' not in new_difficulty:
@@ -231,7 +236,7 @@ def create_difficulty():
   
 
     new_difficulty = Difficulty(
-        difficulty_name = new_difficulty['difficulty_name'],
+        name = new_difficulty['name'],
         experience_given = new_difficulty['experience_given'],
         energy_given = new_difficulty['energy_given']
         
@@ -263,8 +268,8 @@ def update_difficulty(difficulty_id):
     if old_difficulty_obj is None:
         return "No difficulty with id: " + str(difficulty_id), 400
 
-    if 'difficulty_name' in new_updated_difficulty:
-        old_difficulty_obj.difficulty_name = new_updated_difficulty['difficulty_name']
+    if 'name' in new_updated_difficulty:
+        old_difficulty_obj.name = new_updated_difficulty['name']
 
     if 'experience_given' in new_updated_difficulty:
         old_difficulty_obj.experience_given = new_updated_difficulty['experience_given']
@@ -275,15 +280,16 @@ def update_difficulty(difficulty_id):
     db.session.commit()
 
     return jsonify({"msg": "difficulty is Updated"}), 200
-
+'''
 
 ##  TASKS ROUTES  ##
-
+'''
 @api.route("/task",  methods=['GET'])
 def get_tasks():
     tasks= Task.query.all()
     all_tasks= list(map(lambda x: x.serialize(), tasks))
     return jsonify(all_tasks), 200
+'''
 
 @api.route("/task",  methods=['POST'])
 def create_task():
@@ -366,18 +372,19 @@ def get_rarities():
     return jsonify(all_rarities), 200
 
 # i don't think we need this
+'''
 @api.route("/rarity",  methods=['POST'])
 def create_rarity():
     new_rarity = request.get_json()
 
-    if 'rarity_name' not in new_rarity:
-        return "rarity_name should be in New rarity Body", 400
+    if 'nam' not in new_rarity:
+        return "nam should be in New rarity Body", 400
     if 'energy_required' not in new_rarity:
         return "energy_required should be in New rarity Body", 400
    
 
     new_rarity = Rarity(
-        rarity_name = new_rarity['rarity_name'],
+        nam = new_rarity['nam'],
         energy_required = new_rarity['energy_required'],
         
         )
@@ -408,8 +415,8 @@ def update_rarity(rarity_id):
     if old_rarity_obj is None:
         return "No difficulty with id: " + str(rarity_id), 400
 
-    if 'rarity_name' in new_updated_rarity:
-        old_rarity_obj.rarity_name = new_updated_rarity['rarity_name']
+    if 'nam' in new_updated_rarity:
+        old_rarity_obj.nam = new_updated_rarity['nam']
 
     if 'energy_required' in new_updated_rarity:
         old_rarity_obj.energy_required = new_updated_rarity['energy_required']
@@ -418,16 +425,18 @@ def update_rarity(rarity_id):
     db.session.commit()
 
     return jsonify({"msg": "rarity is Updated"}), 200
-
+'''
 
 ##  REWARD ROUTES  ##
 
 # i don't think we need this
+'''
 @api.route("/rewards",  methods=['GET'])
 def get_rewards():
     rewards= Reward.query.all()
     all_rewards= list(map(lambda x: x.serialize(), rewards))
     return jsonify(all_rewards), 200
+'''
 
 @api.route("/rewards",  methods=['POST'])
 def create_reward():
@@ -504,11 +513,13 @@ def delete_reward(reward_id):
 ##  MONSTERS ROUTES  ##
 
 # i don't think we need this
+'''
 @api.route("/bestiary",  methods=['GET'])
 def get_monsters():
     bestiary= Bestiary.query.all()
     all_monsters= list(map(lambda x: x.serialize(), bestiary))
     return jsonify(all_monsters), 200
+'''
 
 @api.route("/bestiary",  methods=['POST'])
 def new_monster_aquired():
