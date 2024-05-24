@@ -8,21 +8,97 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			allMonsters : null,
+			allMonsters: null,
 			encounterPool: null,
+			task: null,
+			difficulty: null,
+			energy: null,
+			experience: null,
+			roles: [],
+			images: [barbarian, wizard, rogue],
+			users: [],
+			user: null,
+			loggedInUser: null,
 			bestiary: null,
 			rewards: null,
 			rarityId: null,
+
+			rewardId: null,
+			roles: [],
+
 			rewardId:null,
 			rarities: [],
 			user: [],
 			tasks: [],
 			roles: [],
 			images: {"Barbarian": barbarian, "Wizard": wizard, "Rogue": rogue},
+
 			inputs: {},
 
 		},
 		actions: {
+
+			getUsers: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/`, {
+						method: 'GET',
+						headers: { "Content-Type": "application/json" }
+					});
+
+					if (!response.ok) {
+						throw new Error(response.status);
+					}
+
+					const data = await response.json();
+
+
+					setStore({ ...getStore(), users: data });
+
+				} catch (error) {
+					console.error('Error fetching user:', error);
+				}
+			},
+			getUser: async (userId) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${userId}`, {
+						method: 'GET',
+						headers: { "Content-Type": "application/json" }
+					});
+
+					if (!response.ok) {
+						throw new Error(response.status);
+					}
+
+					const data = await response.json();
+
+
+					setStore({ ...getStore(), user: data });
+
+				} catch (error) {
+					console.error('Error fetching user:', error);
+				}
+			},
+
+			updateUserExpDif: async (user_id, user, experience, energy) => {
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${user_id}`, {
+						method: 'PUT',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							...user,
+							experience: experience,
+							energy: energy
+						})
+					});
+
+					if (!resp.ok) {
+						throw new Error(`HTTP error! status: ${resp.status}`);
+
+					}
+
+					const data = await resp.json();
+					console.log(data)
+
 			// Use getActions to call a function within a fuction
 			
 			getMessage: async () => {
@@ -32,21 +108,62 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
+
 					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
+				} catch (error) {
+					console.error('Error updating user experience and energy:', error);
 				}
 			},
+
+
+
+
+			addTask: async (label, user_id, task_difficulty_id) => {
+				try {
+					const store = getStore();
+					const response = await fetch(process.env.BACKEND_URL + "/api/task", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							label: label,
+							user_id: user_id,
+							task_difficulty_id: task_difficulty_id
+						}),
+					});
+
+					if (!response.ok) {
+						// Log the response status and status text for better debugging
+						throw new Error(`Failed to add task: ${response.status} ${response.statusText}`);
+					}
+
+					const data = await response.json();
+					console.log(data);
+
+					// Update the store with the new task
+					setStore({ tasks: [...store.tasks, data] });
+
+				} catch (error) {
+					console.error("Error adding task:", error);
+				}
+			},
+
+
+
+
 
 			getInput: (event) => {
 				const name = event.target.id;
 				const value = event.target.value;
-				setStore({...getStore,
-						  inputs: {...getStore().inputs, [name]: value}})
+				setStore({
+					...getStore,
+					inputs: { ...getStore().inputs, [name]: value }
+				})
 			},
 
 			resetInput: () => {
-				setStore({...getStore,inputs: {}})
+				setStore({ ...getStore, inputs: {} })
 			},
 
 			seePassword: () => {
@@ -120,7 +237,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
 					getActions().resetInput();
-					if(response.ok) return response.json();
+					if (response.ok) return response.json();
 					throw Error(response.status)
 				}).then((loginData) => {
 					localStorage.setItem('jwt-token', loginData.token)
@@ -148,21 +265,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 					method: 'GET',
 					headers: { "Content-Type": "application/json" },
 				}).then((response) => {
+
+					console.log(response);
+					if (response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rolesData) => {
+					console.log(rolesData);
+					setStore({ ...getStore, roles: rolesData })
+
 					if(response.ok) return response.json()
 					throw Error(response.status)
 				}).then((rolesData) => {
 					setStore({...getStore, roles: rolesData})
+
 				}).catch((err) => {
 					console.error('Couldnt get classes from API', err)
 				})
 			},
 
-			addRole: (role) => {
-
+			/*addRole: (role) => {
+	
 				//const user = localStorage.getItem('user_id')
-
+	
 				//just to test
+
+				const user = 1
+	
+
 				const user = 3
+
 
 				fetch(process.env.BACKEND_URL + "roles/" + user + "/" + role, {
 					method: 'PUT',
@@ -175,7 +306,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).catch((err) => {
 					console.error('Couldnt add role to user', err)
 				})
-			},
+			},*/
+
+
+			/*getallMonsters: async ()=>{
 
 			getUserData: async () => {
 
@@ -330,44 +464,46 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getallMonsters: async ()=>{
+
 				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
 				const requestOptions = {
-  					method: "GET",
-  					headers: myHeaders,
-  					redirect: "follow"
+						method: "GET",
+						headers: myHeaders,
+						redirect: "follow"
 				};
-
-
+	
+	
 				fetch("https://www.dnd5eapi.co/api/monsters", requestOptions)
-  				.then((response) => response.json())
-  				.then((result) => {setStore({allMonsters: result.results})
+					.then((response) => response.json())
+					.then((result) => {setStore({allMonsters: result.results})
 				  console.log(store.allMonsters)})
-  				.catch((error) => console.error(error));
-			},
+					.catch((error) => console.error(error));
+			},*/
 
-			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
+			getMonsterByCr: (challengeRating1, challengeRating2, challengeRating3, challengeRating4, challengeRating5, challengeRating6, challengeRating7, challengeRating8, challengeRating9, challengeRating10, challengeRating11, challengeRating12, challengeRating13, challengeRating14, challengeRating15, challengeRating16, challengeRating17, challengeRating18, challengeRating19, challengeRating20, challengeRating21, challengeRating22, challengeRating23, challengeRating24, challengeRating25, challengeRating26) => {
 				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and then form 1 to 24
-				const store=getStore()
+				const store = getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
 				const requestOptions = {
-				method: "GET",
-				headers: myHeaders,
-				redirect: "follow"
+					method: "GET",
+					headers: myHeaders,
+					redirect: "follow"
 				};
 
 
 				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
-				.then((response) => response.json())
-				.then((result) => {setStore({encounterPool: result.results})
-					//console.log(store.encounterPool)
-				})
-				.catch((error) => console.error(error));
+					.then((response) => response.json())
+					.then((result) => {
+						setStore({ encounterPool: result.results })
+						//console.log(store.encounterPool)
+					})
+					.catch((error) => console.error(error));
 			},
 
-			getMonsterByIndex: (index)=>{
+			/*getMonsterByIndex: (index)=>{
 				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -376,8 +512,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				headers: myHeaders,
 				redirect: "follow"
 				};
-
-
+	
+	
 				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
 				.then((response) => response.json())
 				.then((result) => console.log(result))
@@ -444,7 +580,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 				
 				const monster = store.randomMonster
-
+	
 				const bestiaryEntry={
 					monster_name : monster,
 					user_id: userId
@@ -453,7 +589,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch(process.env.BACKEND_URL + "api/bestiary", {
 					method: "POST",
 					body: JSON.stringify(bestiaryEntry),
-				   	headers: {"Content-Type": "application/json"}
+						  headers: {"Content-Type": "application/json"}
 				   }).then(resp => {
 					   console.log(resp.ok);
 					   console.log(resp.status);
@@ -477,8 +613,128 @@ const getState = ({ getStore, getActions, setStore }) => {
 					else{return console.log(false)}
 				}, "500");
 			},
-		}
-	};
-};
 
+			createReward: (userId, label, rarity)=>{
+				const store=getStore()
+				const action=getActions()
+	
+				const reward ={
+					"label": label,
+					"user_id": userId,
+					"rarity_id": rarity
+				}
+	
+				fetch(process.env.BACKEND_URL + "/api/rewards", {
+					method: "POST",
+					body: JSON.stringify(reward),
+						  headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			getRewards: async (userId)=>{
+				const store=getStore()
+				const action=getActions()
+	
+				fetch(process.env.BACKEND_URL + "/api/rewards/"+userId, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rewardList) => {
+					setStore({rewards: rewardList })
+					console.log(store.rewards);
+				}).catch((err) => {
+					console.error('Couldnt get rewards from API', err)
+				})
+			
+			},
+			deleteRewards: (rewardId)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
+					method: 'DELETE',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					console.log(response);
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((rewardList) => {
+					console.log(rewardList)
+				}).catch((err) => {
+					console.error('Couldnt delete the reward', err)
+				})
+			},
+			updateReward: (rewardId, label, rarityId)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				const updatedReward= {
+					"label": label,
+					"rarity_id": rarityId
+				}
+				
+				fetch(process.env.BACKEND_URL + "/api/rewards/"+rewardId, {
+					method: "PUT",
+					body: JSON.stringify(updatedReward),
+						  headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			selectRarity:(rarity)=>{
+				const store=getStore()
+				const action=getActions()
+				const rarityList= store.allRarities
+				for(let item of rarityList){
+					if(item.rarity_name === rarity){setStore({rarityId: item.id})}
+				}
+				return store.rarityId
+				
+				
+			},
+			getAllRarities: async ()=>{
+				const store=getStore()
+				const action=getActions()
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/rarity")
+					const data = await resp.json()
+					setStore({ allRarities: data})
+					// don't forget to return something, that is how the async resolves
+					console.log(store.allRarities)
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
+			setRewardId: (id)=>{
+				const store=getStore()
+				const action=getActions()
+				setStore({rewardId : id})
+			}
+	
+	
+
+		}
+	};*/
+		},
+	}
+}
 export default getState;

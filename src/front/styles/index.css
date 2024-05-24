@@ -1,5 +1,13 @@
 body {
     font-family: Montserrat;
+
+    /* margin-top: 100px; */
+}
+
+#app{
+   height:100vh;
+
+
 }
 
 /* pages with the navbar */
