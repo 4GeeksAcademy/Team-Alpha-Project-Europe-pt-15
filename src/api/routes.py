@@ -23,7 +23,7 @@ def handle_hello():
     return jsonify(response_body), 200
 
 
-##  USER ROUTES  ##
+###################################################################################  USER ROUTES
 
 @api.route('/login', methods=['POST'])
 def login_user():
@@ -62,7 +62,7 @@ def create_user():
         level= 1,
         experience = 0,
         energy = 0
-        )
+    )
 
     db.session.add(new_user)
     db.session.commit()
@@ -118,8 +118,7 @@ def update_user(user_id):
 
     return jsonify({"msg": "User is Updated"}), 200
 
-
-##  ROLES ROUTES  ##
+###################################################################################  ROLES ROUTES
 
 @api.route("/roles", methods=['GET'])
 def get_roles_list():
@@ -221,7 +220,7 @@ def update_role(role_id):
     return jsonify({"msg": "role is Updated"}), 200
 '''
 
-##  TASK DIFFICULTY ROUTES  ##
+###################################################################################  TASK DIFFICULTY ROUTES
 
 @api.route("/difficulty",  methods=['GET'])
 def get_difficulties():
@@ -291,16 +290,15 @@ def update_difficulty(difficulty_id):
     return jsonify({"msg": "difficulty is Updated"}), 200
 '''
 
-##  TASKS ROUTES  ##
-'''
-@api.route("/task",  methods=['GET'])
+###################################################################################  TASKS ROUTES
+
+@api.route("/tasks",  methods=['GET'])
 def get_tasks():
     tasks= Task.query.all()
     all_tasks= list(map(lambda x: x.serialize(), tasks))
     return jsonify(all_tasks), 200
-'''
 
-@api.route("/task",  methods=['POST'])
+@api.route("/tasks",  methods=['POST'])
 def create_task():
     new_task = request.get_json()
 
@@ -310,14 +308,14 @@ def create_task():
         return "user_id should be in New task Body", 400
     if 'task_difficulty_id' not in new_task:
         return "task_difficulty_id should be in New task Body", 400
-    
-  
 
     new_task = Task(
         label = new_task['label'],
         user_id = new_task['user_id'],
         task_difficulty_id = new_task['task_difficulty_id'],
-        done = False
+        done = False,
+        onboard = True
+
         )
 
     db.session.add(new_task)
@@ -326,7 +324,7 @@ def create_task():
     return jsonify({"msg": "New Task is Created"}), 201
 
 
-@api.route('/task/<int:the_user_id>', methods=['GET'])
+@api.route('/tasks/<int:the_user_id>', methods=['GET'])
 def get_task_list(the_user_id):
 
     tasks = Task.query.filter_by(user_id = the_user_id)
@@ -338,14 +336,14 @@ def get_task_list(the_user_id):
 
     return jsonify(task_list), 200
 
-@api.route('/task/<int:task_id>', methods=['PUT'])
+@api.route('/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
 
     new_updated_task = request.get_json()
     old_task_obj = Task.query.get(task_id)
 
     if old_task_obj is None:
-        return "No difficulty with id: " + str(task_id), 400
+        return "No task with id: " + str(task_id), 400
 
     if 'label' in new_updated_task:
         old_task_obj.label = new_updated_task['label']
@@ -356,12 +354,19 @@ def update_task(task_id):
     if 'done' in new_updated_task:
         old_task_obj.done = new_updated_task['done']
 
+    if 'done' in new_updated_task:
+        old_task_obj.done = new_updated_task['done']
+
+    if 'onboard' in new_updated_task:
+        old_task_obj.onboard = new_updated_task['onboard']
+
 
     db.session.commit()
 
     return jsonify({"msg": "task is Updated"}), 200
 
-@api.route('/task/<int:task_id>', methods=['DELETE'])
+'''
+@api.route('/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
 
     deleting_task = Task.query.get(task_id)
@@ -373,9 +378,8 @@ def delete_task(task_id):
     db.session.commit()
 
     return jsonify({"msg": "task is Deleted"}), 200
-
-
-##  REWARD RARITY ROUTES  ##
+'''
+###################################################################################  REWARD RARITY ROUTES
 
 @api.route("/rarity",  methods=['GET'])
 def get_rarities():
@@ -439,16 +443,16 @@ def update_rarity(rarity_id):
     return jsonify({"msg": "rarity is Updated"}), 200
 '''
 
-##  REWARD ROUTES  ##
+###################################################################################  REWARD ROUTES
 
 # i don't think we need this
-'''
+
 @api.route("/rewards",  methods=['GET'])
 def get_rewards():
     rewards= Reward.query.all()
     all_rewards= list(map(lambda x: x.serialize(), rewards))
     return jsonify(all_rewards), 200
-'''
+
 
 @api.route("/rewards",  methods=['POST'])
 def create_reward():
@@ -465,8 +469,8 @@ def create_reward():
     new_reward = Reward(
         label = new_reward['label'],
         user_id = new_reward['user_id'],
-        rarity_id = new_reward['rarity_id']
-        
+        rarity_id = new_reward['rarity_id'],
+        done = False
         )
 
     db.session.add(new_reward)
@@ -496,18 +500,18 @@ def update_reward(reward_id):
 
     if 'label' in new_updated_reward:
         old_reward_obj.label = new_updated_reward['label']
-
-    if 'user_id' in new_updated_reward:
-        old_reward_obj.user_id = new_updated_reward['user_id']
     
     if 'rarity_id' in new_updated_reward:
         old_reward_obj.rarity_id = new_updated_reward['rarity_id']
+
+    if 'done' in new_updated_reward:
+        old_reward_obj.done = new_updated_reward['done']
 
 
     db.session.commit()
 
     return jsonify({"msg": "reward is Updated"}), 200
-
+'''
 @api.route('/rewards/<int:reward_id>', methods=['DELETE'])
 def delete_reward(reward_id):
 
@@ -520,9 +524,9 @@ def delete_reward(reward_id):
     db.session.commit()
 
     return jsonify({"msg": "reward is Deleted"}), 200
+'''
 
-
-##  MONSTERS ROUTES  ##
+###################################################################################  MONSTER ROUTES
 
 # i don't think we need this
 '''
@@ -564,7 +568,7 @@ def get_monster_list(the_user_id):
 
     return jsonify(monster_list), 200
 
-#hability routes#
+###################################################################################  ABILITY ROUTES
 
 @api.route("/ability",  methods=['GET'])
 def get_all_habilities():

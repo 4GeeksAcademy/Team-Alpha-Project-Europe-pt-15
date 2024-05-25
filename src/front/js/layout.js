@@ -12,6 +12,7 @@ import {Dash} from "./pages/dashboard";
 import { Rewards } from "./pages/rewards";
 import { Bestiary } from "./pages/bestiary"; 
 
+
 import injectContext from "./store/appContext";
 import { ProfileEdit } from "./pages/profile_edit";
 

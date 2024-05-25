@@ -191,8 +191,8 @@ def setup_commands(app):
         user.password = "user"
         user.user_role = 2
         user.level = 1
-        user.experience = 0
-        user.energy = 0
+        user.experience = 78
+        user.energy = 23
         db.session.add(user)
         db.session.commit()
         print("Test user created.")
@@ -206,6 +206,7 @@ def setup_commands(app):
         task1.user_id = 1
         task1.task_difficulty_id = 3
         task1.done = False    
+        task1.onboard = True 
         db.session.add(task1)
         db.session.commit()
 
@@ -213,7 +214,8 @@ def setup_commands(app):
         task2.label = "call mom"
         task2.user_id = 1
         task2.task_difficulty_id = 1  
-        task2.done = False     
+        task2.done = False    
+        task2.onboard = True  
         db.session.add(task2)
         db.session.commit()
 
@@ -222,17 +224,19 @@ def setup_commands(app):
         task3.user_id = 1
         task3.task_difficulty_id = 2  
         task3.done = False       
+        task3.onboard = True 
         db.session.add(task3)
         db.session.commit()
 
-        task5 = Task()
-        task5.label = "break up with Linda, it's not her it's me..."
-        task5.user_id = 1
-        task5.task_difficulty_id = 3
-        task5.done = False 
-        db.session.add(task5)
+        task4 = Task()
+        task4.label = "break up with Linda, it's not her it's me..."
+        task4.user_id = 1
+        task4.task_difficulty_id = 3
+        task4.done = False 
+        task4.onboard = True 
+        db.session.add(task4)
         db.session.commit()
-        print("5 tasks created.")
+        print("4 tasks created.")
 
 
         ##  REWARDS  ##
@@ -240,28 +244,32 @@ def setup_commands(app):
         reward1 = Reward()
         reward1.label = "new limited edition oreo icecream"
         reward1.user_id = 1
-        reward1.rarity_id = 1        
+        reward1.rarity_id = 1 
+        reward1.done = False         
         db.session.add(reward1)
         db.session.commit()
 
         reward2 = Reward()
         reward2.label = "camping trip"
         reward2.user_id = 1
-        reward2.rarity_id = 3        
+        reward2.rarity_id = 3  
+        reward2.done = False       
         db.session.add(reward2)
         db.session.commit()
 
         reward3 = Reward()
         reward3.label = "taco tuesday"
         reward3.user_id = 1
-        reward3.rarity_id = 2        
+        reward3.rarity_id = 2    
+        reward3.done = False     
         db.session.add(reward3)
         db.session.commit()
 
-        reward5 = Reward()
-        reward5.label = "realize I'm worthy of love too and win Linda back!!!"
-        reward5.user_id = 1
-        reward5.rarity_id = 3
-        db.session.add(reward5)
+        reward4 = Reward()
+        reward4.label = "realize I'm worthy of love too and win Linda back!!!"
+        reward4.user_id = 1
+        reward4.rarity_id = 3
+        reward4.done = False 
+        db.session.add(reward4)
         db.session.commit()
-        print("5 rewards created.")
+        print("4 rewards created.")
