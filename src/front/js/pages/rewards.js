@@ -12,7 +12,7 @@ export const Rewards = () => {
     const { store, actions } = useContext(Context);
    
     useEffect(() => {
-        actions.getRewards()
+        actions.getRewards(1)
 		actions.getRarities()
     },[]);
 

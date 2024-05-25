@@ -9,7 +9,8 @@ import { SignUp } from "./pages/signUp";
 import { Role } from "./pages/choose_role";
 import { Quests } from "./pages/quests";
 import {Dash} from "./pages/dashboard";
-import { Rewards } from "./pages/rewards"; 
+import { Rewards } from "./pages/rewards";
+import { Bestiary } from "./pages/bestiary"; 
 
 import injectContext from "./store/appContext";
 import { ProfileEdit } from "./pages/profile_edit";
@@ -33,6 +34,7 @@ const Layout = () => {
                         <Route element={<Quests />} path="/quests" />
                         <Route element={<Rewards />} path="/rewards" />
                         <Route element={<ProfileEdit />} path="/editprofile" />
+                        <Route element={<Bestiary />} path="/bestiary" />
                         <Route element={<Dash />} path="/dashboard" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

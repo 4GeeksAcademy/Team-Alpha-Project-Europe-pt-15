@@ -11,7 +11,7 @@ export const Quests = () => {
 	const { store, actions } = useContext(Context);
 
 	useEffect(() => {
-        actions.getTaskList()
+        actions.getTaskList(1)
 		//actions.getDifficulties()
     },[]);
 
