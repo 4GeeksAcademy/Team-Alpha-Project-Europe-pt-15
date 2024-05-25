@@ -59,8 +59,10 @@ def create_user():
         name = new_user['name'],
         password = new_user['password'],
         email = new_user['email'],
-        level= 1        
-        )
+        level= 1,
+        experience = 0,
+        energy = 0
+    )
 
     db.session.add(new_user)
     db.session.commit()
@@ -313,6 +315,7 @@ def create_task():
         task_difficulty_id = new_task['task_difficulty_id'],
         done = False,
         onboard = True
+
         )
 
     db.session.add(new_task)
@@ -347,6 +350,9 @@ def update_task(task_id):
     
     if 'task_difficulty_id' in new_updated_task:
         old_task_obj.task_difficulty_id = new_updated_task['task_difficulty_id']
+    
+    if 'done' in new_updated_task:
+        old_task_obj.done = new_updated_task['done']
 
     if 'done' in new_updated_task:
         old_task_obj.done = new_updated_task['done']
@@ -562,11 +568,10 @@ def get_monster_list(the_user_id):
 
     return jsonify(monster_list), 200
 
-
 ###################################################################################  ABILITY ROUTES
 
 @api.route("/ability",  methods=['GET'])
 def get_all_habilities():
     ability= Ability.query.all()
-    all_habilities= list(map(lambda x: x.serialize(), ability))
-    return jsonify(all_habilities), 200
+    all_abilities= list(map(lambda x: x.serialize(), ability))
+    return jsonify(all_abilities), 200
