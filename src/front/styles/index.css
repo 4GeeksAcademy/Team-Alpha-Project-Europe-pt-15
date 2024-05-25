@@ -19,6 +19,16 @@ body {
 .txt-red {color: #EB1652}
 .txt-purple {color: #9111F2}
 
+.bg-active, .bg-experience {
+    background: #10E0B8;
+    border-radius: 100px !important;
+}
+
+.bg-energy {
+    background: #FFC444;
+    border-radius: 100px !important;
+}
+
 /* cards borders and shadows */
 .card {
     border: 3px solid #252424;
@@ -51,9 +61,4 @@ input {
 
 .card-header {
     border-bottom: 3px solid #252424;
-}
-
-.bg-active{
-    background: #10E0B8;
-    border-radius: 100px !important;
 }

@@ -47,9 +47,11 @@ export const Navbar = ({view, modal}) => {
                     </button>
                 </div>
                 {/* log out */}
-                <button className="card circle bg-black">
-                    <i className="fa-solid fa-power-off"></i>
-                </button>
+                <Link to="/" >
+                    <button className="card circle bg-black" onClick={actions.Logout}>
+                        <i className="fa-solid fa-power-off"></i>
+                    </button>
+                </Link>
         </div>
         {/* views */}
         <div className="card round col-lg-3 mx-auto mt-4 d-flex flex-row justify-content-evenly">
@@ -88,11 +90,15 @@ export const Navbar = ({view, modal}) => {
             <div className="card col-12 gap-3 p-3 my-3">
                 <div className="d-inline-flex flex-row justify-content-between">
                     <i className="fa-solid fa-forward"></i>
-                    <div className="card round col-11"></div>
+                    <div className="card round col-11">
+                        <div className="bg-experience" style={{height:"15px",width: store.user.experience + "%"}}></div>
+                    </div>
                 </div>
                 <div className="d-inline-flex flex-row justify-content-between">
                     <i className="fa-solid fa-bolt"></i>
-                    <div className="card round col-11"></div>
+                    <div className="card round col-11">
+                        <div className="bg-energy" style={{height:"15px",width: store.user.energy + "%"}}></div>
+                    </div>
                 </div>
             </div>
             {/* beastiary */}

@@ -17,43 +17,41 @@ export const Rewards = () => {
     },[]);
 
     let view = "rewards"
-	let createModal = "createReward"
-	let editModal = "editReward"
+	let idCreateModal = "createReward"
     
     return (
 		<>
 		{/* navigation */}
         <Navbar
 			view={view}
-			modal={`#${createModal}`}
+			modal={`#${idCreateModal}`}
 		/>
 		{/* list */}
 		<div className="dashboard row row-cols-1 row-cols-md-4 g-4">
-			{store.rewards?.map((item,index)=>(
+			{store.rewards?.filter(item => item.done === false).map((item,index)=>(
 				<DashCard key={index}
-					view={view}
 					id={item.id}
+					view={view}
 					label={item.label}
 					tier={item.rarity_id}
-					modal={`#editModal${item.id}`}
+					modal={`#${item.id}`}
 				/>
 			))}
 		</div>
 		{/* create reward */}
 		<DashModal
-			id={createModal}
+			id={idCreateModal}
+			view={view}
 			label="New Reward"
 			tier={store.rarities}
-			submit={actions.createReward}
-			delete={actions.delete}
 		/>
 		{/* edit reward */}
 		{store.rewards?.map((item,index)=>(
-		<DashModal
-			id={`#editModal${item.id}`}
+		<DashModal key={index}
+			id={item.id}
+			view={view}
 			label="Edit Reward"
 			tier={store.rarities}
-			submit=""
 		/>
 		))}
 		</>

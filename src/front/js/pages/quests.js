@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
 
 import "../../styles/index.css";
 import { Navbar } from "../component/navbar_dashboard";
@@ -16,44 +15,42 @@ export const Quests = () => {
     },[]);
 
     let view = "tasks"
-	let createModal = "createQuest"
-	let editModal = "editQuest"
+	let idCreateModal = "createTask"
     
     return (
 		<>
 		{/* navigation */}
         <Navbar
 			view={view}
-			modal={`#${createModal}`}
+			modal={`#${idCreateModal}`}
 		/>
 		{/* list */}
 		<div className="dashboard row row-cols-1 row-cols-md-4 g-4">
-			{store.tasks?.map((item,index)=>(
+			{store.tasks?.filter(item => item.onboard === true).map((item,index)=>(
 				<DashCard key={index}
-					view={view}
 					id={item.id}
+					view={view}
 					label={item.label}
 					tier={item.task_difficulty_id}
-					done={item.done}
 					modal={`#${item.id}`}
+					done={item.done}
 				/>
 			))}
 		</div>
 		{/* create quest */}
 		<DashModal
-			id={createModal}
+			id={idCreateModal}
+			view={view}
 			label="New Quest"
 			tier={store.difficulties}
-			submit=""
 		/>
 		{/* edit quest */}
-		{store.tasks?.map(item =>(
-		<DashModal
+		{store.tasks?.map((item,index)=>(
+		<DashModal key={index}
 			id={item.id}
 			view={view}
 			label="Edit Quest"
 			tier={store.difficulties}
-			submit=""
 		/>
 		))}
 		</>
