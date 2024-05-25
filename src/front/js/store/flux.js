@@ -10,10 +10,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
-			bestiary: null,
+			bestiary: [],
 			rewards: null,
 			rarityId: null,
 			rewardId:null,
+			creatureInfo:[],
 			rarities: [],
 			user: [],
 			tasks: [],
@@ -126,7 +127,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem('jwt-token', loginData.token)
 					localStorage.setItem('user', loginData.user_id)
 				}).catch((err) => {
-					console.error('Something Wrong when calling API', err)
+					console.log('Something Wrong when calling API', err)
 				})
 			},
 
@@ -153,7 +154,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).then((rolesData) => {
 					setStore({...getStore, roles: rolesData})
 				}).catch((err) => {
-					console.error('Couldnt get classes from API', err)
+					console.log('Couldnt get classes from API', err)
 				})
 			},
 
@@ -173,16 +174,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).then((message) => {
 					console.log(message)
 				}).catch((err) => {
-					console.error('Couldnt add role to user', err)
+					console.log('Couldnt add role to user', err)
 				})
 			},
 
 			getUserData: async () => {
-
+				const store = getStore()
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				const user = 1
 
 				fetch(process.env.BACKEND_URL + "api/user/" + user, {
 					method: 'GET',
@@ -193,9 +194,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw Error(response.status)
 				}).then((userData) => {
 					setStore({...getStore, user: userData})
+					console.log(store.user)
 				}).catch((err) => {
-					console.error('Couldnt get classes from API', err)
-				})
+					console.log("Couldnt get user from API", err)
+				});
 			},
 
 			getTaskList: async () => {
@@ -215,7 +217,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).then((tasksData) => {
 					setStore({...getStore, tasks: tasksData})
 				}).catch((err) => {
-					console.error('Couldnt get classes from API', err)
+					console.log('Couldnt get classes from API', err)
 				})
 			},
 
@@ -224,7 +226,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				const user = 1
 
 				fetch(process.env.BACKEND_URL + "api/rewards/" + user, {
 					method: 'GET',
@@ -235,17 +237,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).then((rewardList) => {
 					setStore({rewards: rewardList })
 				}).catch((err) => {
-					console.error('Couldnt get rewards from API', err)
+					console.log('Couldnt get rewards from API', err)
 				})
 			
 			},
 
-			createReward: ()=>{
+			createReward: (user)=>{
 
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 3
+				//const user = 3
 				const input = getStore().inputs
 
 				const reward ={
@@ -376,11 +378,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				headers: myHeaders,
 				redirect: "follow"
 				};
-
-
 				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
 				.then((response) => response.json())
-				.then((result) => console.log(result))
+				.then((result) =>{ setStore({creatureInfo:[...store.creatureInfo,result]})})
 				.catch((error) => console.error(error));	
 			},
 			getEncounter: (userLevel)=>{
@@ -423,6 +423,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}	
+			},
+			getBestiaryInfo:()=>{
+				const store=getStore()
+				const action=getActions()
+
+				const myBestiary = store.bestiary
+				console.log(myBestiary)
+				myBestiary.map((item)=>action.getMonsterByIndex(item.monster_name))
+				setTimeout(() => { 
+					console.log(store.creatureInfo)
+				}, "500");
+				
+
 			},
 			decideEncounter: (userlvl,userId)=>{
 				const store=getStore()
@@ -477,6 +490,98 @@ const getState = ({ getStore, getActions, setStore }) => {
 					else{return console.log(false)}
 				}, "500");
 			},
+			getMonsterimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				if(creature.image){return `https://www.dnd5eapi.co${creature.image}`}
+				if (creature.type == "aberration"){return img1}
+				if (creature.type == "beast"){return img2}
+				if (creature.type == "celestial"){return img3}
+				if (creature.type == "construct"){return img4}
+				if (creature.type == "dragon"){return img5}
+				if (creature.type == "elemental"){return img6}
+				if (creature.type == "fey"){return img7}
+				if (creature.type == "fiend"){return img8}
+				if (creature.type == "giant"){return img9}
+				if (creature.type == "humanoid"){return img10}
+				if (creature.type == "monstrosity"){return img11}
+				if (creature.type == "ooze"){return img12}
+				if (creature.type == "plant"){return img13}
+				if (creature.type == "undead"){return img14}
+			},
+			addExperience:(experience)=>{
+				const store=getStore()
+				const action=getActions()
+				const user =store.user
+				const newExp = user.experience + experience
+				
+				if(newExp > 100){return action.updateUserLevel((newExp -100), (user.level + 1))}
+				else {return action.updateUserLevel(newExp, user.level) }
+
+			},
+			addEnergy:(energy)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				const newEnergy= user.energy + energy
+				if (newEnergy >= 40){return action.updateEnergy(40)}
+				else {return action.updateEnergy(newEnergy)}
+			},
+			onQuestCompletion:(experience, energy)=>{
+				const store=getStore()
+				const action=getActions()
+				action.addExperience(experience)
+				action.addEnergy(energy)
+			},
+			
+			updateUserLevel:(experience, level)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				
+					const updatedExpAndLevel = {
+						"experience": experience,
+						"level": level
+					}
+				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
+					method: "PUT",
+					body: JSON.stringify(updatedExpAndLevel),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			updateEnergy:(energy)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				
+					const updatedEnergy = {
+						"energy": energy
+						
+					}
+				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
+					method: "PUT",
+					body: JSON.stringify(updatedEnergy),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+				}
+
 		}
 	};
 };
