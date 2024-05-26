@@ -35,6 +35,9 @@ export const Navbar = ({view, modal}) => {
                 <div className="d-flex flex-row gap-3">
                     {/* profile button */}
                     <button className="card circle" data-bs-toggle="offcanvas" data-bs-target="#Profile" aria-controls="Profile">
+                        {store.user.energy >= 95
+                        ? <span className="position-absolute top-1 start-100 translate-middle">
+                        <i className="fa-solid fa-circle fa-beat txt-yellow"></i></span> : null}
                         <i className="fa-solid fa-user"></i>
                     </button>
                     {/* create task/reward button */}
@@ -95,7 +98,9 @@ export const Navbar = ({view, modal}) => {
                     </div>
                 </div>
                 <div className="d-inline-flex flex-row justify-content-between">
-                    <i className="fa-solid fa-bolt"></i>
+                    {store.user.energy >= 95
+                    ? <i className="fa-solid fa-bolt fa-fade"></i>
+                    : <i className="fa-solid fa-bolt"></i>}
                     <div className="card round col-11">
                         <div className="bg-energy" style={{height:"15px",width: store.user.energy + "%"}}></div>
                     </div>
@@ -103,9 +108,11 @@ export const Navbar = ({view, modal}) => {
             </div>
             {/* beastiary */}
             <div className="d-flex gap-3 my-3">
-                <Link to="/" className="card col-5 p-3">
-                    <img src={beastiary} />
-                    <h5>Beastiary</h5>
+                <Link to="/bestiary" className="card col-5 p-3" >
+                    <div data-bs-dismiss="offcanvas">
+                        <img src={beastiary} className="w-100" />
+                        <h5>Beastiary</h5>
+                    </div>
                 </Link>
                 {/* count */}
                 <div className="col">
