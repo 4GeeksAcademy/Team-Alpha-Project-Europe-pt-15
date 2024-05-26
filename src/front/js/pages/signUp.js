@@ -112,12 +112,13 @@ export const SignUp = () => {
         <div className="d-flex">
           <input type="checkbox" id="tandc" required />
           <label htmlFor="tandc" className="mx-2">
-            Please confirm the <Link to={"/"}>Terms and Condition</Link>
+            I agree to the <Link to={"/"}>Terms and Condition</Link>
           </label>
         </div>
         <button
           type="submit" 
           className="card p-3 m-0 text-center bg-purple"
+          disabled={isButtonDisabled}
         >
           <h5 className="m-auto">Gotcha</h5>
         </button>
