@@ -15,6 +15,7 @@ export const UserPanel = (props) => {
 
         <div className="user-panel">
             <div className="imageRole">
+                
                 <i className="fa-solid fa-remove icone btn"></i>
                 <div className="img align-items-center">
                     <img />

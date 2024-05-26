@@ -6,13 +6,59 @@
   }
 
   
-  }
+}
 
-/* .mainCard{
+.mainCard {
 
-        padding-top: 80px;
-        height: 80vh;
-        width: 45vh;
-        margin-top: 50px;
-} */
+width: 50vh;
+
+}
+
+.mainCard:hover {
+  color: black !important;
+  background-color: white !important;
+}
+
+
+.difSelector {
+  display: flex;
+  gap: 10px;
+}
+
+.btnDif:hover{
+  background-color:  black;
+  color: white; 
+  
+}
+
+.btnDif:active {
+
+    background-color:  black;
+    color: white; 
+   
+} 
+
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+
+.cardLabel{
+  margin: 0;
+
+}
+
+.cardLabel:hover {
+  color: black;
+  
+  margin: 0;
+  
+}
+
+.inpuTasker{
+  overflow: hidden;
+}
 

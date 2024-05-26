@@ -58,6 +58,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error('Error fetching user:', error);
 				}
 			},
+			
 			getUser: async (userId) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${userId}`, {
@@ -79,26 +80,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			updateUserExpDif: async (user_id, user, experience, energy) => {
-				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${user_id}`, {
-						method: 'PUT',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							...user,
-							experience: experience,
-							energy: energy
-						})
-					});
-
-					if (!resp.ok) {
-						throw new Error(`HTTP error! status: ${resp.status}`);
-
-					}
-
-					const data = await resp.json();
-					console.log(data)
-
+			
 			// Use getActions to call a function within a fuction
 			
 			getMessage: async () => {
@@ -151,9 +133,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 
-
-
-			getInput: (event) => {
+			/*getInput: (event) => {
 				const name = event.target.id;
 				const value = event.target.value;
 				setStore({
@@ -283,7 +263,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			},
 
-			/*addRole: (role) => {
+			addRole: (role) => {
 	
 				//const user = localStorage.getItem('user_id')
 	
@@ -708,6 +688,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				
 				
 			},
+
 			getAllRarities: async ()=>{
 				const store=getStore()
 				const action=getActions()
@@ -732,9 +713,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 	
 	
 
-		}
-	};*/
+		},*/
+	
 		},
-	}
-}
+	};
+};
 export default getState;
