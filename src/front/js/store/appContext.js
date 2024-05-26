@@ -29,6 +29,11 @@ const injectContext = PassedComponent => {
 			 * store, instead use actions, like this:
 			 **/
 			
+
+			state.actions.getUserData();
+			state.actions.getBestiary(1);
+			state.actions.getMessage();
+
 			
 	
 			//state.actions.getRoles();
