@@ -1,6 +1,6 @@
 
 import click
-from api.models import db, User, Role, Difficulty, Task, Rarity, Reward
+from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Ability
 
 """
 In this file, you can add as many commands as you want using the @app.cli.command decorator
@@ -37,10 +37,7 @@ def setup_commands(app):
         B = Role()
         B.name = "Barbarian"
         B.description = "Battle Rage is blind and merciless but extreamely powerful. This means a greater chance at defeating your enemies and achieve victory."
-        B.passive = "B"
-        B.hability_1 = "Fang Slash"
-        B.hability_2 = "Jaw Breaker"
-        B.hability_3 = "Frenzy Strikes"       
+        B.passive = "B"      
         db.session.add(B)
         db.session.commit()
         print("Barbarian created.")
@@ -48,10 +45,7 @@ def setup_commands(app):
         W = Role()
         W.name = "Wizard"
         W.description = "Being a master at conjuring comes with it's own perks. Your Arcana abilities provide you a second shot at succeeding in a encounter."
-        W.passive = "W"
-        W.hability_1 = "Confusion Enchantment"
-        W.hability_2 = "Lightning Blast"
-        W.hability_3 = "Fireball Vortex"        
+        W.passive = "W"       
         db.session.add(W)
         db.session.commit()
         print("Wizard created.")
@@ -59,10 +53,7 @@ def setup_commands(app):
         R = Role()
         R.name = "Rogue"
         R.description = "Sneaky little bastard ain't we. How come you never get caught stealling extra experience from the master vault?"
-        R.passive = "R"
-        R.hability_1 = "Tear Smoke Bomb"
-        R.hability_2 = "Swift and Easy"
-        R.hability_3 = "Table Heist"        
+        R.passive = "R"       
         db.session.add(R)
         db.session.commit()
         print("Rogue created.")
@@ -72,7 +63,7 @@ def setup_commands(app):
         ##  TASK DIFFICULTY  ##
         print("Creating db task difficulty")
         Easy = Difficulty()
-        Easy.difficulty_name = "Easy"
+        Easy.name = "Easy"
         Easy.experience_given = 7
         Easy.energy_given = 1        
         db.session.add(Easy)
@@ -80,7 +71,7 @@ def setup_commands(app):
         print("Easy created.")
 
         Medium = Difficulty()
-        Medium.difficulty_name = "Medium"
+        Medium.name = "Medium"
         Medium.experience_given = 13
         Medium.energy_given = 2        
         db.session.add(Medium)
@@ -88,7 +79,7 @@ def setup_commands(app):
         print("Medium created.")
 
         Hard = Difficulty()
-        Hard.difficulty_name = "Hard"
+        Hard.name = "Hard"
         Hard.experience_given = 20
         Hard.energy_given = 4        
         db.session.add(Hard)
@@ -100,26 +91,96 @@ def setup_commands(app):
         ##  REWARD RARITY  ##
         print("Creating db reward rarities")
         Common = Rarity()
-        Common.rarity_name = "Common"
+        Common.name = "Common"
         Common.energy_required = 10        
         db.session.add(Common)
         db.session.commit()
         print("Common created.")
 
         Rare = Rarity()
-        Rare.rarity_name = "Rare"
+        Rare.name = "Rare"
         Rare.energy_required = 20        
         db.session.add(Rare)
         db.session.commit()
         print("Rare created.")
 
         Legendary = Rarity()
-        Legendary.rarity_name = "Legendary"
+        Legendary.name = "Legendary"
         Legendary.energy_required = 40        
         db.session.add(Legendary)
         db.session.commit()
         print("Legendary created.")        
         print("All reward rarities created")
+        
+
+        ##  ROLES ABILITIES  ##
+        print("Creating db role abilities")
+        BH1 = Ability()
+        BH1.name = "Fang Slash"
+        BH1.role_id = 1   
+        BH1.effect = 1 
+        db.session.add(BH1)
+        db.session.commit()
+
+        BH2 = Ability()
+        BH2.name = "Jaw Breaker"
+        BH2.role_id = 1    
+        BH2.effect = 2
+        db.session.add(BH2)
+        db.session.commit()
+
+        BH3 = Ability()
+        BH3.name = "Frenzy Strikes"
+        BH3.role_id = 1    
+        BH3.effect = 3
+        db.session.add(BH3)
+        db.session.commit()
+        print("Barbarian abilities created.")
+
+        WH1 = Ability()
+        WH1.name = "Stun Spell"
+        WH1.role_id = 2   
+        WH1.effect = 1 
+        db.session.add(WH1)
+        db.session.commit()
+
+        WH2 = Ability()
+        WH2.name = "Lightning Blast"
+        WH2.role_id = 2    
+        WH2.effect = 2
+        db.session.add(WH2)
+        db.session.commit()
+
+        WH3 = Ability()
+        WH3.name = "Fireball Vortex"
+        WH3.role_id = 2    
+        WH3.effect = 3
+        db.session.add(WH3)
+        db.session.commit()
+        print("Wizard abilities created.")
+
+        RH1 = Ability()
+        RH1.name = "Distraction Crackers"
+        RH1.role_id = 3   
+        RH1.effect = 1 
+        db.session.add(RH1)
+        db.session.commit()
+
+        RH2 = Ability()
+        RH2.name = "Swift and Easy"
+        RH2.role_id = 3    
+        RH2.effect = 2
+        db.session.add(RH2)
+        db.session.commit()
+
+        RH3 = Ability()
+        RH3.name = "Table Heist"
+        RH3.role_id = 3    
+        RH3.effect = 3
+        db.session.add(RH3)
+        db.session.commit()
+        print("Rogue abilities created.")
+        print("All abilities created.")
 
 
         ##  TEST USER  ##
@@ -130,8 +191,8 @@ def setup_commands(app):
         user.password = "user"
         user.user_role = 2
         user.level = 1
-        user.experience = 0
-        user.energy = 0
+        user.experience = 78
+        user.energy = 23
         db.session.add(user)
         db.session.commit()
         print("Test user created.")
@@ -143,74 +204,72 @@ def setup_commands(app):
         task1 = Task()
         task1.label = "fill in taxes form"
         task1.user_id = 1
-        task1.task_difficulty_id = 3      
+        task1.task_difficulty_id = 3
+        task1.done = False    
+        task1.onboard = True 
         db.session.add(task1)
         db.session.commit()
 
         task2 = Task()
         task2.label = "call mom"
         task2.user_id = 1
-        task2.task_difficulty_id = 1      
+        task2.task_difficulty_id = 1  
+        task2.done = False    
+        task2.onboard = True  
         db.session.add(task2)
         db.session.commit()
 
         task3 = Task()
-        task3.label = "take out the trash"
+        task3.label = "return book to library"
         task3.user_id = 1
-        task3.task_difficulty_id = 2        
+        task3.task_difficulty_id = 2  
+        task3.done = False       
+        task3.onboard = True 
         db.session.add(task3)
         db.session.commit()
 
         task4 = Task()
-        task4.label = "return book to library"
+        task4.label = "break up with Linda, it's not her it's me..."
         task4.user_id = 1
-        task4.task_difficulty_id = 1
+        task4.task_difficulty_id = 3
+        task4.done = False 
+        task4.onboard = True 
         db.session.add(task4)
         db.session.commit()
-
-        task5 = Task()
-        task5.label = "break up with Linda, it's not her it's me..."
-        task5.user_id = 1
-        task5.task_difficulty_id = 3
-        db.session.add(task5)
-        db.session.commit()
-        print("5 tasks created.")
+        print("4 tasks created.")
 
 
         ##  REWARDS  ##
         print("Creating db dummy rewards")
         reward1 = Reward()
-        reward1.label = "oreo icecream"
+        reward1.label = "new limited edition oreo icecream"
         reward1.user_id = 1
-        reward1.rarity_id = 1        
+        reward1.rarity_id = 1 
+        reward1.done = False         
         db.session.add(reward1)
         db.session.commit()
 
         reward2 = Reward()
         reward2.label = "camping trip"
         reward2.user_id = 1
-        reward2.rarity_id = 3        
+        reward2.rarity_id = 3  
+        reward2.done = False       
         db.session.add(reward2)
         db.session.commit()
 
         reward3 = Reward()
         reward3.label = "taco tuesday"
         reward3.user_id = 1
-        reward3.rarity_id = 2        
+        reward3.rarity_id = 2    
+        reward3.done = False     
         db.session.add(reward3)
         db.session.commit()
 
         reward4 = Reward()
-        reward4.label = "movie night"
+        reward4.label = "realize I'm worthy of love too and win Linda back!!!"
         reward4.user_id = 1
-        reward4.rarity_id = 1
+        reward4.rarity_id = 3
+        reward4.done = False 
         db.session.add(reward4)
         db.session.commit()
-
-        reward5 = Reward()
-        reward5.label = "finnaly realize I deserve love too and win Linda back!!!"
-        reward5.user_id = 1
-        reward5.rarity_id = 3
-        db.session.add(reward5)
-        db.session.commit()
-        print("5 rewards created.")
+        print("4 rewards created.")

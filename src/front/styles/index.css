@@ -1,5 +1,6 @@
 body {
     font-family: Montserrat;
+
 }
 
 /* text */
@@ -10,7 +11,12 @@ h1, h2, h3, h4, h5, h6, .bold {
 h1, button {
     text-align: center;
     margin-top: 100px;
+=======
+
 }
+
+/* pages with the navbar */
+.dashboard {margin-top: 100px}
 
 /* colors */
 .bg-green {background: #10E0B8}
@@ -20,11 +26,22 @@ h1, button {
 .bg-black {background: #252424}
 .bg-black {background: #252424; color: #ffffff; box-shadow: none !important;}
 .bg-white {background: #ffffff}
+.form-range-track-bg { background: #252424};
 
 .txt-green {color: #10E0B8}
 .txt-yellow {color: #FFC444}
 .txt-red {color: #EB1652}
 .txt-purple {color: #9111F2}
+
+.bg-active, .bg-experience {
+    background: #10E0B8;
+    border-radius: 100px !important;
+}
+
+.bg-energy {
+    background: #FFC444;
+    border-radius: 100px !important;
+}
 
 /* cards borders and shadows */
 .card, .bttn {
@@ -67,7 +84,7 @@ a {
 }
 
 /* text */
-h1, h2, h3, h4, h5, h6 {font-weight: 800}
+h1, h2, h3, h4, h5, h6, .bold {font-weight: 800}
 
 i {scale: 140%}
 
@@ -83,7 +100,10 @@ input {
     border-bottom: 3px solid #252424;
 }
 
+
 .bg-active{
     background: #10E0B8;
     border-radius: 100px !important;
 }
+=======
+
