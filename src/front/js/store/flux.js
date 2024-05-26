@@ -9,7 +9,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			user: [],
 			tasks: [],
 			rewards: [],
-     	bestiary: [],
+     		bestiary: [],
  			roles: [],
 			images: [barbarian, wizard, rogue],
 			difficulties: [],
@@ -52,9 +52,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			seePassword: () => {
 				let passwordInput = document.getElementById("password");
-
-				if (passwordInput.type === "password") passwordInput.type = "text";
-				else passwordInput.type = "password";
+				let confirmPasswordInput =document.getElementById("confirmPassword");
+				if (passwordInput.type === "password"){passwordInput.type = "text",confirmPasswordInput.type = "text" }
+				else {passwordInput.type = "password", confirmPasswordInput.type = "password"}
 			},	
 			
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
@@ -188,7 +188,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//localStorage.removeItem('jwt-token')
 				//localStorage.removeItem('user_id')
 			},
-
+			
 			////////////////////////////////////////////////////////////////////////////////////////// USER 
 
 			getUserData: async () => {
@@ -196,7 +196,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 1
+				const user = 2
 
 				fetch(process.env.BACKEND_URL + "api/user/" + user, {
 					method: 'GET',
@@ -212,13 +212,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Couldnt get user from API", err)
 				});
 			},
+			singUp:()=>{
+
+				const input = getStore().inputs
+				
+				
+				const newUser ={
+					"name": input.name,
+					"email": input.email,
+					"password": input.password
+				}
+
+				fetch(process.env.BACKEND_URL + "api/users", {
+					method: "POST",
+					body: JSON.stringify(newUser),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then((response) => {
+					if(response.ok) return response.json()
+				   }).then(() => {
+					   getActions().resetInput()
+				   }).catch(error => {
+					   console.log(error);
+				   });
+
+			},
 
 			userRole: async (role) => {
 
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 1
+				const user = 2
 
 				setStore({...getStore, inputs: {"role" : role}})
 				getActions().updateUser()
@@ -229,7 +253,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 1
+				const user = 2
 
 				setStore({...getStore, inputs: {"email" : "", "password": ""}})
 				getActions().updateUser()
@@ -241,7 +265,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
-				const user = 1
+				const user = 2
 
 				const input = getStore().inputs
 
