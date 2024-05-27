@@ -1,6 +1,16 @@
-import barbarian from "../../img/axe.png"
-import wizard from "../../img/magic.png"
-import rogue from "../../img/R1.png"
+import bandid from "../../img/bandid.png"
+import barbarian from "../../img/barbarian_icon.png"
+import B_ability1 from "../../img/barbarian1.png"
+import B_ability2 from "../../img/barbarian2.png"
+import B_ability3 from "../../img/barbarian3.png"
+import wizard from "../../img/wizard_icon.png"
+import W_ability1 from "../../img/wizard1.png"
+import W_ability2 from "../../img/wizard2.png"
+import W_ability3 from "../../img/wizard3.png"
+import rogue from "../../img/rogue_icon.png"
+import R_ability1 from "../../img/rogue1.png"
+import R_ability2 from "../../img/rogue2.png"
+import R_ability3 from "../../img/rogue3.png"
 
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -11,9 +21,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rewards: [],
      		bestiary: [],
  			roles: [],
-			images: [barbarian, wizard, rogue],
+			images: [bandid,
+					[barbarian, B_ability1, B_ability2, B_ability3],
+					[wizard, W_ability1, W_ability2, W_ability3],
+					[rogue, R_ability1, R_ability2, R_ability3]],
 			difficulties: [],
 			rarities: [],
+			abilities: [],
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
@@ -59,54 +73,69 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
-			getCardColor: (view, tier, done) => {
+			getRoleColor: (view, tier, done) => {
 
-				let cardColor="";
+				let roleColor="";
 
 				if (view === "rewards" || view === "tasks" && done === true) {
 					switch(tier){
 						case 1:
-							cardColor = "bg-yellow"
+							roleColor = "bg-yellow"
 							break;
 						case 2:
-							cardColor = "bg-green"
+							roleColor = "bg-green"
 							break;
 						case 3:
-							cardColor = "bg-purple"
+							roleColor = "bg-purple"
 							break;
 						default:
-							cardColor = null
+							roleColor = null
 							break;
 					}
-				} else cardColor= null
+				} else roleColor = null
 		
-				return cardColor
+				return roleColor
 			},
 
-			getCardIcon: (view, tier, done) => {
+			getRoleIcon: (tier) => {
 
-				let cardIcon="";
+				let roleIcon="";
+				
+				switch(tier){
+					case 1:
+						roleIcon = "far fa-star"
+						break;
+					case 2:
+						roleIcon = "fas fa-star-half-alt"
+						break;
+					case 3:
+						roleIcon = "fas fa-star"
+						break;
+					default:
+						roleIcon = "fa-solid fa-question"
+						break;
+				}
 
-				if (view === "rewards" || view === "tasks" && done === false) {
-					switch(tier){
-						case 1:
-							cardIcon = "far fa-star"
-							break;
-						case 2:
-							cardIcon = "fas fa-star-half-alt"
-							break;
-						case 3:
-							cardIcon = "fas fa-star"
+				return roleIcon
+			},
+			
+			getActionIcon: (view, done) => {
+
+				let actionIcon="";
+
+				if (view === "rewards") actionIcon = "fa-solid fa-skull" 
+				else if(view === "tasks") {
+					switch(done){
+						case true:
+							actionIcon = "fa-solid fa-check"
 							break;
 						default:
-							cardIcon = "fa-solid fa-question"
+							actionIcon = "fa-solid fa-tents"
 							break;
 					}
-				} else {
-					cardIcon = "fa-solid fa-check"
-				}
+				} else actionIcon = "fa-solid fa-question"
 		
-				return cardIcon
+				return actionIcon
 			},
 
 			getDashboardModalAction: (view, modalId) => {
@@ -152,6 +181,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(process.env.BACKEND_URL + "api/rarity")
 					const data = await resp.json()
 					setStore({...getStore, rarities: data})
+					// don't forget to return something, that is how the async resolves
+					return data;
+				}catch(error){
+					console.log("Error loading rarity table", error)
+				}
+			},
+			
+			getAbilities: async () => {
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "api/ability")
+					const data = await resp.json()
+					setStore({...getStore, abilities: data})
 					// don't forget to return something, that is how the async resolves
 					return data;
 				}catch(error){

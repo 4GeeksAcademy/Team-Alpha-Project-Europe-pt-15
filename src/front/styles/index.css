@@ -8,11 +8,10 @@ body {
 /* colors */
 .bg-green {background: #10E0B8}
 .bg-yellow {background: #FFC444}
-.bg-red {background: #EB1652; color: #ffffff}
-.bg-purple {background: #9111F2; color: #ffffff}
+.bg-red {background: #EB1652}
+.bg-purple {background: #9111F2}
 .bg-black {background: #252424; color: #ffffff; box-shadow: none !important;}
 .bg-white {background: #ffffff}
-.form-range-track-bg { background: #252424};
 
 .txt-green {color: #10E0B8}
 .txt-yellow {color: #FFC444}

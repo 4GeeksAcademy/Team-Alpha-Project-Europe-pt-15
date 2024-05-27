@@ -13,7 +13,10 @@ export const Navbar = ({view, modal}) => {
         actions.getUserData()
     },[]);
 
-    {/* active view css*/}
+    //profile image
+    let roleImg = store.images[store.user.user_role]
+
+    // active view css
     let focusQ=""
     let focusR=""
 
@@ -27,7 +30,7 @@ export const Navbar = ({view, modal}) => {
             focusR = null
             break;
     }
-
+    
 	return (
     <>
     <div className="navbar fixed-top d-inline px-5 py-3 bg-white">
@@ -74,7 +77,7 @@ export const Navbar = ({view, modal}) => {
         </div>
         <div className="offcanvas-body text-center">
             {/* image */}
-                <img className="col-5 mb-3" src={store.images[store.user.user_role - 1]} />
+                <img className="col-5 mb-3" src={roleImg !== undefined? roleImg[0] : null} alt="user role icon" />
             {/* name */}
             <div className="card col my-3 p-2">
                 <h5>{store.user.name}</h5>

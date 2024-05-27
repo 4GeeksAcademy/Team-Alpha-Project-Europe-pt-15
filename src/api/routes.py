@@ -574,4 +574,19 @@ def get_monster_list(the_user_id):
 def get_all_habilities():
     ability= Ability.query.all()
     all_abilities= list(map(lambda x: x.serialize(), ability))
+
     return jsonify(all_abilities), 200
+
+@api.route('/ability/<int:role_id>', methods=['GET'])
+def get_role_ability(role_id):
+
+    ability = Ability.query.filter_by(role = role_id).all()
+    if ability is None:
+        return "No abilities connected to the role: " + str(role_id), 400
+
+    #rarity = Rarity.query.get(ability.energy)
+
+    role_abilities = ability.serialize()
+    #role_abilities.update({"energy_taken": rarity.energy_required})
+
+    return jsonify(role_abilities), 200

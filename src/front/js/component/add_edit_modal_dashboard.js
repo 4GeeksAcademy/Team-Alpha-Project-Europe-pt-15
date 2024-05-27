@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
 
-export const DashModal = ({id, view, label, tier}) => {
+export const AddEditModal = ({id, view, label, tier}) => {
     const { store, actions } = useContext(Context);
 
     return (

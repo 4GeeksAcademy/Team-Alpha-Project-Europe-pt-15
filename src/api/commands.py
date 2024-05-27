@@ -36,7 +36,7 @@ def setup_commands(app):
         print("Creating db roles")
         B = Role()
         B.name = "Barbarian"
-        B.description = "Battle Rage is blind and merciless but extreamely powerful. This means a greater chance at defeating your enemies and achieve victory."
+        B.description = "Battle Rage merciless and extremely powerful. This means a greater chance at defeating your enemies and achieve victory."
         B.passive = "B"      
         db.session.add(B)
         db.session.commit()

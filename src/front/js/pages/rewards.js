@@ -4,7 +4,7 @@ import "../../styles/index.css"
 
 import { Navbar } from "../component/navbar_dashboard";
 import { DashCard } from "../component/card_dashboard";
-import { DashModal } from "../component/modal_dashboard";
+import { AddEditModal } from "../component/add_edit_modal_dashboard";
 
 
 export const Rewards = () => {
@@ -14,6 +14,7 @@ export const Rewards = () => {
     useEffect(() => {
         actions.getRewardList()
 		actions.getRarities()
+		actions.getAbilities()
     },[]);
 
     let view = "rewards"
@@ -39,7 +40,7 @@ export const Rewards = () => {
 			))}
 		</div>
 		{/* create reward */}
-		<DashModal
+		<AddEditModal
 			id={idCreateModal}
 			view={view}
 			label="New Reward"
@@ -47,7 +48,7 @@ export const Rewards = () => {
 		/>
 		{/* edit reward */}
 		{store.rewards?.map((item,index)=>(
-		<DashModal key={index}
+		<AddEditModal key={index}
 			id={item.id}
 			view={view}
 			label="Edit Reward"
