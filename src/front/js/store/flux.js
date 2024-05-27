@@ -12,7 +12,6 @@ import R_ability1 from "../../img/rogue1.png"
 import R_ability2 from "../../img/rogue2.png"
 import R_ability3 from "../../img/rogue3.png"
 
-
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -157,14 +156,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw Error(response.status)
 				}).then((rolesData) => {
 					setStore({...getStore, roles: rolesData})
-				}).then( (rolesData) => {
-					console.log("data", rolesData);
-					getActions().getAbilities(rolesData)}
-				).catch((err) => {
+				}).catch((err) => {
 					console.log('Couldnt get classes from API', err)
 				})
-
-				//getActions().getAbilities()
 			},
 			
 			getDifficulties: async () => {
@@ -191,22 +185,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}catch(error){
 					console.log("Error loading rarity table", error)
 				}
-			},
-
-			getAbilities: async (role) => {
-				//let role = getStore().user.user_role
-
-				fetch(process.env.BACKEND_URL + "api/ability/" + role, {
-					method: 'GET',
-					headers: { "Content-Type": "application/json" },
-				}).then((response) => {
-					if(response.ok) return response.json()
-					throw Error(response.status)
-				}).then((roleAbilities) => {
-					setStore({...getStore, abilities: roleAbilities})
-				}).catch((err) => {
-					console.log('Couldnt get role abilities from API', err)
-				})
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// AUTHENTICATION
@@ -255,7 +233,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log(response.json);
 					throw Error(response.status)
 				}).then((userData) => {
-					setStore({...getStore, user: userData})
+					setStore({...getStore, user: userData[0], abilities: userData[1]})
 				}).catch((err) => {
 					console.log("Couldnt get user from API", err)
 				});
@@ -285,7 +263,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			updateUser: async () => {
-				console.log(getStore().user);
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
@@ -302,6 +279,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					"experience": input.experience,
 					"energy": input.energy,
 				}
+
+				console.log(input);
 				
 				fetch(process.env.BACKEND_URL + "api/user/" + user, {
 					method: "PUT",
@@ -526,8 +505,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   });
 			},
 
-			deleteReward: async (rewardId) => {
-				
+			checkEnoughEnergy: (tier) => {
+				const currentEnergy = getStore().user.energy
+				const rewardEnergy = getStore().rarities[tier - 1].energy_required
+
+				if (currentEnergy - rewardEnergy >= 0) return true
+				else return false
+			},
+
+			getReward: async (tier, rewardId) => {
+				const currentEnergy = getStore().user.energy
+				const rewardEnergy = getStore().rarities[tier - 1].energy_required
+
+				setStore({...getStore, inputs: {
+						...getStore().inputs, "energy" : currentEnergy - rewardEnergy}})
+
+				getActions().updateUser()
+				getActions().deleteReward(rewardId)
+			},
+
+			deleteReward: async (rewardId) => {				
 				const updatedReward = {"done": true}
 				
 				fetch(process.env.BACKEND_URL + "api/rewards/" + rewardId, {

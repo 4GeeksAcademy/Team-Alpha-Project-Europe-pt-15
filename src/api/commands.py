@@ -116,14 +116,14 @@ def setup_commands(app):
         ##  ROLES ABILITIES  ##
         print("Creating db role abilities")
         BH1 = Ability()
-        BH1.name = "Fang Slash"
+        BH1.name = "Big Throw"
         BH1.role_id = 1   
         BH1.rarity_id = 1 
         db.session.add(BH1)
         db.session.commit()
 
         BH2 = Ability()
-        BH2.name = "Jaw Breaker"
+        BH2.name = "Skull Breaker"
         BH2.role_id = 1    
         BH2.rarity_id = 2
         db.session.add(BH2)
@@ -138,7 +138,7 @@ def setup_commands(app):
         print("Barbarian abilities created.")
 
         WH1 = Ability()
-        WH1.name = "Stun Spell"
+        WH1.name = "Fire Breath"
         WH1.role_id = 2   
         WH1.rarity_id = 1 
         db.session.add(WH1)
@@ -152,7 +152,7 @@ def setup_commands(app):
         db.session.commit()
 
         WH3 = Ability()
-        WH3.name = "Fireball Vortex"
+        WH3.name = "Wind Vortex"
         WH3.role_id = 2    
         WH3.rarity_id = 3
         db.session.add(WH3)

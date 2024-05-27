@@ -78,11 +78,19 @@ def get_user(user_id):
 
     role = Role.query.get(user.user_role)
 
+    ability = Ability.query.filter_by(role_id = user.user_role)
+    role_abilities = list(map(lambda x: x.serialize(), ability))
+
+    for x in role_abilities:
+        rarity = Rarity.query.get(x["rarity_id"])
+        x.update({"energy_required": rarity.energy_required})
+
+    role_abilities.insert(0, None)
+
     one_user = user.serialize()
     one_user.update({"role": role.name})
 
-    return jsonify(one_user), 200
-
+    return jsonify(one_user, role_abilities), 200
 
 @api.route('/user/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
