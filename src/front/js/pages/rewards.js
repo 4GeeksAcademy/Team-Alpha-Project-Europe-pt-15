@@ -13,8 +13,6 @@ export const Rewards = () => {
    
     useEffect(() => {
         actions.getRewardList()
-		actions.getRarities()
-		actions.getAbilities()
     },[]);
 
     let view = "rewards"

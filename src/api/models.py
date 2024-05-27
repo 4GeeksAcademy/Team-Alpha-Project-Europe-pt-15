@@ -142,7 +142,7 @@ class Ability(db.Model):
     __tablename__ = "hability"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
-    energy = db.Column(db.Integer, db.ForeignKey('rarity.id'))
+    rarity_id = db.Column(db.Integer, db.ForeignKey('rarity.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     rarity = db.relationship(Rarity)
     role = db.relationship(Role)
@@ -154,7 +154,7 @@ class Ability(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "effect": self.effect,  
+            "rarity_id": self.rarity_id,  
             "role": self.role_id,        
         }
 

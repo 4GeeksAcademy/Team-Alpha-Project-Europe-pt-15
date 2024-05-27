@@ -27,7 +27,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					[rogue, R_ability1, R_ability2, R_ability3]],
 			difficulties: [],
 			rarities: [],
-			abilities: [],
+			abilities: [null,],
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
@@ -157,9 +157,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw Error(response.status)
 				}).then((rolesData) => {
 					setStore({...getStore, roles: rolesData})
-				}).catch((err) => {
+				}).then( (rolesData) => {
+					console.log("data", rolesData);
+					getActions().getAbilities(rolesData)}
+				).catch((err) => {
 					console.log('Couldnt get classes from API', err)
 				})
+
+				//getActions().getAbilities()
 			},
 			
 			getDifficulties: async () => {
@@ -187,18 +192,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading rarity table", error)
 				}
 			},
-			
-			getAbilities: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "api/ability")
-					const data = await resp.json()
-					setStore({...getStore, abilities: data})
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading rarity table", error)
-				}
+
+			getAbilities: async (role) => {
+				//let role = getStore().user.user_role
+
+				fetch(process.env.BACKEND_URL + "api/ability/" + role, {
+					method: 'GET',
+					headers: { "Content-Type": "application/json" },
+				}).then((response) => {
+					if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((roleAbilities) => {
+					setStore({...getStore, abilities: roleAbilities})
+				}).catch((err) => {
+					console.log('Couldnt get role abilities from API', err)
+				})
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// AUTHENTICATION

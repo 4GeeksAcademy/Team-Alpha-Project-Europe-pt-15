@@ -7,6 +7,13 @@ export const TakeAction = ({id, view, tier, done}) => {
 
     let actionIcon = actions.getActionIcon(view, done)
 
+    //attack image
+    let abilityImg = store.images[store.user.user_role]
+    let ability = store.habilities
+
+    console.log(store.roles);
+    console.log("name", store.abilities[2]);
+
     return (
         <>
         <div className="card circle">
@@ -49,7 +56,7 @@ export const TakeAction = ({id, view, tier, done}) => {
                         <img className="col-6 align-self-center" src={store.images[0]} alt="mysterious figure" />
                         {/* message */} 
 						<h5>The mysterious figure responds as it fades back into the dark corner. No one notices your interaction, as you face the tavern again, it is filled with noise and the smell of strong ale.</h5>
-                        <p>+{tier} task completed</p>                
+                        <p>task completed</p>                
                         {/* confirm */}
 						<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" onClick={() => actions.doTask(tier, id)}>
 							<h5>Collect prize</h5>
@@ -65,16 +72,16 @@ export const TakeAction = ({id, view, tier, done}) => {
             <div className="modal-dialog modal-dialog-centered">
                 <div className="card modal-content p-4">
                     {/* title */}
-                    <h1>You wish to claim this reward?</h1>                 
+                    <h1>Attack this reward?</h1>                 
                     <div className="modal-body d-flex flex-column gap-4"> 
                         {/* image */} 
-                        <img className="col-6 align-self-center" src={store.images[0]} alt="attack" />     
+                        <img className="col-6 align-self-center" src={abilityImg !== undefined? abilityImg[tier] : null} alt="attack" />     
                         {/* message */} 
-						<h5>Use ability</h5>
-                        <p>+{tier} task completed</p>             
+						<h5>{ability !== undefined? ability[tier].name : null}</h5>
+                        <p>- {ability !== undefined? ability[tier].energy_required : null} energy</p>             
                         {/* confirm */}
 						<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target={`#rewardResponse${id}`}>
-							<h5>Go for it</h5>
+							<h5>Use ability</h5>
 						</div>
                         {/* cancel */}
                         <div type="reset" className="card p-2 text-center bg-black" data-bs-dismiss="modal">

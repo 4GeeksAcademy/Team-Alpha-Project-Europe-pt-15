@@ -11,7 +11,6 @@ export const Quests = () => {
 
 	useEffect(() => {
         actions.getTaskList()
-		actions.getDifficulties()
     },[]);
 
     let view = "tasks"

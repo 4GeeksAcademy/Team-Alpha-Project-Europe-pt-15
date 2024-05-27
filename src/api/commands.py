@@ -118,21 +118,21 @@ def setup_commands(app):
         BH1 = Ability()
         BH1.name = "Fang Slash"
         BH1.role_id = 1   
-        BH1.effect = 1 
+        BH1.rarity_id = 1 
         db.session.add(BH1)
         db.session.commit()
 
         BH2 = Ability()
         BH2.name = "Jaw Breaker"
         BH2.role_id = 1    
-        BH2.effect = 2
+        BH2.rarity_id = 2
         db.session.add(BH2)
         db.session.commit()
 
         BH3 = Ability()
         BH3.name = "Frenzy Strikes"
         BH3.role_id = 1    
-        BH3.effect = 3
+        BH3.rarity_id = 3
         db.session.add(BH3)
         db.session.commit()
         print("Barbarian abilities created.")
@@ -140,21 +140,21 @@ def setup_commands(app):
         WH1 = Ability()
         WH1.name = "Stun Spell"
         WH1.role_id = 2   
-        WH1.effect = 1 
+        WH1.rarity_id = 1 
         db.session.add(WH1)
         db.session.commit()
 
         WH2 = Ability()
         WH2.name = "Lightning Blast"
         WH2.role_id = 2    
-        WH2.effect = 2
+        WH2.rarity_id = 2
         db.session.add(WH2)
         db.session.commit()
 
         WH3 = Ability()
         WH3.name = "Fireball Vortex"
         WH3.role_id = 2    
-        WH3.effect = 3
+        WH3.rarity_id = 3
         db.session.add(WH3)
         db.session.commit()
         print("Wizard abilities created.")
@@ -162,21 +162,21 @@ def setup_commands(app):
         RH1 = Ability()
         RH1.name = "Distraction Crackers"
         RH1.role_id = 3   
-        RH1.effect = 1 
+        RH1.rarity_id = 1 
         db.session.add(RH1)
         db.session.commit()
 
         RH2 = Ability()
         RH2.name = "Swift and Easy"
         RH2.role_id = 3    
-        RH2.effect = 2
+        RH2.rarity_id = 2
         db.session.add(RH2)
         db.session.commit()
 
         RH3 = Ability()
         RH3.name = "Table Heist"
         RH3.role_id = 3    
-        RH3.effect = 3
+        RH3.rarity_id = 3
         db.session.add(RH3)
         db.session.commit()
         print("Rogue abilities created.")
