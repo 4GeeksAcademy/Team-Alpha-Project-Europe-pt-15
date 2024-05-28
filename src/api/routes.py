@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability
+from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability, Combat_text
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -575,3 +575,11 @@ def get_all_habilities():
     ability= Ability.query.all()
     all_abilities= list(map(lambda x: x.serialize(), ability))
     return jsonify(all_abilities), 200
+
+
+###################################################################################  COMBAT ROUTES
+@api.route("/combat",  methods=['GET'])
+def get_all_combat_text():
+    text= Combat_text.query.all()
+    all_text= list(map(lambda x: x.serialize(), text))
+    return jsonify(all_text), 200
