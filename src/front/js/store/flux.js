@@ -1,7 +1,4 @@
-import barbarian from "../../img/axe.png"
-import wizard from "../../img/magic.png"
-import rogue from "../../img/R1.png"
-
+import { IMAGES } from "../../img/all_images";
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -9,11 +6,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			user: [],
 			tasks: [],
 			rewards: [],
-     	bestiary: [],
+     		bestiary: [],
  			roles: [],
-			images: [barbarian, wizard, rogue],
 			difficulties: [],
 			rarities: [],
+			abilities: [],
+			encounter : false,
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
@@ -59,54 +57,69 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
-			getCardColor: (view, tier, done) => {
+			getRoleColor: (view, tier, done) => {
 
-				let cardColor="";
+				let roleColor="";
 
 				if (view === "rewards" || view === "tasks" && done === true) {
 					switch(tier){
 						case 1:
-							cardColor = "bg-yellow"
+							roleColor = "bg-yellow"
 							break;
 						case 2:
-							cardColor = "bg-green"
+							roleColor = "bg-green"
 							break;
 						case 3:
-							cardColor = "bg-purple"
+							roleColor = "bg-purple"
 							break;
 						default:
-							cardColor = null
+							roleColor = null
 							break;
 					}
-				} else cardColor= null
+				} else roleColor = null
 		
-				return cardColor
+				return roleColor
 			},
 
-			getCardIcon: (view, tier, done) => {
+			getRoleIcon: (tier) => {
 
-				let cardIcon="";
+				let roleIcon="";
+				
+				switch(tier){
+					case 1:
+						roleIcon = "far fa-star"
+						break;
+					case 2:
+						roleIcon = "fas fa-star-half-alt"
+						break;
+					case 3:
+						roleIcon = "fas fa-star"
+						break;
+					default:
+						roleIcon = "fa-solid fa-question"
+						break;
+				}
 
-				if (view === "rewards" || view === "tasks" && done === false) {
-					switch(tier){
-						case 1:
-							cardIcon = "far fa-star"
-							break;
-						case 2:
-							cardIcon = "fas fa-star-half-alt"
-							break;
-						case 3:
-							cardIcon = "fas fa-star"
+				return roleIcon
+			},
+			
+			getActionIcon: (view, done) => {
+
+				let actionIcon="";
+
+				if (view === "rewards") actionIcon = "fa-solid fa-skull" 
+				else if(view === "tasks") {
+					switch(done){
+						case true:
+							actionIcon = "fa-solid fa-check"
 							break;
 						default:
-							cardIcon = "fa-solid fa-question"
+							actionIcon = "fa-solid fa-tents"
 							break;
 					}
-				} else {
-					cardIcon = "fa-solid fa-check"
-				}
+				} else actionIcon = "fa-solid fa-question"
 		
-				return cardIcon
+				return actionIcon
 			},
 
 			getDashboardModalAction: (view, modalId) => {
@@ -115,6 +128,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (view === "tasks" && typeof modalId === "string") getActions().createTask()
 				if (view === "rewards" && typeof modalId === "number") getActions().updateReward(modalId)
 				if (view === "rewards" && typeof modalId === "string") getActions().createReward()					
+			},
+
+			getRoleImage: (role) => {
+				let roleImg = ""
+
+				if ( role === 1) roleImg = IMAGES.barbarian
+				else if (role === 2) roleImg = IMAGES.wizard
+				else if (role === 3) roleImg = IMAGES.rogue
+				return roleImg
+			},
+
+			getAbilityImage: (ability_rarity) => {
+
+				let role = getStore().user.role
+				let abilityImg = ""
+
+				if ( role === "Barbarian"){
+					if (ability_rarity === 1) abilityImg = IMAGES.barbarian1
+					if (ability_rarity === 2) abilityImg = IMAGES.barbarian2
+					if (ability_rarity === 3) abilityImg = IMAGES.barbarian3
+				} else if (role === "Wizard"){
+					if (ability_rarity === 1) abilityImg = IMAGES.wizard1
+					if (ability_rarity === 2) abilityImg = IMAGES.wizard2
+					if (ability_rarity === 3) abilityImg = IMAGES.wizard3
+				} else if (role === "Rogue"){
+					if (ability_rarity === 1) abilityImg = IMAGES.rogue1
+					if (ability_rarity === 2) abilityImg = IMAGES.rogue2
+					if (ability_rarity === 3) abilityImg = IMAGES.rogue3
+				}
+				return abilityImg
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// DB DATA 
@@ -191,8 +234,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			////////////////////////////////////////////////////////////////////////////////////////// USER 
 
-			getUserData: async () => {
-				const store = getStore()
+			getUserDataAndAbilities: async () => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
@@ -206,8 +248,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log(response.json);
 					throw Error(response.status)
 				}).then((userData) => {
-					setStore({...getStore, user: userData})
-					console.log(store.user)
+					setStore({...getStore, user: userData[0], abilities: userData[1]})
 				}).catch((err) => {
 					console.log("Couldnt get user from API", err)
 				});
@@ -237,7 +278,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			updateUser: async () => {
-
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
@@ -263,8 +303,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   if(response.ok) return response.json()
 						throw Error(response.status)
 				   }).then(() => {
-					getActions().getUserData()
-					getActions().resetInput() 
+					getActions().getUserDataAndAbilities()
+					getActions().resetInput()
 				   }).catch(error => {
 					   console.log(error);
 				   });
@@ -274,7 +314,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			////////////////////////////////////////////////////////////////////////////////////////// TASKS 
 
 			getTaskList: async () => {
-
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
@@ -349,58 +388,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			doTask: async (tier, taskId) => {
-
 				const currentLevel = getStore().user.level
 				const currentExperience = getStore().user.experience
 				const currentEnergy = getStore().user.energy
 
-				const taskExperience = getStore().difficulties[tier - 1].experience_given
-				const taskEnergy = getStore().difficulties[tier - 1].energy_given
-				
-				console.log("current levels:", currentExperience, currentEnergy);
-				console.log("task levels:", taskExperience, taskEnergy);
+				const taskExperience = getStore().difficulties[tier].experience_given
+				const taskEnergy = getStore().difficulties[tier].energy_given
 
 				if(currentExperience + taskExperience < 100) {
 					setStore({...getStore, inputs: {
 						"experience" : currentExperience + taskExperience,
-						"energy": currentEnergy + taskEnergy
 					}})
 				} else {
 					setStore({...getStore, inputs: {
-						"experience" : currentExperience + taskExperience - 100,
-						"energy": currentEnergy + taskEnergy,
+						"experience" : currentExperience + taskExperience -100,
 						"level" : currentLevel + 1,
 					}})
+					setStore({...getStore, encounter: true})
+				}
+				
+				if(currentEnergy + taskEnergy < 100) {
+					setStore({...getStore, inputs: {
+						...getStore().inputs, "energy" : currentEnergy + taskEnergy}})
+				} else {
+					setStore({...getStore, inputs: {
+						...getStore().inputs, "energy" : 100}})
 				}
 
-				console.log("update:", getStore().inputs);
-				getActions().updateUser()
-				
+				getActions().updateUser()				
 				setStore({...getStore, inputs: {"done": true}})
-				console.log("task new state:", getStore().inputs);
 				getActions().updateTask(taskId)
-				
 			},
 
-			deleteTasks: async () => {
+			cleanDashboard: async () => {
 
-				let toBeDeleted = getStore().tasks.filter(item => item.done === True)
-
-				const updatedTask = {"onboard": false}
+				let offBoard = getStore().tasks.filter(item => item.done === true && item.onboard === true)
+				console.log(offBoard);
 				
-				fetch(process.env.BACKEND_URL + "api/tasks/" + toBeDeleted, {
-					method: "PUT",
-					body: JSON.stringify(updatedTask),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(response => {
-					   if(response.ok) return response.json()
-						throw Error(response.status)
-				   }).then(() => {
-					getActions().getTaskList()
-					getActions().resetInput() 
-				   }).catch(error => {
-					   console.log(error);
-				   });
+				for (let task of offBoard){
+					setStore({...getStore, inputs: {"onboard": false}})
+					getActions().updateTask(task.id)
+				}
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// REWARDS
@@ -479,8 +507,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   });
 			},
 
-			deleteReward: async (rewardId) => {
-				
+			checkEnoughEnergy: (tier) => {
+				const currentEnergy = getStore().user.energy
+				const rewardEnergy = getStore().rarities[tier].energy_required
+
+				if (currentEnergy - rewardEnergy >= 0) return true
+				else return false
+			},
+
+			getReward: async (tier, rewardId) => {
+				const currentEnergy = getStore().user.energy
+				const rewardEnergy = getStore().rarities[tier].energy_required
+
+				setStore({...getStore, inputs: {
+						...getStore().inputs, "energy" : currentEnergy - rewardEnergy}})
+
+				getActions().updateUser()
+				getActions().deleteReward(rewardId)
+			},
+
+			deleteReward: async (rewardId) => {				
 				const updatedReward = {"done": true}
 				
 				fetch(process.env.BACKEND_URL + "api/rewards/" + rewardId, {
@@ -600,30 +646,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if(userLevel <= 200) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24)}
 			
 			},
-			getBestiary: async (userId)=>{
-				const store=getStore()
-				const action=getActions()
+			getBestiary: async ()=>{
+				//const user = localStorage.getItem('user_id')
+
+				//just to test
+				const user = 1
+
 				try{
 					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/"+userId)
+					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/"+ user)
 					const data = await resp.json()
 					setStore({ bestiary: data})
 					// don't forget to return something, that is how the async resolves
-					console.log(store.bestiary)
+					console.log(getStore().bestiary)
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}	
 			},
 			getBestiaryInfo:()=>{
-				const store=getStore()
-				const action=getActions()
-
-				const myBestiary = store.bestiary
+				const myBestiary = getStore().bestiary
 				console.log(myBestiary)
-				myBestiary.map((item)=>action.getMonsterByIndex(item.monster_name))
+				myBestiary.map((item)=>getActions().getMonsterByIndex(item.monster_name))
 				setTimeout(() => { 
-					console.log(store.creatureInfo)
+					console.log(getStore().creatureInfo)
 				}, "500");
 				
 
@@ -701,78 +747,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "plant"){return img13}
 				if (creature.type == "undead"){return img14}
 			},
-			addExperience:(experience)=>{
-				const store=getStore()
-				const action=getActions()
-				const user =store.user
-				const newExp = user.experience + experience
-				
-				if(newExp > 100){return action.updateUserLevel((newExp -100), (user.level + 1))}
-				else {return action.updateUserLevel(newExp, user.level) }
 
-			},
-			addEnergy:(energy)=>{
-				const store=getStore()
-				const action=getActions()
-				const user = store.user
-				const newEnergy= user.energy + energy
-				if (newEnergy >= 40){return action.updateEnergy(40)}
-				else {return action.updateEnergy(newEnergy)}
-			},
 			onQuestCompletion:(experience, energy)=>{
 				const store=getStore()
 				const action=getActions()
 				action.addExperience(experience)
 				action.addEnergy(energy)
 			},
-			
-			updateUserLevel:(experience, level)=>{
-				const store=getStore()
-				const action=getActions()
-				const user = store.user
-				
-					const updatedExpAndLevel = {
-						"experience": experience,
-						"level": level
-					}
-				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
-					method: "PUT",
-					body: JSON.stringify(updatedExpAndLevel),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(resp => {
-					   console.log(resp.ok);
-					   console.log(resp.status);
-					 return resp.json(); 
-				   }).then(data => {
-					   console.log(data); 
-				   }).catch(error => {
-					   console.log(error);
-				   });
-			},
-			updateEnergy:(energy)=>{
-				const store=getStore()
-				const action=getActions()
-				const user = store.user
-				
-					const updatedEnergy = {
-						"energy": energy
-						
-					}
-				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
-					method: "PUT",
-					body: JSON.stringify(updatedEnergy),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(resp => {
-					   console.log(resp.ok);
-					   console.log(resp.status);
-					 return resp.json(); 
-				   }).then(data => {
-					   console.log(data); 
-				   }).catch(error => {
-					   console.log(error);
-				   });
-				}
-
 		}
 	};
 };

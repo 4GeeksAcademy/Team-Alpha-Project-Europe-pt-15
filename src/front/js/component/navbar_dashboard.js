@@ -3,17 +3,16 @@ import { Context } from "../store/appContext";
 
 import "../../styles/index.css";
 import { Link } from "react-router-dom";
-
-import beastiary from "../../img/beast.png"
+import { IMAGES } from "../../img/all_images";
 
 export const Navbar = ({view, modal}) => {
 	const { store, actions } = useContext(Context);
 
     useEffect(() => {
-        actions.getUserData()
+        actions.getUserDataAndAbilities()
     },[]);
 
-    {/* active view css*/}
+    // active view css
     let focusQ=""
     let focusR=""
 
@@ -27,7 +26,7 @@ export const Navbar = ({view, modal}) => {
             focusR = null
             break;
     }
-
+    
 	return (
     <>
     <div className="navbar fixed-top d-inline px-5 py-3 bg-white">
@@ -35,6 +34,14 @@ export const Navbar = ({view, modal}) => {
                 <div className="d-flex flex-row gap-3">
                     {/* profile button */}
                     <button className="card circle" data-bs-toggle="offcanvas" data-bs-target="#Profile" aria-controls="Profile">
+                        {/* energy alert */}
+                        {store.user.energy >= 90
+                        ? <span className="position-absolute top-1 start-100 translate-middle">
+                        <i className="fa-solid fa-circle fa-beat txt-yellow"></i></span> : null}
+                        {/* encounter alert */}
+                        {store.encounter === true
+                        ? <span className="position-absolute top-1 start-100 translate-middle">
+                        <i className="fa-solid fa-circle fa-beat txt-purple"></i></span> : null}
                         <i className="fa-solid fa-user"></i>
                     </button>
                     {/* create task/reward button */}
@@ -42,9 +49,12 @@ export const Navbar = ({view, modal}) => {
                         <i className="fa-solid fa-plus"></i>
                     </button>
                     {/* clean dashboard button */}
-                    <button className="card circle">
-                        <i className="fa-solid fa-arrows-rotate"></i>
+                    {view === "tasks"
+                    ? <button className="card circle" onClick={actions.cleanDashboard}>
+                    <i className="fa-solid fa-arrows-rotate"></i>
                     </button>
+                    : null
+                    }
                 </div>
                 {/* log out */}
                 <Link to="/" >
@@ -71,7 +81,7 @@ export const Navbar = ({view, modal}) => {
         </div>
         <div className="offcanvas-body text-center">
             {/* image */}
-                <img className="col-5 mb-3" src={store.images[store.user.user_role - 1]} />
+                <img className="col-5 mb-3" src={actions.getRoleImage(store.user.user_role)} alt="user role icon" />
             {/* name */}
             <div className="card col my-3 p-2">
                 <h5>{store.user.name}</h5>
@@ -95,7 +105,9 @@ export const Navbar = ({view, modal}) => {
                     </div>
                 </div>
                 <div className="d-inline-flex flex-row justify-content-between">
-                    <i className="fa-solid fa-bolt"></i>
+                    {store.user.energy >= 95
+                    ? <i className="fa-solid fa-bolt fa-fade"></i>
+                    : <i className="fa-solid fa-bolt"></i>}
                     <div className="card round col-11">
                         <div className="bg-energy" style={{height:"15px",width: store.user.energy + "%"}}></div>
                     </div>
@@ -103,9 +115,11 @@ export const Navbar = ({view, modal}) => {
             </div>
             {/* beastiary */}
             <div className="d-flex gap-3 my-3">
-                <Link to="/" className="card col-5 p-3">
-                    <img src={beastiary} />
-                    <h5>Beastiary</h5>
+                <Link to="/bestiary" className="card col-5 p-3" >
+                    <div data-bs-dismiss="offcanvas">
+                        <img src={IMAGES.beastiary} className="w-100" />
+                        <h5>Beastiary</h5>
+                    </div>
                 </Link>
                 {/* count */}
                 <div className="col">
@@ -120,9 +134,16 @@ export const Navbar = ({view, modal}) => {
                     </div>
                 </div>
             </div>
+            {store.encounter === true
+            ? <Link to="/encounter">
+                <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
+                    <h5>Watch Out</h5>
+                </div>
+            </Link>
+            : null }
         </div>
         {/* edit profile */}
-        <div className="offcanvas-footer p-4">
+        <div className="offcanvas-footer p-3">
             <Link to="/editprofile">
                 <div className="card col p-2 bg-yellow" data-bs-dismiss="offcanvas">
                     <h5>Edit Profile</h5>

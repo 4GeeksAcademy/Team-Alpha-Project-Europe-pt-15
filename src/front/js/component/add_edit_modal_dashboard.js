@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
 
-export const DashModal = ({id, view, label, tier}) => {
+export const AddEditModal = ({id, view, label, tier}) => {
     const { store, actions } = useContext(Context);
 
     return (
@@ -27,9 +27,9 @@ export const DashModal = ({id, view, label, tier}) => {
                                 name="tier"
                                 value={store.inputs.tier || ""}
                                 onChange={event => actions.getInput(event)}>
-                                    <option value={0} default >How would you grade it?</option>
+                                    <option value={0} default >How would you rank it?</option>
                                     {/* tier options */}
-                                    {tier?.map( item => (
+                                    {tier?.filter(item => item !== null).map( item => (
                                         <option value={item.id} key={item.id}>{item.name}</option>
                                     ))}
                             </select>
