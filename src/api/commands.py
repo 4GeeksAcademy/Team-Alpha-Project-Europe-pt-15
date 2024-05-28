@@ -373,7 +373,7 @@ def setup_commands(app):
         db.session.commit()
 
         text17 = Combat_text()
-        text17.text = "ou find yourself in a dimly lit alleyway, shadows dancing along the walls as a group of enemies block your path. They are clearly underestimating the your prowess. With a smirk and a glint of determination in your eyes, you prepare to strike from the shadows, using your agility, stealth, and precision to turn the tide in your favor."
+        text17.text = "You find yourself in a dimly lit alleyway, shadows dancing along the walls as a group of enemies block your path. They are clearly underestimating the your prowess. With a smirk and a glint of determination in your eyes, you prepare to strike from the shadows, using your agility, stealth, and precision to turn the tide in your favor."
         text17.creature_or_role_type = "Rougue"
         db.session.add(text17)
         db.session.commit()

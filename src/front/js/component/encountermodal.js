@@ -14,11 +14,21 @@ export const EcounterModal= ({id}) => {
            actions.decideVictory()
         }, "500");
     }
-
     const victoryFanfarre=()=>{
     if(store.userRoll > store.creatureRoll){return store.victoryMessage}
     else {return store.defeatMessage}
     }
+    const roleText=()=>{
+        if(store.user.role === "Barbarian"){return store.combatText[14].text}
+        if(store.user.role === "Wizard"){return store.combatText[15].text}
+        if(store.user.role === "Rogue"){return store.combatText[16].text}
+    }
+    
+    
+    
+    
+    
+    
     return (
         <>
           <div className="modal fade" id={id} tabIndex="-1" aria-hidden="true">
@@ -27,10 +37,10 @@ export const EcounterModal= ({id}) => {
                     {/* title */}
                     <h1>Encounter</h1>
                     <div>
-                        <p>this is te text that opens the encounter depending on the monster type</p>
+                        <p>{actions.selectCombatText(store.encounterInfo)}</p>
                     </div>
                     <div>
-                        <p>this is the text that shows depending on your role</p>
+                        <p>{roleText()}</p>
                         <button data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" disabled={isDisabled} onClick={()=>handleClick()}>Defend yourself</button>    
                     </div>
                     <div>

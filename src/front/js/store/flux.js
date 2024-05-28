@@ -725,6 +725,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 					a glimmer of resolve begins to stir.</p> })}
 				
 			},
+			getCombatText:async ()=>{
+				const store=getStore()
+				const action=getActions()
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "api/combat")
+					const data = await resp.json()
+					setStore({ combatText: data})
+					console.log(store.combatText)
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
+			selectCombatText:(creature)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				if (creature.type == "aberration"){return store.combatText[0].text}
+				if (creature.type == "beast"){return store.combatText[1].text}
+				if (creature.type == "celestial"){return store.combatText[2].text}
+				if (creature.type == "construct"){return store.combatText[3].text}
+				if (creature.type == "dragon"){return store.combatText[4].text}
+				if (creature.type == "elemental"){return store.combatText[5].text}
+				if (creature.type == "fey"){return store.combatText[6].text}
+				if (creature.type == "fiend"){return store.combatText[7].text}
+				if (creature.type == "giant"){return store.combatText[8].text}
+				if (creature.type == "humanoid"){return store.combatText[9].text}
+				if (creature.type == "monstrosity"){return store.combatText[10].text}
+				if (creature.type == "ooze"){return store.combatText[11].text}
+				if (creature.type == "plant"){return store.combatText[12].text}
+				if (creature.type == "undead"){return store.combatText[13].text}
+			},
 			getMonsterimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
 				const store=getStore()
 				const action=getActions()
