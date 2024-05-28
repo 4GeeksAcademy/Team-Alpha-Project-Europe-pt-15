@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a98340a7b05a
+Revision ID: 0bf3a50390be
 Revises: 
-Create Date: 2024-05-27 15:19:34.649270
+Create Date: 2024-05-28 13:45:48.740401
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a98340a7b05a'
+revision = '0bf3a50390be'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -40,7 +40,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('description', sa.String(length=1000), nullable=True),
-    sa.Column('passive', sa.String(length=120), nullable=False),
+    sa.Column('passive', sa.String(length=120), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name'),
     sa.UniqueConstraint('passive')
@@ -48,9 +48,9 @@ def upgrade():
     op.create_table('hability',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
-    sa.Column('energy', sa.Integer(), nullable=True),
+    sa.Column('rarity_id', sa.Integer(), nullable=True),
     sa.Column('role_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['energy'], ['rarity.id'], ),
+    sa.ForeignKeyConstraint(['rarity_id'], ['rarity.id'], ),
     sa.ForeignKeyConstraint(['role_id'], ['role.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')

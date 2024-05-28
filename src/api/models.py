@@ -8,7 +8,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
     description = db.Column(db.String(1000))
-    passive = db.Column(db.String(120), unique=True, nullable=False)
+    passive = db.Column(db.String(120), unique=True, nullable=True)
     
     def __repr__(self):
         return f'<Role {self.name}>'

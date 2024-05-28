@@ -37,7 +37,6 @@ def setup_commands(app):
         B = Role()
         B.name = "Barbarian"
         B.description = "Battle Rage merciless and extremely powerful. This means a greater chance at defeating your enemies and achieve victory."
-        B.passive = "B"      
         db.session.add(B)
         db.session.commit()
         print("Barbarian created.")
@@ -45,15 +44,13 @@ def setup_commands(app):
         W = Role()
         W.name = "Wizard"
         W.description = "Being a master at conjuring comes with it's own perks. Your Arcana abilities provide you a second shot at succeeding in a encounter."
-        W.passive = "W"       
         db.session.add(W)
         db.session.commit()
         print("Wizard created.")
 
         R = Role()
         R.name = "Rogue"
-        R.description = "Sneaky little bastard ain't we. How come you never get caught stealling extra experience from the master vault?"
-        R.passive = "R"       
+        R.description = "Sneaky little bastard ain't we? How come you never get caught stealling extra experience from the master vault?"
         db.session.add(R)
         db.session.commit()
         print("Rogue created.")
@@ -116,7 +113,7 @@ def setup_commands(app):
         ##  ROLES ABILITIES  ##
         print("Creating db role abilities")
         BH1 = Ability()
-        BH1.name = "Big Throw"
+        BH1.name = "Power Throw"
         BH1.role_id = 1   
         BH1.rarity_id = 1 
         db.session.add(BH1)
@@ -145,14 +142,14 @@ def setup_commands(app):
         db.session.commit()
 
         WH2 = Ability()
-        WH2.name = "Lightning Blast"
+        WH2.name = "Wind Vortex"
         WH2.role_id = 2    
         WH2.rarity_id = 2
         db.session.add(WH2)
         db.session.commit()
 
         WH3 = Ability()
-        WH3.name = "Wind Vortex"
+        WH3.name = "Lightning Blast"
         WH3.role_id = 2    
         WH3.rarity_id = 3
         db.session.add(WH3)
@@ -181,22 +178,6 @@ def setup_commands(app):
         db.session.commit()
         print("Rogue abilities created.")
         print("All abilities created.")
-
-
-        ##  TEST USER  ##
-        print("Creating test user")
-        user = User()
-        user.name = "user"
-        user.email = "user@test"
-        user.password = "user"
-        user.user_role = 2
-        user.level = 1
-        user.experience = 78
-        user.energy = 23
-        db.session.add(user)
-        db.session.commit()
-        print("Test user created.")
-        print("email: user@test   password: user")
 
 
         ##  TASKS  ##
@@ -273,3 +254,18 @@ def setup_commands(app):
         db.session.add(reward4)
         db.session.commit()
         print("4 rewards created.")
+
+         ##  TEST USER  ##
+        print("Creating test user")
+        user = User()
+        user.name = "user"
+        user.email = "user@test"
+        user.password = "user"
+        user.user_role = 2
+        user.level = 1
+        user.experience = 78
+        user.energy = 23
+        db.session.add(user)
+        db.session.commit()
+        print("Test user created.")
+        print("email: user@test   password: user")

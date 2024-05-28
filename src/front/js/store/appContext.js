@@ -31,8 +31,7 @@ const injectContext = PassedComponent => {
 
 			state.actions.getRoles();
 			state.actions.getDifficulties();
-			state.actions.getRarities();			
-			state.actions.getUserData();
+			state.actions.getRarities();
 			state.actions.getBestiary(1);
 			state.actions.getMessage();
 			

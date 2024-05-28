@@ -1,16 +1,4 @@
-import bandid from "../../img/bandid.png"
-import barbarian from "../../img/barbarian_icon.png"
-import B_ability1 from "../../img/barbarian1.png"
-import B_ability2 from "../../img/barbarian2.png"
-import B_ability3 from "../../img/barbarian3.png"
-import wizard from "../../img/wizard_icon.png"
-import W_ability1 from "../../img/wizard1.png"
-import W_ability2 from "../../img/wizard2.png"
-import W_ability3 from "../../img/wizard3.png"
-import rogue from "../../img/rogue_icon.png"
-import R_ability1 from "../../img/rogue1.png"
-import R_ability2 from "../../img/rogue2.png"
-import R_ability3 from "../../img/rogue3.png"
+import { IMAGES } from "../../img/all_images";
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -20,13 +8,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rewards: [],
      		bestiary: [],
  			roles: [],
-			images: [bandid,
-					[barbarian, B_ability1, B_ability2, B_ability3],
-					[wizard, W_ability1, W_ability2, W_ability3],
-					[rogue, R_ability1, R_ability2, R_ability3]],
 			difficulties: [],
 			rarities: [],
-			abilities: [null,],
+			abilities: [],
+			encounter : false,
 			message: null,
 			allMonsters : null,
 			encounterPool: null,
@@ -145,6 +130,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (view === "rewards" && typeof modalId === "string") getActions().createReward()					
 			},
 
+			getRoleImage: (role) => {
+				let roleImg = ""
+
+				if ( role === 1) roleImg = IMAGES.barbarian
+				else if (role === 2) roleImg = IMAGES.wizard
+				else if (role === 3) roleImg = IMAGES.rogue
+				return roleImg
+			},
+
+			getAbilityImage: (ability_rarity) => {
+
+				let role = getStore().user.role
+				let abilityImg = ""
+
+				if ( role === "Barbarian"){
+					if (ability_rarity === 1) abilityImg = IMAGES.barbarian1
+					if (ability_rarity === 2) abilityImg = IMAGES.barbarian2
+					if (ability_rarity === 3) abilityImg = IMAGES.barbarian3
+				} else if (role === "Wizard"){
+					if (ability_rarity === 1) abilityImg = IMAGES.wizard1
+					if (ability_rarity === 2) abilityImg = IMAGES.wizard2
+					if (ability_rarity === 3) abilityImg = IMAGES.wizard3
+				} else if (role === "Rogue"){
+					if (ability_rarity === 1) abilityImg = IMAGES.rogue1
+					if (ability_rarity === 2) abilityImg = IMAGES.rogue2
+					if (ability_rarity === 3) abilityImg = IMAGES.rogue3
+				}
+				return abilityImg
+			},
+
 			////////////////////////////////////////////////////////////////////////////////////////// DB DATA 
 
 			getRoles: async () => {
@@ -219,7 +234,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			////////////////////////////////////////////////////////////////////////////////////////// USER 
 
-			getUserData: async () => {
+			getUserDataAndAbilities: async () => {
 				//const user = localStorage.getItem('user_id')
 
 				//just to test
@@ -279,8 +294,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					"experience": input.experience,
 					"energy": input.energy,
 				}
-
-				console.log(input);
 				
 				fetch(process.env.BACKEND_URL + "api/user/" + user, {
 					method: "PUT",
@@ -290,9 +303,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   if(response.ok) return response.json()
 						throw Error(response.status)
 				   }).then(() => {
-					getActions().getUserData()
-					getActions().resetInput() 
-					console.log(getStore().user);
+					getActions().getUserDataAndAbilities()
+					getActions().resetInput()
 				   }).catch(error => {
 					   console.log(error);
 				   });
@@ -380,8 +392,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const currentExperience = getStore().user.experience
 				const currentEnergy = getStore().user.energy
 
-				const taskExperience = getStore().difficulties[tier - 1].experience_given
-				const taskEnergy = getStore().difficulties[tier - 1].energy_given
+				const taskExperience = getStore().difficulties[tier].experience_given
+				const taskEnergy = getStore().difficulties[tier].energy_given
 
 				if(currentExperience + taskExperience < 100) {
 					setStore({...getStore, inputs: {
@@ -389,9 +401,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}})
 				} else {
 					setStore({...getStore, inputs: {
-						"experience" : currentExperience + taskExperience - 100,
+						"experience" : currentExperience + taskExperience -100,
 						"level" : currentLevel + 1,
 					}})
+					setStore({...getStore, encounter: true})
 				}
 				
 				if(currentEnergy + taskEnergy < 100) {
@@ -402,31 +415,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...getStore().inputs, "energy" : 100}})
 				}
 
-				getActions().updateUser()
-				
+				getActions().updateUser()				
 				setStore({...getStore, inputs: {"done": true}})
 				getActions().updateTask(taskId)
 			},
 
 			cleanDashboard: async () => {
 
-				let offBoard = getStore().tasks.filter(item => item.done === True)
-
-				const updatedTask = {"onboard": false}
+				let offBoard = getStore().tasks.filter(item => item.done === true && item.onboard === true)
+				console.log(offBoard);
 				
-				fetch(process.env.BACKEND_URL + "api/tasks/" + offBoard, {
-					method: "PUT",
-					body: JSON.stringify(updatedTask),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(response => {
-					   if(response.ok) return response.json()
-						throw Error(response.status)
-				   }).then(() => {
-					getActions().getTaskList()
-					getActions().resetInput() 
-				   }).catch(error => {
-					   console.log(error);
-				   });
+				for (let task of offBoard){
+					setStore({...getStore, inputs: {"onboard": false}})
+					getActions().updateTask(task.id)
+				}
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// REWARDS
@@ -507,7 +509,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			checkEnoughEnergy: (tier) => {
 				const currentEnergy = getStore().user.energy
-				const rewardEnergy = getStore().rarities[tier - 1].energy_required
+				const rewardEnergy = getStore().rarities[tier].energy_required
 
 				if (currentEnergy - rewardEnergy >= 0) return true
 				else return false
@@ -515,7 +517,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getReward: async (tier, rewardId) => {
 				const currentEnergy = getStore().user.energy
-				const rewardEnergy = getStore().rarities[tier - 1].energy_required
+				const rewardEnergy = getStore().rarities[tier].energy_required
 
 				setStore({...getStore, inputs: {
 						...getStore().inputs, "energy" : currentEnergy - rewardEnergy}})

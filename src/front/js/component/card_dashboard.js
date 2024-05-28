@@ -19,7 +19,7 @@ export const DashCard = ({id, view, label, tier, modal, done}) => {
                     <div className="card circle">
                     <i className={roleIcon}></i>
                     </div>
-                    <TakeAction id={id} view={view} label={label} tier={tier} done={done} />
+                    <TakeAction id={id} view={view} tier={tier} done={done} />
                 </div>
                 <button className="card circle"
                     data-bs-toggle="modal" data-bs-target={modal}>

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-
+import { IMAGES } from "../../img/all_images";
 
 import "../../styles/index.css";
 
@@ -18,7 +18,7 @@ export const Role = () => {
 		{store.roles.length > 0 && store.roles.map( role => (
 			<div className="col-lg-3 d-lg-inline-flex m-xl-3 my-3 p-4 gap-3 card" key={role.id}>
 				<img className="col-6 align-self-center"
-					src={store.images[role.id][0]}
+					src={actions.getRoleImage(role.id)}
 					alt={role.name + " item"}
 				/>
 				<div className="col">

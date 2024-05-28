@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-
-import reward from "../../img/reward.png"
-import weak from "../../img/weak.png"
+import { IMAGES } from "../../img/all_images";
 
 export const TakeAction = ({id, view, label, tier, done}) => {
 
@@ -10,10 +8,13 @@ export const TakeAction = ({id, view, label, tier, done}) => {
 
     let actionIcon = actions.getActionIcon(view, done)
 
+    // tasks data
+    let difficulty = store.difficulties[tier]
+
     //rewards data
-    let abilityImg = store.images[store.user.user_role]
     let ability = store.abilities[tier]
     let energy = actions.checkEnoughEnergy(tier)
+    let abilityImg = actions.getAbilityImage(tier)
 
     return (
         <>
@@ -55,12 +56,16 @@ export const TakeAction = ({id, view, label, tier, done}) => {
                     <h1>Gooooood</h1>                 
                     <div className="modal-body d-flex flex-column gap-4">
                         {/* image */} 
-                        <img className="col-6 align-self-center" src={store.images[0]} alt="mysterious figure" />
+                        <img className="col-6 align-self-center" src={IMAGES.bandid} alt="mysterious figure" />
                         {/* message */} 
 						<h5>The mysterious figure responds as it fades back into the dark corner. No one notices your interaction, as you face the tavern again, it is filled with noise and the smell of strong ale.</h5>
                         <div className="d-flex flex-row mx-auto gap-3">
-                        <i className="fa-solid fa-angles-up fa-bounce txt-green"></i><p>{store.difficulties[tier-1].experience_given} experience</p>
-                        <i className="fa-solid fa-angles-up fa-bounce txt-yellow"></i><p>{store.difficulties[tier-1].energy_given} energy</p>
+                            {/* + experience */} 
+                            <i className="fa-solid fa-angles-up fa-bounce txt-green"></i>
+                            <p>{difficulty !== undefined? difficulty.experience_given : null} experience</p>
+                            {/* + energy */} 
+                            <i className="fa-solid fa-angles-up fa-bounce txt-yellow"></i>
+                            <p>{difficulty !== undefined? difficulty.energy_given : null} energy</p>
                         </div>              
                         {/* confirm */}
 						<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" onClick={() => actions.doTask(tier, id)}>
@@ -79,16 +84,15 @@ export const TakeAction = ({id, view, label, tier, done}) => {
                     {/* title */}
                     <h1>Attack this reward?</h1>                 
                     <div className="modal-body d-flex flex-column gap-4"> 
-                        {/* image */} 
-                        <img className="col-6 align-self-center" src={abilityImg !== undefined? abilityImg[tier] : null} alt="attack" />     
+                        {/* image */}  
+                        <img className="col-6 align-self-center" src={abilityImg} alt="ability" />
                         {/* message */} 
                         <div>
-                            <h5>Use {ability.name} on</h5>
-                            <p>{label}</p>
+                            <h5>{ability !== undefined? ability.name : null}</h5>
                         </div>             
                         {/* confirm */}
 						<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target={`#rewardResponse${id}`}>
-							<h5>Go for it</h5>
+							<h5>Use ability</h5>
 						</div>
                         {/* cancel */}
                         <div type="reset" className="card p-2 text-center bg-black" data-bs-dismiss="modal">
@@ -106,12 +110,12 @@ export const TakeAction = ({id, view, label, tier, done}) => {
                     <h1>Yeaaahhh</h1>                 
                     <div className="modal-body d-flex flex-column gap-4">
                         {/* image */} 
-                        <img className="col-6 align-self-center" src={reward} alt="reward" />
+                        <img className="col-6 align-self-center" src={IMAGES.reward} alt="reward" />
                         {/* message */} 
 						<h5>You're too powerful, they never saw it coming. Your hard work is paying off, keep it up.</h5>               
                         {/* confirm */}
 						<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" onClick={() => actions.getReward(tier, id)}>
-							<h5>Enjoy the spoils</h5>
+							<h5>Take loot</h5>
 						</div>
                     </div>
                 </div>
@@ -120,16 +124,16 @@ export const TakeAction = ({id, view, label, tier, done}) => {
 
 
         {/* not enough energy modal */}
-		<div className="modal fade" id="sorry" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-hidden="true">
+		<div className="modal fade" id="sorry" tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="card modal-content p-4">
                     {/* title */}
                     <h1>Daaamn...</h1>                 
                     <div className="modal-body d-flex flex-column gap-4">
                         {/* image */} 
-                        <img className="col-6 align-self-center" src={weak} alt="reward" />
+                        <img className="col-6 align-self-center" src={IMAGES.weak} alt="injured" />
                         {/* message */} 
-						<h5>The injuries from your last adventure still got you weak. You can't have this battle now, your energy is too low...</h5>               
+						<h5>You're still weak from the injuries of your last adventure. You can't go into battle now, your energy is too low...</h5>               
                         {/* confirm */}
 						<div type="reset" className="card p-2 text-center bg-black" data-bs-dismiss="modal">
 							<h5>Retrieve</h5>
@@ -141,3 +145,59 @@ export const TakeAction = ({id, view, label, tier, done}) => {
         </>
     )
 }
+
+/*
+
+        task confirmation
+        <BetweenModal 
+            id={`taskDone?${id}`}
+            title="Is it Done?"
+            message=""
+            subMessage=""
+            confirmLabel="Firmly nod once"
+            targetModal={`#taskResponse${id}`}
+            dismissLabel="Retrieve"
+        />
+
+        task response
+        <ResponseModal
+            id={`taskResponse${id}`}
+            title="Gooooood"
+            image={IMAGES.bandid}
+            message="The mysterious figure responds as it fades back into the dark corner. No one notices your interaction, as you face the tavern again, it is filled with noise and the smell of strong ale."
+            subMessage={taskSubMessage}
+            confirmLabel="Collect prize"
+            action={() => actions.doTask(tier, id)}
+        />
+
+        reward confirmation
+        <BetweenModal 
+            id={`attackReward${id}`}
+            title="Attack this reward?"
+            image={abilityImg}
+            message={ability !== undefined? ability.name : null}
+            confirmLabel="Use Ability"
+            targetModal={`#rewardResponse${id}`}
+            dismissLabel="Not yet"
+        />
+
+        reward response
+        <ResponseModal
+            id={`rewardResponse${id}`}
+            title="Yeaaahhh"
+            image={IMAGES.reward}
+            message="You're too powerful, they never saw it coming. Your hard work is paying off, keep it up."
+            confirmLabel="Collect loot"
+            action={() => actions.getReward(tier, id)}
+        />
+
+        not enough energy response
+        <ResponseModal
+            id="sorry"
+            title="Daaamn..."
+            image={IMAGES.weak}
+            message="The injuries from your last adventure still got you weak. You can't have this battle now, your energy is too low..."
+            confirmLabel="Retrieve"
+        />
+
+*/
