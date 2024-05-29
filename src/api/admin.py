@@ -1,7 +1,7 @@
   
 import os
 from flask_admin import Admin
-from .models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability
+from .models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability, Combat_text
 from flask_admin.contrib.sqla import ModelView
 
 def setup_admin(app):
@@ -19,6 +19,7 @@ def setup_admin(app):
     admin.add_view(ModelView(Reward, db.session))
     admin.add_view(ModelView(Bestiary, db.session))
     admin.add_view(ModelView(Ability, db.session))
+    admin.add_view(ModelView(Combat_text, db.session))
 
     # You can duplicate that line to add mew models
     # admin.add_view(ModelView(YourModelName, db.session))

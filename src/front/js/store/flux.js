@@ -14,7 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			encounter : false,
 			message: null,
 			allMonsters : null,
-			encounterPool: null,
+			encounterPool: [],
 			creatureInfo:[],
 			inputs: {},
 
@@ -50,9 +50,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			seePassword: () => {
 				let passwordInput = document.getElementById("password");
-
-				if (passwordInput.type === "password") passwordInput.type = "text";
-				else passwordInput.type = "password";
+				let confirmPasswordInput =document.getElementById("confirmPassword");
+				if (passwordInput.type === "password"){passwordInput.type = "text",confirmPasswordInput.type = "text" }
+				else {passwordInput.type = "password", confirmPasswordInput.type = "password"}
 			},	
 			
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
@@ -204,6 +204,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			////////////////////////////////////////////////////////////////////////////////////////// AUTHENTICATION
 
+			singUp:()=>{
+				const input = getStore().inputs				
+				
+				const newUser ={
+					"name": input.name,
+					"email": input.email,
+					"password": input.password
+				}
+
+				fetch(process.env.BACKEND_URL + "api/users", {
+					method: "POST",
+					body: JSON.stringify(newUser),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then((response) => {
+					if(response.ok) return response.json()
+				   }).then(() => {
+					   getActions().resetInput()
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			
 			Login: () => {
 
 				const input = getStore().inputs
@@ -616,7 +638,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
 				.then((response) => response.json())
-				.then((result) =>{ setStore({creatureInfo:[...store.creatureInfo,result]})})
+				.then((bestiary) =>{ setStore({creatureInfo:[...store.creatureInfo,bestiary]})})
 				.catch((error) => console.error(error));	
 			},
 			
@@ -646,40 +668,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if(userLevel <= 200) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24)}
 			
 			},
-			getBestiary: async ()=>{
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
-
+			getBestiary: async (userId)=>{
+				const store=getStore()
+				const action=getActions()
 				try{
 					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/"+ user)
+					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/"+userId)
 					const data = await resp.json()
 					setStore({ bestiary: data})
-					// don't forget to return something, that is how the async resolves
-					console.log(getStore().bestiary)
+					store.bestiary.map((item)=>action.getMonsterByIndex(item.monster_name))
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
-				}	
-			},
-			getBestiaryInfo:()=>{
-				const myBestiary = getStore().bestiary
-				console.log(myBestiary)
-				myBestiary.map((item)=>getActions().getMonsterByIndex(item.monster_name))
-				setTimeout(() => { 
-					console.log(getStore().creatureInfo)
-				}, "500");
+				}
 				
-
+			},
+			getEncounterInfo:()=>{
+				const store=getStore()
+				const myHeaders = new Headers();
+				myHeaders.append("Accept", "application/json");
+				const requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow"
+				};
+				fetch("https://www.dnd5eapi.co/api/monsters/"+store.randomMonster, requestOptions)
+				.then((response) => response.json())
+				.then((result) =>{setStore({encounterInfo: result})})
+				.catch((error) => console.error(error));
 			},
 			decideEncounter: (userlvl,userId)=>{
 				const store=getStore()
 				const action=getActions()
 				action.getEncounter(userlvl)
-				action.getBestiary(userId)
-				
 				setTimeout(() => {
 				const encounterPool = store.encounterPool?.map((item)=>{return item.index});
 				const bestiary = store.bestiary?.map((item)=>{return item.monster_name});
@@ -714,18 +735,71 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
-			decideVictory: async (userLevel,userId)=>{
+			creatureRoll:()=>{
+				const monsterDice =Math.floor(Math.random() * 6) + 1;
+				setStore({creatureRoll: monsterDice})
+			},
+			userRoll:()=>{
 				const store=getStore()
 				const action=getActions()
-				action.decideEncounter(userLevel,userId)
+				const userRoll =Math.floor(Math.random() * 6) + 1;
+				const barbarianRoll=Math.floor(Math.random() * 8) + 1;
+				if(store.user.role=== "Barbarian"){setStore({userRoll: barbarianRoll})}
+				else{setStore({userRoll: userRoll})}
+
+			},
+			decideVictory: async ()=>{
+				const store=getStore()
+				const action=getActions()
+				const user = 1
+				if(store.userRoll > store.creatureRoll){return action.addMosnterOnBestiary(user), 
+					setStore({victoryMessage:<p>As the final blow is struck, your enemiy falls to the ground with a resounding thud. Silence fills the air, broken only by your labored breathing. 
+					You have done it. You have triumphed against all odds. The battlefield, once a scene of chaos and violence, now lies still.<br/> The remnants of your foe lie scattered, 
+					and the scent of victory hangs in the air. The morning sun begins to rise, casting a golden hue over the land, symbolizing a new dawn and a hard-fought peace.<br/>
+					You gather yourself, bearing wounds and scars, but also a sense of pride and accomplishment. This victory is not just a testament to your strength and skill, 
+					but also to your unwavering resolve.<br/> As you stand, the realization sinks in: your name will be remembered, songs will be sung of your deeds, 
+					and the tales of your bravery will inspire future generations. This is your moment. Savor it, for you have earned it.</p>})} 
+
+					else{return setStore({defeatMessage:<p>The clashing of steel and the roar of battle finally come to a halt. As you fall, an eerie silence descends upon the battlefield.
+					You stand up amidst the wreckage of what you where defending, bruised, battered, and barely holding on. The weight of defeat settles heavily on your shoulders.<br/>
+					The enemies, now victorious, survey the carnage with grim satisfaction. Though you fought valiantly, the odds were insurmountable, and your strength was not enough to turn the tide.<br/> 
+					The bitter taste of failure lingers in the air, mingling with the scent of blood and smoke.As the enemy withdraws, leaving you alone with your thoughts and the bodies of your comrades, 
+					a sense of sorrow and loss fills your heart.<br/> This defeat is a harsh reminder of the perils and unpredictability of the life you have chosen. Yet, within this darkness, 
+					a glimmer of resolve begins to stir.</p> })}
 				
-				setTimeout(() => {
-					console.log(store.randomMonster)
-					const playerDice = Math.floor(Math.random() * 6) + 1
-					const monsterDice =Math.floor(Math.random() * 6) + 1;
-					if(playerDice > monsterDice){return action.addMosnterOnBestiary(userId) }
-					else{return console.log(false)}
-				}, "500");
+			},
+			getCombatText:async ()=>{
+				const store=getStore()
+				const action=getActions()
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "api/combat")
+					const data = await resp.json()
+					setStore({ combatText: data})
+					console.log(store.combatText)
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
+			selectCombatText:(creature)=>{
+				const store=getStore()
+				const action=getActions()
+				
+				if (creature.type == "aberration"){return store.combatText[0].text}
+				if (creature.type == "beast"){return store.combatText[1].text}
+				if (creature.type == "celestial"){return store.combatText[2].text}
+				if (creature.type == "construct"){return store.combatText[3].text}
+				if (creature.type == "dragon"){return store.combatText[4].text}
+				if (creature.type == "elemental"){return store.combatText[5].text}
+				if (creature.type == "fey"){return store.combatText[6].text}
+				if (creature.type == "fiend"){return store.combatText[7].text}
+				if (creature.type == "giant"){return store.combatText[8].text}
+				if (creature.type == "humanoid"){return store.combatText[9].text}
+				if (creature.type == "monstrosity"){return store.combatText[10].text}
+				if (creature.type == "ooze"){return store.combatText[11].text}
+				if (creature.type == "plant"){return store.combatText[12].text}
+				if (creature.type == "undead"){return store.combatText[13].text}
 			},
 			getMonsterimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
 				const store=getStore()
@@ -747,13 +821,78 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "plant"){return img13}
 				if (creature.type == "undead"){return img14}
 			},
+			addExperience:(experience)=>{
+				const store=getStore()
+				const action=getActions()
+				const user =store.user
+				const newExp = user.experience + experience
+				
+				if(newExp > 100){return action.updateUserLevel((newExp -100), (user.level + 1))}
+				else {return action.updateUserLevel(newExp, user.level) }
 
+			},
+			addEnergy:(energy)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				const newEnergy= user.energy + energy
+				if (newEnergy >= 40){return action.updateEnergy(40)}
+				else {return action.updateEnergy(newEnergy)}
+			},
 			onQuestCompletion:(experience, energy)=>{
 				const store=getStore()
 				const action=getActions()
 				action.addExperience(experience)
 				action.addEnergy(energy)
 			},
+			
+			updateUserLevel:(experience, level)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				
+					const updatedExpAndLevel = {
+						"experience": experience,
+						"level": level
+					}
+				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
+					method: "PUT",
+					body: JSON.stringify(updatedExpAndLevel),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			updateEnergy:(energy)=>{
+				const store=getStore()
+				const action=getActions()
+				const user = store.user
+				
+					const updatedEnergy = {
+						"energy": energy
+						
+					}
+				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
+					method: "PUT",
+					body: JSON.stringify(updatedEnergy),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(resp => {
+					   console.log(resp.ok);
+					   console.log(resp.status);
+					 return resp.json(); 
+				   }).then(data => {
+					   console.log(data); 
+				   }).catch(error => {
+					   console.log(error);
+				   });
+				}
+
 		}
 	};
 };
