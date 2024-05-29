@@ -642,6 +642,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getEncounterInfo:()=>{
 				const store=getStore()
+				const monster = localStorage.getItem("randomMonster")
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
 				const requestOptions = {
@@ -649,12 +650,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				headers: myHeaders,
 				redirect: "follow"
 				};
-				fetch("https://www.dnd5eapi.co/api/monsters/"+store.randomMonster, requestOptions)
+				fetch("https://www.dnd5eapi.co/api/monsters/"+monster, requestOptions)
 				.then((response) => response.json())
 				.then((result) =>{setStore({encounterInfo: result})})
 				.catch((error) => console.error(error));
 			},
-			decideEncounter: (userlvl,userId)=>{
+			decideEncounter: (userlvl)=>{
 				const store=getStore()
 				const action=getActions()
 				action.getEncounter(userlvl)
@@ -664,6 +665,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const monsterpool = encounterPool.filter(val => !bestiary.includes(val));
 				const randomMonster = monsterpool[Math.floor(Math.random() * monsterpool.length)]
 				setStore({randomMonster: randomMonster})
+				localStorage.setItem("randomMonster", randomMonster)
 				  }, "500");
 				
 			},
@@ -710,19 +712,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 				const user = 1
 				if(store.userRoll > store.creatureRoll){return action.addMosnterOnBestiary(user), 
-					setStore({victoryMessage:<p>As the final blow is struck, your enemiy falls to the ground with a resounding thud. Silence fills the air, broken only by your labored breathing. 
+					setStore({victoryMessage:<div><h2>You are Victorius!!!!!</h2><p>As the final blow is struck, your enemiy falls to the ground with a resounding thud. Silence fills the air, broken only by your labored breathing. 
 					You have done it. You have triumphed against all odds. The battlefield, once a scene of chaos and violence, now lies still.<br/> The remnants of your foe lie scattered, 
 					and the scent of victory hangs in the air. The morning sun begins to rise, casting a golden hue over the land, symbolizing a new dawn and a hard-fought peace.<br/>
 					You gather yourself, bearing wounds and scars, but also a sense of pride and accomplishment. This victory is not just a testament to your strength and skill, 
 					but also to your unwavering resolve.<br/> As you stand, the realization sinks in: your name will be remembered, songs will be sung of your deeds, 
-					and the tales of your bravery will inspire future generations. This is your moment. Savor it, for you have earned it.</p>})} 
+					and the tales of your bravery will inspire future generations. This is your moment. Savor it, for you have earned it.</p></div>})} 
 
-					else{return setStore({defeatMessage:<p>The clashing of steel and the roar of battle finally come to a halt. As you fall, an eerie silence descends upon the battlefield.
+					else{return setStore({defeatMessage:<div><h2>You will have to try agin next time</h2><p>The clashing of steel and the roar of battle finally come to a halt. As you fall, an eerie silence descends upon the battlefield.
 					You stand up amidst the wreckage of what you where defending, bruised, battered, and barely holding on. The weight of defeat settles heavily on your shoulders.<br/>
 					The enemies, now victorious, survey the carnage with grim satisfaction. Though you fought valiantly, the odds were insurmountable, and your strength was not enough to turn the tide.<br/> 
 					The bitter taste of failure lingers in the air, mingling with the scent of blood and smoke.As the enemy withdraws, leaving you alone with your thoughts and the bodies of your comrades, 
 					a sense of sorrow and loss fills your heart.<br/> This defeat is a harsh reminder of the perils and unpredictability of the life you have chosen. Yet, within this darkness, 
-					a glimmer of resolve begins to stir.</p> })}
+					a glimmer of resolve begins to stir.</p></div> })}
 				
 			},
 			getCombatText:async ()=>{
@@ -757,6 +759,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "ooze"){return store.combatText[11].text}
 				if (creature.type == "plant"){return store.combatText[12].text}
 				if (creature.type == "undead"){return store.combatText[13].text}
+				
 			},
 			getMonsterimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
 				const store=getStore()
@@ -777,6 +780,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "ooze"){return img12}
 				if (creature.type == "plant"){return img13}
 				if (creature.type == "undead"){return img14}
+				
 			},
 			addExperience:(experience)=>{
 				const store=getStore()
