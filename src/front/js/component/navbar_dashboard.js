@@ -57,7 +57,7 @@ export const Navbar = ({view, modal}) => {
                     }
                 </div>
                 {/* log out */}
-                <Link to="/" >
+                <Link to="/login" >
                     <button className="card circle bg-black" onClick={actions.Logout}>
                         <i className="fa-solid fa-power-off"></i>
                     </button>

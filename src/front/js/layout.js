@@ -3,20 +3,18 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
+import injectContext from "./store/appContext";
+
 import { Home } from "./pages/home";
-import { Login } from "./pages/logIn";
 import { SignUp } from "./pages/signUp";
 import { Role } from "./pages/choose_role";
+import { Login } from "./pages/logIn";
+import { Forgot } from "./pages/forgot_password";
 import { Quests } from "./pages/quests";
 import { Rewards } from "./pages/rewards";
 import { Bestiary } from "./pages/bestiary"; 
 import { Encounter } from "./pages/encounter";
-
-
-import injectContext from "./store/appContext";
 import { ProfileEdit } from "./pages/profile_edit";
-
-
 
 const Layout = () => {
     const basename = process.env.BASENAME || "";
@@ -29,9 +27,10 @@ const Layout = () => {
                 <ScrollToTop>
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route element={<Login />} path="/login" />
                         <Route element={<SignUp />} path="/signup" />
                         <Route element={<Role />} path="/role" />
+                        <Route element={<Login />} path="/login" />
+                        <Route element={<Forgot />} path="/forgot" />
                         <Route element={<Quests />} path="/quests" />
                         <Route element={<Rewards />} path="/rewards" />
                         <Route element={<Bestiary />} path="/bestiary" />

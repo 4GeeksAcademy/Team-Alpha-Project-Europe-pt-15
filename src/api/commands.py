@@ -1,6 +1,6 @@
 
 import click
-from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Ability
+from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Ability, Combat_text
 
 """
 In this file, you can add as many commands as you want using the @app.cli.command decorator
@@ -179,6 +179,20 @@ def setup_commands(app):
         print("Rogue abilities created.")
         print("All abilities created.")
 
+        ##  TEST USER  ##
+        print("Creating test user")
+        user = User()
+        user.name = "user"
+        user.email = "user@test"
+        user.password = "user"
+        user.user_role = 2
+        user.level = 1
+        user.experience = 78
+        user.energy = 23
+        db.session.add(user)
+        db.session.commit()
+        print("Test user created.")
+        print("email: user@test   password: user")
 
         ##  TASKS  ##
         print("Creating db dummy tasks")
@@ -359,18 +373,3 @@ def setup_commands(app):
         db.session.add(text17)
         db.session.commit()
         print("combat text for all 14 types and the 3 roles created")
-
-        ##  TEST USER  ##
-        print("Creating test user")
-        user = User()
-        user.name = "user"
-        user.email = "user@test"
-        user.password = "user"
-        user.user_role = 2
-        user.level = 1
-        user.experience = 78
-        user.energy = 23
-        db.session.add(user)
-        db.session.commit()
-        print("Test user created.")
-        print("email: user@test   password: user")

@@ -50,10 +50,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			seePassword: () => {
 				let passwordInput = document.getElementById("password");
-				let confirmPasswordInput =document.getElementById("confirmPassword");
-				if (passwordInput.type === "password"){passwordInput.type = "text",confirmPasswordInput.type = "text" }
+				if (passwordInput.type === "password"){passwordInput.type = "text" }
+				else {passwordInput.type = "password"}
+
+				/*
+				let passwordInput = document.getElementById("password");
+				let confirmPasswordInput = document.getElementById("confirmPassword");
+				if (passwordInput.type === "password"){passwordInput.type = "text", confirmPasswordInput.type = "text" }
 				else {passwordInput.type = "password", confirmPasswordInput.type = "password"}
-			},	
+				*/
+			},
 			
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
@@ -219,9 +225,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   	headers: {"Content-Type": "application/json"}
 				   }).then((response) => {
 					if(response.ok) return response.json()
-				   }).then(() => {
-					   getActions().resetInput()
-				   }).catch(error => {
+					}).then(() => {
+						getActions().Login()		
+					}).catch(error => {
 					   console.log(error);
 				   });
 			},
@@ -244,23 +250,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}).then((loginData) => {
 					localStorage.setItem('jwt-token', loginData.token)
 					localStorage.setItem('user', loginData.user_id)
+					getActions().getUserDataAndAbilities()
+					getActions().getTaskList()
+					getActions().getRewardList()
 				}).catch((err) => {
 					console.error('Something Wrong when calling API', err)
 				})
+
+				//console.log("login auth", localStorage.getItem('jwt-token'))
+				//console.log("login id", localStorage.getItem('user'))
 			},
 
 			Logout: () => {
-				//localStorage.removeItem('jwt-token')
-				//localStorage.removeItem('user_id')
+				localStorage.removeItem('jwt-token')
+				localStorage.removeItem('user')
+				getActions().resetInput()
+				setStore({...getStore, user:[], tasks:[], rewards:[], beastiary:[], abilities:[], encounter: false})
+
+				//console.log("logout auth", localStorage.getItem('jwt-token'))
+				//console.log("logout id", localStorage.getItem('user'))
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// USER 
 
 			getUserDataAndAbilities: async () => {
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
+				//console.log("user data auth", localStorage.getItem('jwt-token'))
+				//console.log("user id", localStorage.getItem('user'))
 
 				fetch(process.env.BACKEND_URL + "api/user/" + user, {
 					method: 'GET',
@@ -278,10 +294,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			userRole: async (role) => {
 
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
 
 				setStore({...getStore, inputs: {"role" : role}})
 				getActions().updateUser()
@@ -289,10 +302,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			deleteUser: async () => {
 
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
 
 				setStore({...getStore, inputs: {"email" : "", "password": ""}})
 				getActions().updateUser()
@@ -300,10 +310,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			updateUser: async () => {
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
 
 				const input = getStore().inputs
 
@@ -336,10 +343,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			////////////////////////////////////////////////////////////////////////////////////////// TASKS 
 
 			getTaskList: async () => {
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
 
 				fetch(process.env.BACKEND_URL + "api/tasks/" + user, {
 					method: 'GET',
@@ -357,10 +361,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			createTask: async () => {
 
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
 				const input = getStore().inputs
 
 				const task ={
@@ -457,10 +458,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getRewardList: async () => {
 
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
 
 				fetch(process.env.BACKEND_URL + "api/rewards/" + user, {
 					method: 'GET',
@@ -478,10 +476,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			createReward: async () => {
 
-				//const user = localStorage.getItem('user_id')
-
-				//just to test
-				const user = 1
+				const user = localStorage.getItem('user')
 
 				const input = getStore().inputs
 
@@ -668,6 +663,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if(userLevel <= 200) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24)}
 			
 			},
+
 			getBestiary: async (userId)=>{
 				const store=getStore()
 				const action=getActions()
@@ -683,6 +679,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				
 			},
+
 			getEncounterInfo:()=>{
 				const store=getStore()
 				const myHeaders = new Headers();
@@ -697,6 +694,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.then((result) =>{setStore({encounterInfo: result})})
 				.catch((error) => console.error(error));
 			},
+
 			decideEncounter: (userlvl,userId)=>{
 				const store=getStore()
 				const action=getActions()
@@ -710,6 +708,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  }, "500");
 				
 			},
+
 			addMosnterOnBestiary:async (userId)=>{
 				const store=getStore()
 				const action=getActions()
@@ -735,10 +734,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
+
 			creatureRoll:()=>{
 				const monsterDice =Math.floor(Math.random() * 6) + 1;
 				setStore({creatureRoll: monsterDice})
 			},
+
 			userRoll:()=>{
 				const store=getStore()
 				const action=getActions()
@@ -748,10 +749,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				else{setStore({userRoll: userRoll})}
 
 			},
+
 			decideVictory: async ()=>{
 				const store=getStore()
 				const action=getActions()
-				const user = 1
 				if(store.userRoll > store.creatureRoll){return action.addMosnterOnBestiary(user), 
 					setStore({victoryMessage:<p>As the final blow is struck, your enemiy falls to the ground with a resounding thud. Silence fills the air, broken only by your labored breathing. 
 					You have done it. You have triumphed against all odds. The battlefield, once a scene of chaos and violence, now lies still.<br/> The remnants of your foe lie scattered, 
@@ -768,6 +769,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					a glimmer of resolve begins to stir.</p> })}
 				
 			},
+
 			getCombatText:async ()=>{
 				const store=getStore()
 				const action=getActions()
@@ -782,6 +784,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+
 			selectCombatText:(creature)=>{
 				const store=getStore()
 				const action=getActions()
@@ -801,6 +804,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "plant"){return store.combatText[12].text}
 				if (creature.type == "undead"){return store.combatText[13].text}
 			},
+
 			getMonsterimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
 				const store=getStore()
 				const action=getActions()
@@ -821,78 +825,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "plant"){return img13}
 				if (creature.type == "undead"){return img14}
 			},
-			addExperience:(experience)=>{
-				const store=getStore()
-				const action=getActions()
-				const user =store.user
-				const newExp = user.experience + experience
-				
-				if(newExp > 100){return action.updateUserLevel((newExp -100), (user.level + 1))}
-				else {return action.updateUserLevel(newExp, user.level) }
-
-			},
-			addEnergy:(energy)=>{
-				const store=getStore()
-				const action=getActions()
-				const user = store.user
-				const newEnergy= user.energy + energy
-				if (newEnergy >= 40){return action.updateEnergy(40)}
-				else {return action.updateEnergy(newEnergy)}
-			},
-			onQuestCompletion:(experience, energy)=>{
-				const store=getStore()
-				const action=getActions()
-				action.addExperience(experience)
-				action.addEnergy(energy)
-			},
-			
-			updateUserLevel:(experience, level)=>{
-				const store=getStore()
-				const action=getActions()
-				const user = store.user
-				
-					const updatedExpAndLevel = {
-						"experience": experience,
-						"level": level
-					}
-				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
-					method: "PUT",
-					body: JSON.stringify(updatedExpAndLevel),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(resp => {
-					   console.log(resp.ok);
-					   console.log(resp.status);
-					 return resp.json(); 
-				   }).then(data => {
-					   console.log(data); 
-				   }).catch(error => {
-					   console.log(error);
-				   });
-			},
-			updateEnergy:(energy)=>{
-				const store=getStore()
-				const action=getActions()
-				const user = store.user
-				
-					const updatedEnergy = {
-						"energy": energy
-						
-					}
-				fetch(process.env.BACKEND_URL + "/api/user/"+user.id, {
-					method: "PUT",
-					body: JSON.stringify(updatedEnergy),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then(resp => {
-					   console.log(resp.ok);
-					   console.log(resp.status);
-					 return resp.json(); 
-				   }).then(data => {
-					   console.log(data); 
-				   }).catch(error => {
-					   console.log(error);
-				   });
-				}
-
 		}
 	};
 };

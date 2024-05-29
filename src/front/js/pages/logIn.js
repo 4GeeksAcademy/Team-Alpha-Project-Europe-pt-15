@@ -39,7 +39,7 @@ export const Login = () => {
 				<p>Not part of the crew yet?
 					<Link to={'/signUp'} className="txt-purple"> Sign up here!</Link>
 				</p>
-				<Link to={''} className="txt-red">Forgot password?</Link>
+				<Link to={'/forgot'} className="txt-red">Forgot password?</Link>
 			</div>
 		</form>
 		</>
