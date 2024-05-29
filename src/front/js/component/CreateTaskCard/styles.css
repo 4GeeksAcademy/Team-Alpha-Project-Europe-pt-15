@@ -1,0 +1,135 @@
+
+/* .label-selected{
+  color: white !important;
+} */
+
+/* .mainCard:hover {
+  color: black !important;
+  background-color: white !important;
+} */
+
+ form{
+  max-width:  400px;
+}  
+
+button:hover{
+  border-color:black !important;
+  background-color:black !important;
+i{
+  color:white !important;
+}
+.label{
+  color:white !important;
+}
+}
+
+
+
+.difSelector {
+  display: flex;
+  gap: 10px;
+}
+
+
+
+.btnDif:active {
+
+    background-color: black;
+    color: white; 
+   
+}  
+
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+
+.cardLabel{
+  margin: 0;
+
+}
+
+.cardLabel:hover {
+  color: black;
+  
+  margin: 0;
+  
+}
+
+.inpuTasker{
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 1000px) {
+  /* For mobile phones: */
+  [class*="mainCard"] {
+    
+    
+    font-size: 12px;
+    
+  }
+  
+}
+
+@media only screen and (max-width: 940px) {
+  /* For mobile phones: */
+  [class*="btnDif"] {
+    font-size: 10px;
+    gap: 1px;
+  }
+  
+}
+
+@media only screen and (max-width: 800px) {
+  
+  [class*="mainCard"] {
+    max-width: auto;
+    margin: 0;
+  }
+
+  [class*="label"] {
+    
+    gap: 2px;
+  }
+
+  [class*="btnDif"] {
+    font-size: 12px;
+    gap: 2px;
+  }
+}
+
+
+
+@media only screen and (max-width: 400px) {
+  
+
+
+  [class*="label"] {
+    font-size: 10px;
+    gap: 0px;
+  }
+
+  
+}
+
+@media only screen and (max-width: 300px) {
+  
+  
+
+  [class*="label"] {
+    font-size: auto;
+    gap: 1px;
+  }
+
+  [class*="difSelector"] {
+
+    display: flex; /* Ensure the element is a flex container */
+    flex-direction: column; /* Align children in a column */
+    
+    gap: 2px;
+  }
+  
+}

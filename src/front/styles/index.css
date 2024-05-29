@@ -6,8 +6,6 @@ body {
 
 #app{
    height:100vh;
-
-
 }
 
 /* pages with the navbar */
@@ -21,6 +19,13 @@ body {
 .bg-black {background: #252424; color: #ffffff; box-shadow: none !important;}
 .bg-white {background: #ffffff}
 .form-range-track-bg { background: #252424};
+.bg-custom-purple {
+    background: #9111F2 !important;
+}
+.bg-custom-yellow {
+    background-color: #FFC444 !important;
+  }
+
 
 .txt-green {color: #10E0B8}
 .txt-yellow {color: #FFC444}
