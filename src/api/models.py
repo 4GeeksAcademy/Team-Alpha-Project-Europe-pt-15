@@ -176,3 +176,19 @@ class Bestiary(db.Model):
             "monster_name": self.monster_name,
             "user_id": self.user_id,
         }
+    
+class Combat_text(db.Model):
+    __tablename__ = "combat_text"
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(1000), unique=False, nullable=False)
+    creature_or_role_type = db.Column(db.String(120), unique=False, nullable=False)
+    
+    def __repr__(self):
+        return f'<text {self.id}>'
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "text": self.text,
+            "creature_or_role_type": self.creature_or_role_type 
+        }

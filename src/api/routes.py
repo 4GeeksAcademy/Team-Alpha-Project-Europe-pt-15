@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability
+from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability, Combat_text
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -22,6 +22,48 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+###################################################################################  ROLES ROUTES
+
+@api.route("/roles", methods=['GET'])
+def get_roles_list():
+    roles= Role.query.all()
+    all_roles= list(map(lambda x: x.serialize(), roles))
+    return jsonify(all_roles), 200
+
+###################################################################################  ABILITY ROUTES
+
+@api.route("/ability",  methods=['GET'])
+def get_all_abilities():
+    ability= Ability.query.all()
+    all_abilities= list(map(lambda x: x.serialize(), ability))
+    return jsonify(all_abilities), 200
+
+
+###################################################################################  TASK DIFFICULTY ROUTES
+
+@api.route("/difficulty",  methods=['GET'])
+def get_difficulties():
+    difficulties= Difficulty.query.all()
+    all_difficulties= list(map(lambda x: x.serialize(), difficulties))
+    all_difficulties.insert(0, None)
+    return jsonify(all_difficulties), 200
+
+###################################################################################  REWARD RARITY ROUTES
+
+@api.route("/rarity",  methods=['GET'])
+def get_rarities():
+    rarity= Rarity.query.all()
+    all_rarities= list(map(lambda x: x.serialize(), rarity))
+    all_rarities.insert(0, None)
+    return jsonify(all_rarities), 200
+
+###################################################################################  COMBAT ROUTES
+
+@api.route("/combat",  methods=['GET'])
+def get_all_combat_text():
+    text= Combat_text.query.all()
+    all_text= list(map(lambda x: x.serialize(), text))
+    return jsonify(all_text), 200
 
 ###################################################################################  USER ROUTES
 
@@ -125,41 +167,6 @@ def update_user(user_id):
     db.session.commit()
 
     return jsonify({"msg": "User is Updated"}), 200
-
-###################################################################################  ROLES ROUTES
-
-@api.route("/roles", methods=['GET'])
-def get_roles_list():
-    roles= Role.query.all()
-    all_roles= list(map(lambda x: x.serialize(), roles))
-    return jsonify(all_roles), 200
-
-###################################################################################  ABILITY ROUTES
-
-@api.route("/ability",  methods=['GET'])
-def get_all_abilities():
-    ability= Ability.query.all()
-    all_abilities= list(map(lambda x: x.serialize(), ability))
-    return jsonify(all_abilities), 200
-
-
-###################################################################################  TASK DIFFICULTY ROUTES
-
-@api.route("/difficulty",  methods=['GET'])
-def get_difficulties():
-    difficulties= Difficulty.query.all()
-    all_difficulties= list(map(lambda x: x.serialize(), difficulties))
-    all_difficulties.insert(0, None)
-    return jsonify(all_difficulties), 200
-
-###################################################################################  REWARD RARITY ROUTES
-
-@api.route("/rarity",  methods=['GET'])
-def get_rarities():
-    rarity= Rarity.query.all()
-    all_rarities= list(map(lambda x: x.serialize(), rarity))
-    all_rarities.insert(0, None)
-    return jsonify(all_rarities), 200
 
 ###################################################################################  TASKS ROUTES
 
@@ -305,12 +312,13 @@ def update_reward(reward_id):
 
 ###################################################################################  MONSTER ROUTES
 
+'''
 @api.route("/bestiary",  methods=['GET'])
 def get_monsters():
     bestiary= Bestiary.query.all()
     all_monsters= list(map(lambda x: x.serialize(), bestiary))
     return jsonify(all_monsters), 200
-
+'''
 
 @api.route("/bestiary",  methods=['POST'])
 def new_monster_aquired():
@@ -340,5 +348,3 @@ def get_monster_list(the_user_id):
         return "No monster from user: " + str(the_user_id), 400
     
     monster_list = list(map(lambda x: x.serialize(), monster))
-
-    return jsonify(monster_list), 200
