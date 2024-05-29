@@ -1,13 +1,9 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import { Context } from "../store/appContext"
-import { useNavigate } from "react-router-dom";
+import { IMAGES } from "../../img/all_images";
 
-import user from "../../img/icon_user.png"
-import email from "../../img/icon_email.png"
-import password from "../../img/icon_pw.png"
-import eye from "../../img/icon_pweye.png"
-import "../../styles/index.css";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const SignUp = () => {
   
@@ -38,14 +34,14 @@ export const SignUp = () => {
 			<h1> Sing Up</h1>
 			{/* email input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">
-				<img src={user} alt="user icon" />
+				<img src={IMAGES.user} alt="user icon" />
 				<input type="text" name="name" placeholder="Username" className="col-9"
 					value={store.inputs.name || ""} 
 					onChange={event => actions.getInput(event)}
 					required/>
 			</div>
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">
-				<img src={email} alt="email icon" />
+				<img src={IMAGES.email} alt="email icon" />
 				<input type="text" name="email" placeholder="email" className="col-9"
 					value={store.inputs.email || ""} 
 					onChange={event => actions.getInput(event)}
@@ -53,17 +49,17 @@ export const SignUp = () => {
 			</div>
 			{/* password input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">
-				<img src={password} alt="email icon" />
+				<img src={IMAGES.password} alt="email icon" />
 				<input type="password" id="password" name="password" placeholder="password" className="col-7"
 					value={store.inputs.password || ""} 
 					onChange={event => actions.getInput(event)}
 					required/>
 				{/* see password */}
-                <img src={eye} alt="see password" onClick={actions.seePassword} />
+          <img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
 			</div>
       {/* confirm password */}
       <div className="d-lg-flex flex-row justify-content-evenly p-2 card" style={confirmPasswordClass()}>
-				<img src={password} alt="email icon" />
+				<img src={IMAGES.password_confirm} alt="email icon" />
 				<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" className="col-7"
 					value={store.inputs.confirmPassword || ""} 
 					onChange={event => {actions.getInput(event)
@@ -71,11 +67,11 @@ export const SignUp = () => {
 					}}
 					required/> 
 					{/* see password */}
-					<img src={eye} alt="see password" onClick={actions.seePassword} />   
+					<img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />   
 			</div>
 			{/* submit */}
 			<button type="submit" className="card p-3 bg-yellow" onClick={()=>{actions.singUp()
-				navigate("/login")}} disabled={isButtonDisabled}>
+				navigate("/role")}} disabled={isButtonDisabled}>
 				<h5 style={{margin:"auto"}}>Sign up!</h5>
 			</button>		
 		</form>

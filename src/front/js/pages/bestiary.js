@@ -18,13 +18,10 @@ import ooze from "../../img/ooze.png"
 import plant from "../../img/plant.png"
 import undead from "../../img/undead.png"
 
-
-
 export const Bestiary = () =>{
 
     const { store, actions } = useContext(Context);
     const navigate = useNavigate()
-  
 
   const handleClick=()=>{
     actions.decideEncounter(10,1)

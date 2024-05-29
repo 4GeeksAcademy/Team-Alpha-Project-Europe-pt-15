@@ -1,10 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext"
-
-import email from "../../img/icon_email.png"
-import password from "../../img/icon_pw.png"
-import eye from "../../img/icon_pweye.png"
+import { IMAGES } from "../../img/all_images";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
@@ -15,7 +12,7 @@ export const Login = () => {
 			<h1> Log in</h1>
 			{/* email input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">
-				<img src={email} alt="email icon" />
+				<img src={IMAGES.email} alt="email icon" />
 				<input type="text" name="email" placeholder="email" className="col-9"
 					value={store.inputs.email || ""} 
 					onChange={event => actions.getInput(event)}
@@ -23,13 +20,13 @@ export const Login = () => {
 			</div>
 			{/* password input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">
-				<img src={password} alt="email icon" />
+				<img src={IMAGES.password} alt="email icon" />
 				<input type="password" id="password" name="password" placeholder="password" className="col-7"
 					value={store.inputs.password || ""} 
 					onChange={event => actions.getInput(event)}
 					required/>
 				{/* see password */}
-                <img src={eye} alt="see password" onClick={actions.seePassword} />
+                <img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
 			</div>
 			{/* submit */}
 			<Link to="/quests">
@@ -42,7 +39,7 @@ export const Login = () => {
 				<p>Not part of the crew yet?
 					<Link to={'/signUp'} className="txt-purple"> Sign up here!</Link>
 				</p>
-				<Link to={''} className="txt-red">Forgot password?</Link>
+				<Link to={'/forgot'} className="txt-red">Forgot password?</Link>
 			</div>
 		</form>
 		</>

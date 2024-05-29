@@ -48,8 +48,6 @@ export const Encounter = () => {
         if(store.user.role === "Wizard"){return store.combatText[15].text}
         if(store.user.role === "Rogue"){return store.combatText[16].text}
     }
-
-
     return (
         <>
             <div className="container">

@@ -10,6 +10,7 @@ export const EcounterModal= ({id}) => {
     const handleClick=()=>{
         navigate("/bestiary")
         window.location.reload()
+      
     }
     const victoryFanfarre=()=>{
     if(store.userRoll > store.creatureRoll){return store.victoryMessage}
@@ -20,11 +21,6 @@ export const EcounterModal= ({id}) => {
         if(store.user.role === "Wizard"){return store.combatText[15].text}
         if(store.user.role === "Rogue"){return store.combatText[16].text}
     }
-    
-    
-    
-    
-    
     
     return (
         <>

@@ -4,14 +4,13 @@ import { Context } from "../store/appContext";
 import "../../styles/index.css";
 import { Navbar } from "../component/navbar_dashboard";
 import { DashCard } from "../component/card_dashboard";
-import { DashModal } from "../component/modal_dashboard";
+import { AddEditModal } from "../component/add_edit_modal_dashboard";
 
 export const Quests = () => {
 	const { store, actions } = useContext(Context);
 
 	useEffect(() => {
         actions.getTaskList()
-		actions.getDifficulties()
     },[]);
 
     let view = "tasks"
@@ -38,7 +37,7 @@ export const Quests = () => {
 			))}
 		</div>
 		{/* create quest */}
-		<DashModal
+		<AddEditModal
 			id={idCreateModal}
 			view={view}
 			label="New Quest"
@@ -46,7 +45,7 @@ export const Quests = () => {
 		/>
 		{/* edit quest */}
 		{store.tasks?.map((item,index)=>(
-		<DashModal key={index}
+		<AddEditModal key={index}
 			id={item.id}
 			view={view}
 			label="Edit Quest"
