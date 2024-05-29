@@ -18,26 +18,28 @@ import ooze from "../../img/ooze.png"
 import plant from "../../img/plant.png"
 import undead from "../../img/undead.png"
 
-
-
 export const Bestiary = () =>{
 
     const { store, actions } = useContext(Context);
     const navigate = useNavigate()
-  
 
   const handleClick=()=>{
     actions.decideEncounter(10,1)
-    setTimeout(() => actions.getEncounterInfo(), "500")
-    setTimeout(() => navigate("/encounter"), "1000")
+    actions.getEncounterInfo()
+    setTimeout(() => navigate("/encounter"), "500")
   }
   
-
     return (
     <>
      <div className="container">
-        <Navbar />
-        <div className="row row-cols-1 row-cols-md-5 g-4" style={{marginTop:"100px"}}>
+      <div className="d-grid gap-2">
+        <button className="card p-3 bg-yellow" data-bs-toggle="modal" data-bs-target="#encounter" onClick={()=>navigate("/quests")}>
+                            <h5 style={{margin:"auto"}}>lets go back to questing!</h5>
+        </button>
+      </div>
+      <div className="row row-cols-1 row-cols-md-1 g-4"  style={{marginTop:"10px"}}>
+        <div className="card">
+          <div className="row row-cols-1 row-cols-md-5 g-4" style={{marginTop:"30px", marginBottom:"30px"}}>
             {store.creatureInfo?.map((item,index)=>(
               <div className="col" key={index}>
                   <div className="card">
@@ -48,8 +50,10 @@ export const Bestiary = () =>{
                 </div>
               </div>
             ))}
-            <button onClick={()=>handleClick()}>decide encounter</button>
+            </div>
+            </div>
         </div>
+        <button onClick={()=>handleClick()}> encounter</button>
      </div>
     </> 
 );

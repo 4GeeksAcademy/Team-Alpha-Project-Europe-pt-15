@@ -348,5 +348,3 @@ def get_monster_list(the_user_id):
         return "No monster from user: " + str(the_user_id), 400
     
     monster_list = list(map(lambda x: x.serialize(), monster))
-
-    return jsonify(monster_list), 200

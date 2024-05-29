@@ -8,11 +8,9 @@ export const EcounterModal= ({id}) => {
     const navigate = useNavigate()
 
     const handleClick=()=>{
-        setIsDisabled(true)
-        actions.userRoll()
-        setTimeout(() => {
-           actions.decideVictory()
-        }, "500");
+        navigate("/bestiary")
+        window.location.reload()
+      
     }
     const victoryFanfarre=()=>{
     if(store.userRoll > store.creatureRoll){return store.victoryMessage}
@@ -24,40 +22,25 @@ export const EcounterModal= ({id}) => {
         if(store.user.role === "Rogue"){return store.combatText[16].text}
     }
     
-    
-    
-    
-    
-    
     return (
         <>
-          <div className="modal fade" id={id} tabIndex="-1" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="card modal-content p-5">
-                    {/* title */}
-                    <h1>Encounter</h1>
-                    <div>
-                        <p>{actions.selectCombatText(store.encounterInfo)}</p>
-                    </div>
-                    <div>
-                        <p>{roleText()}</p>
-                        <button data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" disabled={isDisabled} onClick={()=>handleClick()}>Defend yourself</button>    
-                    </div>
-                    <div>
+            <div className="modal fade" id={id} tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="card modal-content p-5">
+                        {/* title */}
+                        <h1>Encounter</h1>
+                        <div>
+                            <h4>the creature attacks with a strength of {store.creatureRoll}<br/>You defend yourself with a strength of {store.userRoll}</h4>
+                        </div>
+                        <div>
+                            {victoryFanfarre()}
+                        </div>
+                        <div type="button" className="card p-3 text-center bg-yellow" data-bs-toggle="modal" data-bs-target="#encounter" onClick={()=>handleClick()}>
+                            <h5>lets keep adventuring</h5>
+                            </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex="-1">
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="card modal-content p-5">
-                    <h4>the creature attacks with a strength of {store.creatureRoll}<br/>
-                    You defend yourself with a strength of {store.userRoll}</h4>
-                    {victoryFanfarre()}
-                </div>
-            </div>
-        </div>
-            
         </>
     )
 }

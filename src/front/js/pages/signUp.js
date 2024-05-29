@@ -55,7 +55,7 @@ export const SignUp = () => {
 					onChange={event => actions.getInput(event)}
 					required/>
 				{/* see password */}
-                <img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
+          <img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
 			</div>
       {/* confirm password */}
       <div className="d-lg-flex flex-row justify-content-evenly p-2 card" style={confirmPasswordClass()}>
