@@ -27,11 +27,11 @@ export const Home = () => {
 
 
 				<div className="nabBtn gap-2 d-md-flex ml-auto">
-					<button className="loginNavBtn card me-md-2"
+					<button className="navBtn card me-md-2"
 						onClick={() => navigate('/login')}
 					>Login
 					</button>
-					<button className="signNavBtn card"
+					<button className="navBtn card"
 						onClick={() => navigate('/signup')}
 					>Signup
 					</button>
@@ -44,11 +44,14 @@ export const Home = () => {
 					</div>
 					<div className="infoLandingPage mt-2 color-light p-5 ">
 						<br className=""></br>
-						<h4 className="subtitleCard">Unleash your productivity with our To-Do List game!
-							Finish your tasks, earn rewards, and watch your progress soar.
-							Level up your warrior and beat the monsters.
-							<p>Challenge yourself to new levels of organization and efficiency.</p>
-						</h4>
+						<h4 className="subtitleCard">Unleash your productivity with To-Do List game!</h4>
+						<h3>Finish your tasks</h3>
+						<h5>earn rewards</h5>
+						<h5>watch your progress soar</h5>
+						<h2>Level up your warrior </h2>
+						<h2>Beat the Monsters.</h2>
+						<p><strong>Challenge yourself to new levels of organization and efficiency.</strong></p>
+
 
 
 					</div>

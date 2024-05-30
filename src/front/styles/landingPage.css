@@ -24,6 +24,12 @@
    
 }
 
+.navBtn:hover {
+
+    color: white;
+}
+
+
 .cardTitle {
     
     width: 80%;
