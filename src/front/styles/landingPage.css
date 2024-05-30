@@ -1,0 +1,49 @@
+/* colors */
+.bg-green {background: #10E0B8}
+.bg-yellow {background: #FFC444}
+.bg-red {background: #EB1652; color: #ffffff}
+.bg-purple {background: #9111F2; color: #ffffff}
+.bg-black {background: #252424; color: #ffffff; box-shadow: none !important;}
+.bg-white {background: #ffffff}
+.form-range-track-bg { background: #252424};
+.bg-custom-purple {
+    background: #9111F2 !important;
+}
+.bg-custom-yellow {
+    background-color: #FFC444 !important;
+  }
+
+
+.txt-green {color: #10E0B8}
+.txt-yellow {color: #FFC444}
+.txt-red {color: #EB1652}
+.txt-purple {color: #9111F2}
+
+.landingPage{
+    background-image: linear-gradient(to bottom right, #EB1652, #9111F2);
+   
+}
+
+.cardTitle {
+    
+    width: 80%;
+}
+.infoLandingPage {
+
+    color: white;
+    line-height: 1.4px;
+}
+
+.imgLandingPage {
+
+    width: 30%;
+}
+
+.imgLogo {
+    margin-left: 20px;
+    width: 50px;
+    height: 50px;
+}
+.carangueijo{
+    max-width: 50%;
+}
