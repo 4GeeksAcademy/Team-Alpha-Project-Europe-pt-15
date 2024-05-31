@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
 
-export const DashModal = ({id, label, tier, submit}) => {
+export const DashModal = ({id, view, label, tier}) => {
     const { store, actions } = useContext(Context);
 
     return (
@@ -17,18 +17,17 @@ export const DashModal = ({id, label, tier, submit}) => {
                         <textarea className="form-control card text-start"
                             placeholder={"thou shall name me"}
                             rows="4"
-                            id="label"
+                            name="label"
                             value={store.inputs.label || ""}
-                            onChange={event => actions.getInput(event)}
-                            required />
+                            onChange={event => actions.getInput(event)} />
                         {/* tier input */}
                         <div>
                             <h5>Tier</h5>
                             <select className="form-select card mb-2"
-                                id="tier"
+                                name="tier"
                                 value={store.inputs.tier || ""}
-                                onChange={event => actions.getInput(event)}
-                                required>
+                                onChange={event => actions.getInput(event)}>
+                                    <option value={0} default >How would you grade it?</option>
                                     {/* tier options */}
                                     {tier?.map( item => (
                                         <option value={item.id} key={item.id}>{item.name}</option>
@@ -36,7 +35,8 @@ export const DashModal = ({id, label, tier, submit}) => {
                             </select>
                         </div>                        
                         {/* submit */}
-                        <div type="submit" className="card p-2 text-center bg-yellow">
+                        <div type="submit" className="card p-2 text-center bg-yellow"
+                            data-bs-dismiss="modal" onClick={() => actions.getDashboardModalAction(view, id)}>
                             <h5>Let's go!</h5>
                         </div>
                         {/* cancel */}
@@ -44,6 +44,14 @@ export const DashModal = ({id, label, tier, submit}) => {
                             data-bs-dismiss="modal" onClick={actions.resetInput}>
                             <h5>Nevermind</h5>
                         </div>
+                        {/* delete */}
+                        {view === "rewards" && typeof id === "number"
+                        ?   <div type="reset" className="card p-2 text-center bg-red"
+                            data-bs-dismiss="modal" onClick={() => actions.deleteReward(id)}>
+                                <h5>Delete</h5>
+                            </div>
+                        : null                       
+                        }
                     </form>
                 </div>
             </div>

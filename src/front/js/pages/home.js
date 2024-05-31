@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
+
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/landingPage.css";
 import barbarian1 from "../../img/barbarian1.png"
@@ -7,6 +8,9 @@ import barbarian3 from "../../img/barbarian3.png"
 import treasure from "../../img/treasure_2642175.png"
 import carangueijo from "../../img/beast.png"
 import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
+
+
 
 export const Home = () => {
 
@@ -17,6 +21,7 @@ export const Home = () => {
 
 
 	return (
+
 		<div className="text-center  landingPage h-100">
 			<nav className="d-flex justify-content-between align-items-center mb-5 p-2">
 
@@ -75,6 +80,7 @@ export const Home = () => {
 
 
 			</div>
+
 
 		</div>
 	);

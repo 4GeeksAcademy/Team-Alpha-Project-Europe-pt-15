@@ -76,6 +76,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(120), nullable=False)
     done = db.Column(db.Boolean(), unique=False, nullable=False)
+    onboard = db.Column(db.Boolean(), unique=False, nullable=False)
     task_difficulty_id = db.Column(db.Integer, db.ForeignKey('difficulty.id'))
     task_difficulty = db.relationship(Difficulty)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -89,6 +90,7 @@ class Task(db.Model):
             "id": self.id,
             "label": self.label,
             "done": self.done,
+            "onboard": self.onboard,
             "user_id": self.user_id,
             "task_difficulty_id": self.task_difficulty_id
            
@@ -117,6 +119,7 @@ class Reward(db.Model):
     __tablename__ = "reward"
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(120),nullable=False)
+    done = db.Column(db.Boolean(), unique=False, nullable=False)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     user=db.relationship(User)
     rarity_id=db.Column(db.Integer, db.ForeignKey('rarity.id')) 
@@ -129,6 +132,7 @@ class Reward(db.Model):
         return {
             "id": self.id,
             "label": self.label,
+            "done": self.done,
             "user_id": self.user_id,
             "rarity_id": self.rarity_id            
         }

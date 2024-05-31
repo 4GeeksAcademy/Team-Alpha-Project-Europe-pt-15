@@ -12,47 +12,48 @@ export const Rewards = () => {
     const { store, actions } = useContext(Context);
    
     useEffect(() => {
-        actions.getRewards()
+        actions.getRewardList()
 		actions.getRarities()
     },[]);
 
     let view = "rewards"
-	let createModal = "createReward"
-	let editModal = "editReward"
+	let idCreateModal = "createReward"
     
     return (
 		<>
 		{/* navigation */}
         <Navbar
 			view={view}
-			modal={`#${createModal}`}
+			modal={`#${idCreateModal}`}
 		/>
 		{/* list */}
 		<div className="dashboard row row-cols-1 row-cols-md-4 g-4">
-			{store.rewards?.map((item,index)=>(
+			{store.rewards?.filter(item => item.done === false).map((item,index)=>(
 				<DashCard key={index}
-					view={view}
 					id={item.id}
+					view={view}
 					label={item.label}
 					tier={item.rarity_id}
-					modal={`#${editModal}`}
+					modal={`#${item.id}`}
 				/>
 			))}
 		</div>
 		{/* create reward */}
 		<DashModal
-			id={createModal}
+			id={idCreateModal}
+			view={view}
 			label="New Reward"
 			tier={store.rarities}
-			submit=""
 		/>
 		{/* edit reward */}
-		<DashModal
-			id={editModal}
+		{store.rewards?.map((item,index)=>(
+		<DashModal key={index}
+			id={item.id}
+			view={view}
 			label="Edit Reward"
 			tier={store.rarities}
-			submit=""
 		/>
+		))}
 		</>
 	);
 };
