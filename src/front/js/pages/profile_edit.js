@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Context } from "../store/appContext"
-import "../../styles/index.css"
 import { IMAGES } from "../../img/all_images";
 
 export const ProfileEdit = () => {
@@ -11,11 +10,12 @@ export const ProfileEdit = () => {
     useEffect(() => {
         actions.getUserDataAndAbilities()
 		actions.getRoles()
+		actions.getBackgroundColor("profile")
     },[]);
 
 	return (
 		<>
-		<form onSubmit={actions.Login} className="col-xl-5 mx-auto p-5 gap-4 card">
+		<form className="col-xl-5 mx-auto p-5 gap-4 card">
 			<h1>How may I assist you oh powerful one?</h1>
             {/* username */}
 			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">

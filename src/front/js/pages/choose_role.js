@@ -10,6 +10,7 @@ export const Role = () => {
 
 	useEffect(() => {
 		actions.getRoles()
+		actions.getBackgroundColor("role")
 	},[])
 
 	return (

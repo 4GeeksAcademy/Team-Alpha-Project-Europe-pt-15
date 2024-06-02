@@ -53,7 +53,7 @@ body {
 /* text */
 h1, h2, h3, h4, h5, h6, .bold {font-weight: 800}
 
-i {scale: 140%}
+i {scale: 140%; width: 17px; height: 17px;}
 
 a {text-decoration: none}
 

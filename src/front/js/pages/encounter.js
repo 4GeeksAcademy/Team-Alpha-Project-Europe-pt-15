@@ -6,23 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { EcounterModal } from "../component/encountermodal";
 
 
-import cross_swords_encounter from "../../img/cross_swords_encounter.png"
-import aberration from "../../img/aberration.png"
-import beast from "../../img/beast_creature.png"
-import celestial from "../../img/celestial.png"
-import construct from "../../img/construct.png"
-import dragon from "../../img/dragon.png"
-import elemental from "../../img/elemental.png"
-import fey from "../../img/fey.png"
-import fiend from "../../img/fiend.png"
-import giant from "../../img/giant.png"
-import humanoid from "../../img/humanoid.png"
-import monstrosity from "../../img/monstrosity.png"
-import ooze from "../../img/ooze.png"
-import plant from "../../img/plant.png"
-import undead from "../../img/undead.png"
-
-
 export const Encounter = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate()
@@ -38,7 +21,6 @@ export const Encounter = () => {
         }, "500");
     }
   
-    
     const handleClick2=()=>{
         navigate("/bestiary")
         window.location.reload()
@@ -55,7 +37,7 @@ export const Encounter = () => {
                     <div>
                         <h1>Encounter</h1> 
                         <p>{actions.selectCombatText(store.encounterInfo)}</p>
-                        <img src={actions.getMonsterimage(store.encounterInfo,aberration,beast,celestial,construct,dragon,elemental,fey,fiend,giant,humanoid,monstrosity,ooze,plant,undead)} style={{width: "300px"}} className="card-img-top" alt="..."/> 
+                        <img src={actions.getMonsterImage(store.encounterInfo)} style={{width: "300px"}} className="card-img-top"/> 
                         <h6>A {store.encounterInfo?.name} appears, getting ready to attack</h6>
                         <p>{roleText()}</p>
                         <div className="d-grid gap-2">

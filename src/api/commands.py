@@ -37,6 +37,7 @@ def setup_commands(app):
         B = Role()
         B.name = "Barbarian"
         B.description = "Battle Rage merciless and extremely powerful. This means a greater chance at defeating your enemies and achieve victory."
+        B.passive = 0
         db.session.add(B)
         db.session.commit()
         print("Barbarian created.")
@@ -44,6 +45,7 @@ def setup_commands(app):
         W = Role()
         W.name = "Wizard"
         W.description = "Being a master at conjuring comes with it's own perks. Your Arcana abilities provide you a second shot at succeeding in a encounter."
+        W.passive = 1
         db.session.add(W)
         db.session.commit()
         print("Wizard created.")
@@ -51,6 +53,7 @@ def setup_commands(app):
         R = Role()
         R.name = "Rogue"
         R.description = "Sneaky little bastard ain't we? How come you never get caught stealling extra experience from the master vault?"
+        R.passive = 0.2
         db.session.add(R)
         db.session.commit()
         print("Rogue created.")
@@ -62,7 +65,7 @@ def setup_commands(app):
         Easy = Difficulty()
         Easy.name = "Easy"
         Easy.experience_given = 7
-        Easy.energy_given = 1        
+        Easy.energy_given = 4
         db.session.add(Easy)
         db.session.commit()
         print("Easy created.")
@@ -70,7 +73,7 @@ def setup_commands(app):
         Medium = Difficulty()
         Medium.name = "Medium"
         Medium.experience_given = 13
-        Medium.energy_given = 2        
+        Medium.energy_given = 9
         db.session.add(Medium)
         db.session.commit()
         print("Medium created.")
@@ -78,7 +81,7 @@ def setup_commands(app):
         Hard = Difficulty()
         Hard.name = "Hard"
         Hard.experience_given = 20
-        Hard.energy_given = 4        
+        Hard.energy_given = 15
         db.session.add(Hard)
         db.session.commit()
         print("Hard created.")        
@@ -89,21 +92,21 @@ def setup_commands(app):
         print("Creating db reward rarities")
         Common = Rarity()
         Common.name = "Common"
-        Common.energy_required = 10        
+        Common.energy_required = 20
         db.session.add(Common)
         db.session.commit()
         print("Common created.")
 
         Rare = Rarity()
         Rare.name = "Rare"
-        Rare.energy_required = 20        
+        Rare.energy_required = 65
         db.session.add(Rare)
         db.session.commit()
         print("Rare created.")
 
         Legendary = Rarity()
         Legendary.name = "Legendary"
-        Legendary.energy_required = 40        
+        Legendary.energy_required = 90  
         db.session.add(Legendary)
         db.session.commit()
         print("Legendary created.")        
@@ -127,7 +130,7 @@ def setup_commands(app):
         db.session.commit()
 
         BH3 = Ability()
-        BH3.name = "Frenzy Strikes"
+        BH3.name = "Battle Rage"
         BH3.role_id = 1    
         BH3.rarity_id = 3
         db.session.add(BH3)
@@ -179,6 +182,7 @@ def setup_commands(app):
         print("Rogue abilities created.")
         print("All abilities created.")
 
+
         ##  TEST USER  ##
         print("Creating test user")
         user = User()
@@ -189,10 +193,12 @@ def setup_commands(app):
         user.level = 1
         user.experience = 78
         user.energy = 23
+        user.encounter = False
         db.session.add(user)
         db.session.commit()
         print("Test user created.")
         print("email: user@test   password: user")
+
 
         ##  TASKS  ##
         print("Creating db dummy tasks")
@@ -268,6 +274,7 @@ def setup_commands(app):
         db.session.add(reward4)
         db.session.commit()
         print("4 rewards created.")
+
 
         ##  COMBAT TEXT  ##
         print("creating the text for the encounters")

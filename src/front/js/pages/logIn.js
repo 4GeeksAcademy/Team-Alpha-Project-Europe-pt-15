@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext"
 import { IMAGES } from "../../img/all_images";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
+
+	useEffect(() => {
+		actions.getBackgroundColor("login")
+    },[]);
 
 	return (
 		<>
@@ -37,9 +41,9 @@ export const Login = () => {
 			{/* signup and forgot */}
 			<div className="text-center">
 				<p>Not part of the crew yet?
-					<Link to={'/signUp'} className="txt-purple"> Sign up here!</Link>
+					<Link to={'/signUp'} className="txt-green"> Sign up here!</Link>
 				</p>
-				<Link to={'/forgot'} className="txt-red">Forgot password?</Link>
+				<Link to={'/forgot'} className="txt-purple">Forgot password?</Link>
 			</div>
 		</form>
 		</>

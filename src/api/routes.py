@@ -103,7 +103,8 @@ def create_user():
         email = new_user['email'],
         level= 1,
         experience = 0,
-        energy = 0
+        energy = 0,
+        encounter = False
     )
 
     db.session.add(new_user)
@@ -163,6 +164,9 @@ def update_user(user_id):
 
     if 'password' in new_updated_user:
         old_user_obj.password = new_updated_user['password']
+
+    if 'encounter' in new_updated_user:
+        old_user_obj.encounter = new_updated_user['encounter']
 
     db.session.commit()
 
@@ -312,13 +316,11 @@ def update_reward(reward_id):
 
 ###################################################################################  MONSTER ROUTES
 
-'''
 @api.route("/bestiary",  methods=['GET'])
 def get_monsters():
     bestiary= Bestiary.query.all()
     all_monsters= list(map(lambda x: x.serialize(), bestiary))
     return jsonify(all_monsters), 200
-'''
 
 @api.route("/bestiary",  methods=['POST'])
 def new_monster_aquired():
@@ -348,3 +350,5 @@ def get_monster_list(the_user_id):
         return "No monster from user: " + str(the_user_id), 400
     
     monster_list = list(map(lambda x: x.serialize(), monster))
+
+    return jsonify(monster_list), 200

@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext"
 import { IMAGES } from "../../img/all_images";
 
 export const Forgot = () => {
 	const { store, actions } = useContext(Context);
+
+	useEffect(() => {
+		actions.getBackgroundColor("forgot")
+    },[]);
 
 	return (
 		<>
@@ -29,9 +33,9 @@ export const Forgot = () => {
 				</div>
 			</Link>
             {/* cancel */}
-            <div type="reset" className="card p-3 text-center bg-black" data-bs-dismiss="modal">
+            <Link to="/login" type="reset" className="card p-3 text-center bg-black" onClick={actions.resetInput}>
                 <h5>Back to login</h5>
-            </div>
+            </Link>
 		</form>
 		</>
 	);

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext"
 import { IMAGES } from "../../img/all_images";
 
@@ -8,6 +8,10 @@ import { Link } from "react-router-dom";
 export const SignUp = () => {
   
 	const { store, actions } = useContext(Context);
+
+	useEffect(() => {
+		actions.getBackgroundColor("signup")
+    },[]);
 	
 	const navigate = useNavigate()
 
