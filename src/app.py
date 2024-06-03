@@ -6,11 +6,13 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_cors import CORS
+from flask_mail import Mail, Message
+from random import randint
 # from models import Person
 
 #Package for Authentication
@@ -38,6 +40,15 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+
+# Mail config
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = "teamalphapt15@gmail.com"
+app.config['MAIL_PASSWORD'] = "TeamAlphaProjectEuropept15!"
+mail = Mail(app)
+
 
 # add the admin
 setup_admin(app)
@@ -74,6 +85,39 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0  # avoid cache memory
     return response
+
+
+
+def send_email(user_email, new_password):
+    msg = Message()
+    msg.subject = "password reset"
+    msg.recipients = [user_email]
+    msg.sender = 'noreply@gmail.com'
+    msg.body = 'hi, this you requested this email becuase you forgot your password, you new password is ' + new_password
+    mail.send(msg)
+
+@app.route("/passwordreset", methods=['PUT'])
+def reset_password():
+
+    user_request = request.get_json()
+    user_in_database = User.query.filter_by(email = user_request)
+    print(user_request)
+
+    if user_in_database is None:
+        return "No User with email: " + str(user_request), 400
+
+    new_password = randint(10000,99999)
+    
+    if 'email' in user_request:
+        user_in_database.password =  new_password
+        send_email(user_request.email, new_password)
+        
+
+
+    db.session.commit()
+
+    return jsonify({"msg": "password stablished"}), 20
+
 
 
 # this only runs if `$ python src/main.py` is executed

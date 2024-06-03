@@ -178,6 +178,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw Error(response.status)
 				}).then((rolesData) => {
 					setStore({...getStore, roles: rolesData})
+					console.log(rolesData)
 				}).catch((err) => {
 					console.log('Couldnt get classes from API', err)
 				})
@@ -358,6 +359,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw Error(response.status)
 				   }).then(() => {
 					getActions().getUserDataAndAbilities()
+					getActions().resetInput()
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},
+			forgotPassword: async () => {
+				const input = getStore().inputs
+
+				const recoveryMail = {
+					"email": input.email
+				}
+				
+				
+				fetch(process.env.BACKEND_URL + "passwordreset", {
+					method: "PUT",
+					body: JSON.stringify(recoveryMail),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(response => {
+					   if(response.ok) return response.json()
+						throw Error(response.status)
+				   }).then(() => {
 					getActions().resetInput()
 				   }).catch(error => {
 					   console.log(error);
