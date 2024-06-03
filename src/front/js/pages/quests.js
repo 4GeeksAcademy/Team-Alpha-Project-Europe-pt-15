@@ -12,6 +12,7 @@ export const Quests = () => {
 	useEffect(() => {
         actions.getTaskList()
 		actions.getBackgroundColor("quests")
+		//actions.checkUserRole()
     },[]);
 
     let view = "tasks"

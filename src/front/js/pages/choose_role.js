@@ -1,7 +1,6 @@
 import React, { useContext, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { IMAGES } from "../../img/all_images";
 
 import "../../styles/index.css";
 
@@ -26,12 +25,10 @@ export const Role = () => {
 					<h3>{role.name}</h3>
 					<p>{role.description}</p>
 				</div>
-				<Link to="/quests" >
-					<button type="button" className="btn bg-black text-light"
+					<Link to="/quests" type="button" className="btn bg-black text-light"
 						onClick={() => actions.userRole(role.id)}>
 						Yes, let's go!
-					</button>
-				</Link>
+					</Link>
 			</div>
 		))}
     </div>

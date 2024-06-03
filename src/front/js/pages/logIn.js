@@ -1,14 +1,22 @@
 import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext"
 import { IMAGES } from "../../img/all_images";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		actions.getBackgroundColor("login")
     },[]);
+
+	const LogIn = () => {
+		actions.Login()
+		setTimeout(() => {
+			navigate("/quests")
+		}, "500");
+	}
 
 	return (
 		<>
@@ -34,14 +42,14 @@ export const Login = () => {
 			</div>
 			{/* submit */}
 			<Link to="/quests">
-				<div type="submit" className="card p-3 text-center bg-yellow" onClick={actions.Login}>
+				<div type="submit" className="card p-3 text-center bg-yellow" onClick={LogIn}>
 					<h5>Let's go!</h5>
 				</div>
 			</Link>
 			{/* signup and forgot */}
 			<div className="text-center">
 				<p>Not part of the crew yet?
-					<Link to={'/signUp'} className="txt-green"> Sign up here!</Link>
+					<Link to={'/signUp'} className="txt-purple"> Sign up here!</Link>
 				</p>
 				<Link to={'/forgot'} className="txt-purple">Forgot password?</Link>
 			</div>

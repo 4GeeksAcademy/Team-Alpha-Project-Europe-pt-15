@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useState} from "react";
 import { IMAGES } from "../../img/all_images";
-
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -159,7 +157,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getBackgroundColor: (page) => {
 				if (page === "login" ) document.querySelector("body").setAttribute("class", "bg-green")
 				if (page === "signup" ) document.querySelector("body").setAttribute("class", "bg-yellow")
+				if (page === "role" ) document.querySelector("body").setAttribute("class", "bg-red")
 				if (page === "forgot" ) document.querySelector("body").setAttribute("class", "bg-purple")
+				if (page === "quests" ) document.querySelector("body").setAttribute("class", "bg-white")
 				if (page === "rewards" ) document.querySelector("body").setAttribute("class", "bg-white")
 				if (page === "profile" ) document.querySelector("body").setAttribute("class", "bg-purple")
 				if (page === "bestiary" ) document.querySelector("body").setAttribute("class", "bg-green")
@@ -645,29 +645,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  console.log(store.allMonsters)})
   				.catch((error) => console.error(error));
 			},
-
-			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
-				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and then form 1 to 24
-				const store=getStore()
-				const myHeaders = new Headers();
-				myHeaders.append("Accept", "application/json");
-				const requestOptions = {
-				method: "GET",
-				headers: myHeaders,
-				redirect: "follow"
-				};
-
-
-				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
-				.then((response) => response.json())
-				.then((result) => {setStore({encounterPool: result.results})
-					//console.log(store.encounterPool)
-				})
-				.catch((error) => console.error(error));
-			},
 			
 			getEncounter: (userLevel)=>{
-				const store=getStore()
 				const action=getActions()
 				
 				if(userLevel <= 10) {return action.getMonsterByCr(0.125)}
@@ -693,8 +672,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			},
 
-			getEncounterInfo:()=>{
+			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
+				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and then form 1 to 24
 				const store=getStore()
+				const myHeaders = new Headers();
+				myHeaders.append("Accept", "application/json");
+				const requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow"
+				};
+
+
+				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
+				.then((response) => response.json())
+				.then((result) => {setStore({encounterPool: result.results})
+					//console.log(store.encounterPool)
+				})
+				.catch((error) => console.error(error));
+			},
+
+			getEncounterInfo:()=>{
 				const monster = localStorage.getItem("randomMonster")
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -789,7 +787,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(process.env.BACKEND_URL + "api/combat")
 					const data = await resp.json()
 					setStore({ combatText: data})
-					console.log(store.combatText)
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)

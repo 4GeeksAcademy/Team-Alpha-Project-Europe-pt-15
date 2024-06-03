@@ -76,8 +76,12 @@ export const SignUp = () => {
 			{/* submit */}
 			<button type="submit" className="card p-3 bg-yellow" onClick={()=>{actions.singUp()
 				navigate("/role")}} disabled={isButtonDisabled}>
-				<h5 style={{margin:"auto"}}>Sign up!</h5>
-			</button>		
+				<h5 style={{margin:"auto"}}>Gotcha!</h5>
+			</button>
+			{/* cancel */}
+            <Link to="/login" type="reset" className="card p-3 text-center bg-black" onClick={actions.resetInput}>
+                <h5>Back to login</h5>
+            </Link>		
 		</form>
 		</>
   )

@@ -27,13 +27,13 @@ export const Bestiary = () =>{
     <div className="col-xl-10 mx-auto p-5 card">
     <h1>Bestiary</h1>
     {/* beasts */}
-    <div className="row row-cols-1 row-cols-md-6 gy-4">
+    <div className="row row-cols-1 row-cols-md-5 gy-4">
           {store.creatureInfo?.map((item,index)=>(
             <div className="col" key={index}>
               <div className="card p-3 gap-3">
                 <img src={actions.getMonsterImage(item)} className="col-8 align-self-center"/>
                 <div className="card p-1 text-center bg-yellow">
-                  <h5>{item.name}</h5>
+                  <h6>{item.name}</h6>
                 </div>
               </div>
             </div>
