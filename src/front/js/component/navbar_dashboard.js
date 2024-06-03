@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 
-import "../../styles/index.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
 
 export const Navbar = ({view, modal}) => {
@@ -136,9 +135,11 @@ export const Navbar = ({view, modal}) => {
                 </div>
             </div>
             {store.user.encounter === true
-            ? <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
+            ? <Link to="/encounter">
+            <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
                 <h5>Watch Out</h5>
             </div>
+            </Link>
             : null }
         </div>
         {/* edit profile */}

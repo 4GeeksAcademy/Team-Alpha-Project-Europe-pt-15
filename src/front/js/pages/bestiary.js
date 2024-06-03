@@ -14,8 +14,6 @@ export const Bestiary = () =>{
   const navigate = useNavigate()
 
   const handleClick=()=>{
-    actions.decideEncounter(10,1)
-    actions.getEncounterInfo()
     setTimeout(() => navigate("/encounter"), "500")
   }
 

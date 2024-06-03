@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1d01ae45aee8
+Revision ID: d65dba109105
 Revises: 
-Create Date: 2024-06-02 16:19:57.233306
+Create Date: 2024-06-03 15:45:39.442011
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1d01ae45aee8'
+revision = 'd65dba109105'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,7 +46,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('description', sa.String(length=1000), nullable=True),
-    sa.Column('passive', sa.String(length=120), nullable=True),
+    sa.Column('passive', sa.Numeric(precision=3, scale=1), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name'),
     sa.UniqueConstraint('passive')
@@ -63,13 +63,14 @@ def upgrade():
     )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=120), nullable=True),
+    sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(length=80), nullable=False),
     sa.Column('email', sa.String(length=80), nullable=False),
     sa.Column('user_role', sa.Integer(), nullable=True),
-    sa.Column('level', sa.Integer(), nullable=True),
-    sa.Column('experience', sa.Integer(), nullable=True),
-    sa.Column('energy', sa.Integer(), nullable=True),
+    sa.Column('encounter', sa.Boolean(), nullable=False),
+    sa.Column('level', sa.Integer(), nullable=False),
+    sa.Column('experience', sa.Numeric(precision=3, scale=1), nullable=False),
+    sa.Column('energy', sa.Numeric(precision=3, scale=1), nullable=False),
     sa.ForeignKeyConstraint(['user_role'], ['role.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
