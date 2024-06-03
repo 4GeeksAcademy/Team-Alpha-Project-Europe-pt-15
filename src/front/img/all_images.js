@@ -21,6 +21,12 @@ import weak from './weak.png'
 import volcano from './volcano.png'
 import beastiary from './beastiary.png'
 import summon from './summon.png'
+import landingImg from './landingImg.png'
+import logo from './logo.png'
+import barbarian_home from './barbarian_home.png'
+import wizard_home from './wizard_home.png'
+import rougue_home from './rougue_home.png'
+
 
 export const IMAGES = {
     barbarian: barbarian,
@@ -46,4 +52,10 @@ export const IMAGES = {
     reward: reward,
     weak: weak,
     summon: summon,
+    landingImg: landingImg,
+    logo: logo,
+    barbarian_home: barbarian_home,
+    wizard_home: wizard_home,
+    rougue_home: rougue_home
+
 }

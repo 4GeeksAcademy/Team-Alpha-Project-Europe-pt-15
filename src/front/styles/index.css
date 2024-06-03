@@ -86,3 +86,24 @@ input {
     50%  {background-color:#9111F2;}
     100% {background-color:#5c0b9b;}
 }
+
+.container-1{
+    /* Background pattern from Toptal Subtle Patterns */
+    background-image: url("https://miro.medium.com/v2/resize:fit:1199/1*AtkkTkSLk6Jd0nwVqifzeQ.jpeg");
+    height: 500px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+ }
+
+ .homeImg{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: 80%;
+ }
+
+ 
