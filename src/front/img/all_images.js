@@ -35,6 +35,12 @@ import monstrosity from './monstrosity.png'
 import ooze from './ooze.png'
 import plant from './plant.png'
 import undead from './undead.png'
+import landingImg from './landingImg.png'
+import logo from './logo.png'
+import barbarian_home from './barbarian_home.png'
+import wizard_home from './wizard_home.png'
+import rougue_home from './rougue_home.png'
+
 
 export const IMAGES = {
     barbarian: barbarian,
@@ -74,4 +80,9 @@ export const IMAGES = {
     ooze: ooze,
     plant: plant,
     undead: undead,
+    landingImg: landingImg,
+    logo: logo,
+    barbarian_home: barbarian_home,
+    wizard_home: wizard_home,
+    rougue_home: rougue_home
 }

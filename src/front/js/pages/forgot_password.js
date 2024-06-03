@@ -27,7 +27,7 @@ export const Forgot = () => {
 					required/>
 			</div>
 			{/* submit */}
-			<Link to="/quests">
+			<Link to="/login" onClick={()=>actions.forgotPassword()}>
 				<div type="submit" className="card p-3 text-center bg-yellow" >
 					<h5>Summon</h5>
 				</div>
