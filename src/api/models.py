@@ -176,7 +176,7 @@ class Bestiary(db.Model):
         return {
             "id": self.id,
             "monster_name": self.monster_name,
-            "user_id": self.user_id,
+            "user_id": self.user_id
         }
     
 class Combat_text(db.Model):

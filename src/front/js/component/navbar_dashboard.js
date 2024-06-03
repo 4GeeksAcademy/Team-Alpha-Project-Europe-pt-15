@@ -9,6 +9,12 @@ export const Navbar = ({view, modal}) => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
+        setTimeout(() => {
+			actions.decideEncounter()
+		 }, "1000");
+         setTimeout(() => {
+			actions.getEncounterInfo()
+		 }, "2000");
     },[]);
 
 

@@ -1,4 +1,6 @@
+import React from "react";
 import { IMAGES } from "../../img/all_images";
+
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -341,7 +343,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				
 				
-				fetch(process.env.BACKEND_URL + "passwordreset", {
+				fetch(process.env.BACKEND_URL + "api/passwordreset", {
 					method: "PUT",
 					body: JSON.stringify(recoveryMail),
 				   	headers: {"Content-Type": "application/json"}
@@ -731,6 +733,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getEncounterInfo:()=>{
+				
 				const monster = localStorage.getItem("randomMonster")
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -741,7 +744,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 				fetch("https://www.dnd5eapi.co/api/monsters/"+ monster, requestOptions)
 				.then((response) => response.json())
-				.then((result) =>{setStore({encounterInfo: result})})
+				.then((result) =>{setStore({encounterInfo: result})	
+				})
 				.catch((error) => console.error(error));
 			},
 
@@ -750,7 +754,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 				
 				const monster = store.randomMonster
+				const type = store.encounterInfo?.type
+				const image = store.encounterInfo?.image
 
+				
 				const bestiaryEntry={
 					monster_name : monster,
 					user_id: userId
@@ -771,7 +778,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   });
 			},
 			creatureRoll:()=>{
-				const monsterDice =Math.floor(Math.random() * 6) + 1;
+				const monsterDice =Math.floor(Math.random() * 2) + 1;
 				setStore({creatureRoll: monsterDice})
 			},
 
