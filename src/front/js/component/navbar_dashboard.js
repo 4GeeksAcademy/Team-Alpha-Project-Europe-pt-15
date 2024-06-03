@@ -9,8 +9,8 @@ export const Navbar = ({view, modal}) => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
+        actions.getBestiary()
     },[]);
-
 
     // active view css
     let focusQ=""
@@ -113,26 +113,31 @@ export const Navbar = ({view, modal}) => {
                     </div>
                 </div>
             </div>
-            {/* beastiary */}
             <div className="d-flex gap-3 my-3">
+                {/* beastiary */}
                 <Link to="/bestiary" className="card col-5 p-3" >
                     <div data-bs-dismiss="offcanvas">
                         <img src={IMAGES.bestiary} className="w-100" />
                         <h5>Bestiary</h5>
                     </div>
                 </Link>
-                {/* count */}
                 <div className="col">
-                    <div className="card p-1">
-                        <h5>loading...</h5>
+                    {/* experience and energy numbers */}
+                    <div className="card p-2">
+                        <h5>{parseFloat(store.user.experience)} <i className="fa-solid fa-forward sizeDown"></i>    {parseFloat(store.user.energy)} <i className="fa-solid fa-bolt sizeDown"></i></h5>
                     </div>
+                    {/* beast count */}
                     <div className="card my-3 p-1">
-                        <h5>loading...</h5>
+                    <h5>{store.bestiary.length} Beasts</h5>
                     </div>
-                    <div className="card p-1">
-                        <h5>loading...</h5>
-                    </div>
+                    {/* scoreboard top10 */}
+                    <Link to="/scoreboard">
+                        <div className="card p-1 bg-black" data-bs-dismiss="offcanvas">
+                        <h5>Scoreboard</h5>
+                        </div>
+                    </Link>
                 </div>
+            {/* encounter button */}
             </div>
             {store.user.encounter === true
             ? <Link to="/encounter">

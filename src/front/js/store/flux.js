@@ -11,6 +11,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			difficulties: [],
 			rarities: [],
 			abilities: [],
+			scoreboard: [],
 			message: null,
 			allMonsters : null,
 			encounterPool: [],
@@ -164,6 +165,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (page === "profile" ) document.querySelector("body").setAttribute("class", "bg-purple")
 				if (page === "bestiary" ) document.querySelector("body").setAttribute("class", "bg-green")
 				if (page === "encounter" ) document.querySelector("body").setAttribute("class", "bg-red")
+				if (page === "scoreboard" ) document.querySelector("body").setAttribute("class", "bg-purple")
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// DB DATA 
@@ -272,7 +274,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			////////////////////////////////////////////////////////////////////////////////////////// USER 
-
+			
 			getUserDataAndAbilities: async () => {
 				const user = localStorage.getItem('user')
 				//console.log("user data auth", localStorage.getItem('jwt-token'))
@@ -338,8 +340,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				const recoveryMail = {
 					"email": input.email
-				}
-				
+				}			
 				
 				fetch(process.env.BACKEND_URL + "passwordreset", {
 					method: "PUT",
@@ -354,7 +355,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
-						
+			
+			getScoreboard: async () => {
+				fetch(process.env.BACKEND_URL + "api/users", {
+					method: "GET",
+				   	headers: {"Content-Type": "application/json"}
+				}).then(response => {
+	  				if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((data) => setStore({...getStore, scoreboard: data})
+				).catch(error => {
+				   console.log(error);
+				});
+			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// TASKS 
 

@@ -21,7 +21,7 @@ export const Login = () => {
 	return (
 		<>
 		<form className="col-md-4 mx-auto p-5 gap-4 card">
-			<h1> Log in</h1>
+			<h1>Log in</h1>
 			{/* email input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">
 				<img src={IMAGES.email} alt="email icon" />

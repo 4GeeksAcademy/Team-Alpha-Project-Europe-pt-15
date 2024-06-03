@@ -84,6 +84,14 @@ def login_user():
 def get_all_users():
     users= User.query.all()
     all_users= list(map(lambda x: x.serialize(), users))
+
+    for x in all_users:
+        role = Role.query.get(x["user_role"])
+        x.update({"role": role.name})
+        beasts = Bestiary.query.filter_by(user_id = x["id"])
+        beasts = list(map(lambda x: x.serialize(), beasts))
+        x.update({"bestiary": int(len(beasts))})
+
     return jsonify(all_users), 200
 
 @api.route("/users",  methods=['POST'])

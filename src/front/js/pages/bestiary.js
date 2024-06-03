@@ -1,28 +1,18 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Bestiary = () =>{
 
   const { store, actions } = useContext(Context);
 
   useEffect(() => {
-    actions.getBestiary()
     actions.getBackgroundColor("bestiary")
     },[]);
   
-  const navigate = useNavigate()
-
-  const handleClick=()=>{
-    setTimeout(() => navigate("/encounter"), "500")
-  }
-
-  console.log("creature info", store.creatureInfo);
-  console.log("bestiary", store.bestiary);
-  
     return (
     <>
-    <div className="col-xl-10 mx-auto p-5 card">
+    <div className="col-md-9 mx-auto p-5 card">
     <h1>Bestiary</h1>
     {/* beasts */}
     <div className="row row-cols-1 row-cols-md-5 gy-4">
