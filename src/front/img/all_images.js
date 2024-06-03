@@ -19,8 +19,22 @@ import bandid from './bandid.png'
 import reward from './reward.png'
 import weak from './weak.png'
 import volcano from './volcano.png'
-import beastiary from './beastiary.png'
+import bestiary from './bestiary.png'
 import summon from './summon.png'
+import aberration from './aberration.png'
+import beast from './beast.png'
+import celestial from './celestial.png'
+import construct from './construct.png'
+import dragon from './dragon.png'
+import elemental from './elemental.png'
+import fey from './fey.png'
+import fiend from './fiend.png'
+import giant from './giant.png'
+import humanoid from './humanoid.png'
+import monstrosity from './monstrosity.png'
+import ooze from './ooze.png'
+import plant from './plant.png'
+import undead from './undead.png'
 import landingImg from './landingImg.png'
 import logo from './logo.png'
 import barbarian_home from './barbarian_home.png'
@@ -46,16 +60,29 @@ export const IMAGES = {
     password: password,
     password_confirm: password_confirm,
     see_password: see_password,
-    beastiary: beastiary,
+    bestiary: bestiary,
     bandid: bandid,
     volcano: volcano,
     reward: reward,
     weak: weak,
     summon: summon,
+    aberration: aberration,
+    beast: beast,
+    celestial: celestial,
+    construct: construct,
+    dragon: dragon,
+    elemental: elemental,
+    fey: fey,
+    fiend: fiend,
+    giant: giant,
+    humanoid: humanoid,
+    monstrosity: monstrosity,
+    ooze: ooze,
+    plant: plant,
+    undead: undead,
     landingImg: landingImg,
     logo: logo,
     barbarian_home: barbarian_home,
     wizard_home: wizard_home,
     rougue_home: rougue_home
-
 }

@@ -13,6 +13,7 @@ export const Rewards = () => {
    
     useEffect(() => {
         actions.getRewardList()
+		actions.getBackgroundColor("rewards")
     },[]);
 
     let view = "rewards"

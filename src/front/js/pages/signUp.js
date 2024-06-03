@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext"
 import { IMAGES } from "../../img/all_images";
 
@@ -8,6 +8,10 @@ import { Link } from "react-router-dom";
 export const SignUp = () => {
   
 	const { store, actions } = useContext(Context);
+
+	useEffect(() => {
+		actions.getBackgroundColor("signup")
+    },[]);
 	
 	const navigate = useNavigate()
 
@@ -72,8 +76,12 @@ export const SignUp = () => {
 			{/* submit */}
 			<button type="submit" className="card p-3 bg-yellow" onClick={()=>{actions.singUp()
 				navigate("/role")}} disabled={isButtonDisabled}>
-				<h5 style={{margin:"auto"}}>Sign up!</h5>
-			</button>		
+				<h5 style={{margin:"auto"}}>Gotcha!</h5>
+			</button>
+			{/* cancel */}
+            <Link to="/login" type="reset" className="card p-3 text-center bg-black" onClick={actions.resetInput}>
+                <h5>Back to login</h5>
+            </Link>		
 		</form>
 		</>
   )

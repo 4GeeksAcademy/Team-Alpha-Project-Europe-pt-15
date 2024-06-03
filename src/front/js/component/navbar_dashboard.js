@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 
 import "../../styles/index.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
 
 export const Navbar = ({view, modal}) => {
@@ -11,6 +11,7 @@ export const Navbar = ({view, modal}) => {
     useEffect(() => {
         actions.getUserDataAndAbilities()
     },[]);
+
 
     // active view css
     let focusQ=""
@@ -29,17 +30,17 @@ export const Navbar = ({view, modal}) => {
     
 	return (
     <>
-    <div className="navbar fixed-top d-inline px-5 py-3 bg-white">
+    <div className="navbar fixed-top d-inline px-5 py-3">
         <div className="d-flex flex-row justify-content-between">
                 <div className="d-flex flex-row gap-3">
                     {/* profile button */}
                     <button className="card circle" data-bs-toggle="offcanvas" data-bs-target="#Profile" aria-controls="Profile">
                         {/* energy alert */}
-                        {store.user.energy >= 90
+                        {store.user.energy >= 85
                         ? <span className="position-absolute top-1 start-100 translate-middle">
                         <i className="fa-solid fa-circle fa-beat txt-yellow"></i></span> : null}
                         {/* encounter alert */}
-                        {store.encounter === true
+                        {store.user.encounter === true
                         ? <span className="position-absolute top-1 start-100 translate-middle">
                         <i className="fa-solid fa-circle fa-beat txt-purple"></i></span> : null}
                         <i className="fa-solid fa-user"></i>
@@ -105,7 +106,7 @@ export const Navbar = ({view, modal}) => {
                     </div>
                 </div>
                 <div className="d-inline-flex flex-row justify-content-between">
-                    {store.user.energy >= 95
+                    {store.user.energy >= 85                   
                     ? <i className="fa-solid fa-bolt fa-fade"></i>
                     : <i className="fa-solid fa-bolt"></i>}
                     <div className="card round col-11">
@@ -117,8 +118,8 @@ export const Navbar = ({view, modal}) => {
             <div className="d-flex gap-3 my-3">
                 <Link to="/bestiary" className="card col-5 p-3" >
                     <div data-bs-dismiss="offcanvas">
-                        <img src={IMAGES.beastiary} className="w-100" />
-                        <h5>Beastiary</h5>
+                        <img src={IMAGES.bestiary} className="w-100" />
+                        <h5>Bestiary</h5>
                     </div>
                 </Link>
                 {/* count */}
@@ -134,12 +135,10 @@ export const Navbar = ({view, modal}) => {
                     </div>
                 </div>
             </div>
-            {store.encounter === true
-            ? <Link to="/encounter">
-                <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
-                    <h5>Watch Out</h5>
-                </div>
-            </Link>
+            {store.user.encounter === true
+            ? <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
+                <h5>Watch Out</h5>
+            </div>
             : null }
         </div>
         {/* edit profile */}

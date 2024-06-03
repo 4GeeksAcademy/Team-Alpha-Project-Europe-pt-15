@@ -8,7 +8,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
     description = db.Column(db.String(1000))
-    passive = db.Column(db.String(120), unique=True, nullable=True)
+    passive = db.Column(db.Numeric(3,1), unique=True, nullable=False)
     
     def __repr__(self):
         return f'<Role {self.name}>'
@@ -25,14 +25,15 @@ class Role(db.Model):
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(80), unique=False, nullable=False)
     user_role= db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship(Role)
-    level = db.Column(db.Integer)
-    experience = db.Column(db.Integer)
-    energy = db.Column(db.Integer)
+    encounter = db.Column(db.Boolean(), unique=False, nullable=False)
+    level = db.Column(db.Integer, unique=False, nullable=False)
+    experience = db.Column(db.Numeric(3,1), unique=False, nullable=False)
+    energy = db.Column(db.Numeric(3,1), unique=False, nullable=False)
 
 
     def __repr__(self):
@@ -46,7 +47,8 @@ class User(db.Model):
             "user_role": self.user_role,
             "level": self.level,
             "experience": self.experience,
-            "energy": self.energy
+            "energy": self.energy,
+            "encounter": self.encounter,
             # do not serialize the password, its a security breach
         }
 

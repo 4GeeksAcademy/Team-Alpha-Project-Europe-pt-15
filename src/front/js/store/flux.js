@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useState} from "react";
 import { IMAGES } from "../../img/all_images";
-
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -8,12 +6,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			user: [],
 			tasks: [],
 			rewards: [],
-     	bestiary: [],
+     		bestiary: [],
  			roles: [],
 			difficulties: [],
 			rarities: [],
 			abilities: [],
-			encounter : false,
 			message: null,
 			allMonsters : null,
 			encounterPool: [],
@@ -52,20 +49,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			seePassword: () => {
 				let passwordInput = document.getElementById("password");
-				if (passwordInput.type === "password"){passwordInput.type = "text" }
-				else {passwordInput.type = "password"}
-
-				/*
-				let passwordInput = document.getElementById("password");
 				let confirmPasswordInput = document.getElementById("confirmPassword");
 				if (passwordInput.type === "password"){passwordInput.type = "text", confirmPasswordInput.type = "text" }
 				else {passwordInput.type = "password", confirmPasswordInput.type = "password"}
-				*/
-			},			
+			},
+
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
 			getRoleColor: (view, tier, done) => {
-
 				let roleColor="";
 
 				if (view === "rewards" || view === "tasks" && done === true) {
@@ -89,7 +80,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getRoleIcon: (tier) => {
-
 				let roleIcon="";
 				
 				switch(tier){
@@ -111,7 +101,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			getActionIcon: (view, done) => {
-
 				let actionIcon="";
 
 				if (view === "rewards") actionIcon = "fa-solid fa-skull" 
@@ -130,7 +119,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getDashboardModalAction: (view, modalId) => {
-
 				if (view === "tasks" && typeof modalId === "number") getActions().updateTask(modalId)
 				if (view === "tasks" && typeof modalId === "string") getActions().createTask()
 				if (view === "rewards" && typeof modalId === "number") getActions().updateReward(modalId)
@@ -147,7 +135,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getAbilityImage: (ability_rarity) => {
-
 				let role = getStore().user.role
 				let abilityImg = ""
 
@@ -165,6 +152,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (ability_rarity === 3) abilityImg = IMAGES.rogue3
 				}
 				return abilityImg
+			},
+
+			getBackgroundColor: (page) => {
+				if (page === "login" ) document.querySelector("body").setAttribute("class", "bg-green")
+				if (page === "signup" ) document.querySelector("body").setAttribute("class", "bg-yellow")
+				if (page === "role" ) document.querySelector("body").setAttribute("class", "bg-red")
+				if (page === "forgot" ) document.querySelector("body").setAttribute("class", "bg-purple")
+				if (page === "quests" ) document.querySelector("body").setAttribute("class", "bg-white")
+				if (page === "rewards" ) document.querySelector("body").setAttribute("class", "bg-white")
+				if (page === "profile" ) document.querySelector("body").setAttribute("class", "bg-purple")
+				if (page === "bestiary" ) document.querySelector("body").setAttribute("class", "bg-green")
+				if (page === "encounter" ) document.querySelector("body").setAttribute("class", "bg-red")
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// DB DATA 
@@ -235,7 +234,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			Login: () => {
-
 				const input = getStore().inputs
 
 				fetch(process.env.BACKEND_URL + "api/login", {
@@ -267,7 +265,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem('jwt-token')
 				localStorage.removeItem('user')
 				getActions().resetInput()
-				setStore({...getStore, user:[], tasks:[], rewards:[], beastiary:[], abilities:[], encounter: false})
+				setStore({...getStore, user:[], tasks:[], rewards:[], bestiary:[], abilities:[]})
 
 				//console.log("logout auth", localStorage.getItem('jwt-token'))
 				//console.log("logout id", localStorage.getItem('user'))
@@ -293,43 +291,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Couldnt get user from API", err)
 				});
 			},
-			singUp:()=>{
-
-				const input = getStore().inputs
-				
-				
-				const newUser ={
-					"name": input.name,
-					"email": input.email,
-					"password": input.password
-				}
-
-				fetch(process.env.BACKEND_URL + "api/users", {
-					method: "POST",
-					body: JSON.stringify(newUser),
-				   	headers: {"Content-Type": "application/json"}
-				   }).then((response) => {
-					if(response.ok) return response.json()
-				   }).then(() => {
-					   getActions().resetInput()
-				   }).catch(error => {
-					   console.log(error);
-				   });
-
-			},
 
 			userRole: async (role) => {
-				const user = localStorage.getItem('user')
-
-
 				setStore({...getStore, inputs: {"role" : role}})
 				getActions().updateUser()
 			},
 
 			deleteUser: async () => {
-				const user = localStorage.getItem('user')
-
-
 				setStore({...getStore, inputs: {"email" : "", "password": ""}})
 				getActions().updateUser()
 				getActions().Logout()
@@ -348,6 +316,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					"level": input.level,
 					"experience": input.experience,
 					"energy": input.energy,
+					"encounter": input.encounter
 				}
 				
 				fetch(process.env.BACKEND_URL + "api/user/" + user, {
@@ -457,41 +426,62 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			doTask: async (tier, taskId) => {
 				const currentLevel = getStore().user.level
-				const currentExperience = getStore().user.experience
-				const currentEnergy = getStore().user.energy
+				const currentExperience = parseFloat(getStore().user.experience)
+				const currentEnergy = parseFloat(getStore().user.energy)
 
 				const taskExperience = getStore().difficulties[tier].experience_given
 				const taskEnergy = getStore().difficulties[tier].energy_given
 
-				if(currentExperience + taskExperience < 100) {
-					setStore({...getStore, inputs: {
-						"experience" : currentExperience + taskExperience,
-					}})
-				} else {
-					setStore({...getStore, inputs: {
-						"experience" : currentExperience + taskExperience -100,
-						"level" : currentLevel + 1,
-					}})
-					setStore({...getStore, encounter: true})
-				}
+				const roguePercentage = getStore().roles[2].passive
+				const rogueExtraExp = parseFloat(taskExperience * roguePercentage)
+				const rogueExtraEng = parseFloat(taskEnergy * roguePercentage)
 				
-				if(currentEnergy + taskEnergy < 100) {
-					setStore({...getStore, inputs: {
-						...getStore().inputs, "energy" : currentEnergy + taskEnergy}})
+				if (getStore().user.role === "Rogue") {
+						if(currentExperience + taskExperience + rogueExtraExp < 100) {
+							setStore({...getStore, inputs: {
+								"experience" : currentExperience + taskExperience + rogueExtraExp
+							}})
+						} else {
+							setStore({...getStore, inputs: {
+								"experience" : currentExperience + taskExperience + rogueExtraExp -100,
+								"level" : currentLevel + 1,
+								"encounter" : true
+							}})
+						}
+						if(currentEnergy + taskEnergy + rogueExtraEng < 100) {
+							setStore({...getStore, inputs: {
+								...getStore().inputs, "energy" : currentEnergy + taskEnergy + rogueExtraEng}})
+						} else {
+							setStore({...getStore, inputs: {
+								...getStore().inputs, "energy" : 100}})
+						}
 				} else {
-					setStore({...getStore, inputs: {
-						...getStore().inputs, "energy" : 100}})
+						if(currentExperience + taskExperience < 100) {
+							setStore({...getStore, inputs: {
+								"experience" : currentExperience + taskExperience,
+							}})
+						} else {
+							setStore({...getStore, inputs: {
+								"experience" : currentExperience + taskExperience - 100,
+								"level" : currentLevel + 1,
+								"encounter" : true
+							}})
+						}
+						if(currentEnergy + taskEnergy < 100) {
+							setStore({...getStore, inputs: {
+								...getStore().inputs, "energy" : currentEnergy + taskEnergy}})
+						} else {
+							setStore({...getStore, inputs: {
+								...getStore().inputs, "energy" : 100}})
+						}
 				}
-
 				getActions().updateUser()				
 				setStore({...getStore, inputs: {"done": true}})
-				getActions().updateTask(taskId)
+				getActions().updateTask(taskId)		
 			},
 
 			cleanDashboard: async () => {
-
 				let offBoard = getStore().tasks.filter(item => item.done === true && item.onboard === true)
-				console.log(offBoard);
 				
 				for (let task of offBoard){
 					setStore({...getStore, inputs: {"onboard": false}})
@@ -604,28 +594,61 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   });
 			},
 
-			////////////////////////////////////////////////////////////////////////////////////////// MONSTERS
-			
-			getimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
+			////////////////////////////////////////////////////////////////////////////////////////// BESTIARY			
+
+			getBestiary: async ()=>{
+				const user = localStorage.getItem('user')
+
 				const store=getStore()
 				const action=getActions()
+
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/" + user)
+					const data = await resp.json()
+					setStore({ bestiary: data})
+					store.bestiary.map((item)=>action.getMonsterByIndex(item.monster_name))
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
 				
-				if(creature.image){return `https://www.dnd5eapi.co${creature.image}`}
-				if (creature.type == "aberration"){return img1}
-				if (creature.type == "beast"){return img2}
-				if (creature.type == "celestial"){return img3}
-				if (creature.type == "construct"){return img4}
-				if (creature.type == "dragon"){return img5}
-				if (creature.type == "elemental"){return img6}
-				if (creature.type == "fey"){return img7}
-				if (creature.type == "fiend"){return img8}
-				if (creature.type == "giant"){return img9}
-				if (creature.type == "humanoid"){return img10}
-				if (creature.type == "monstrosity"){return img11}
-				if (creature.type == "ooze"){return img12}
-				if (creature.type == "plant"){return img13}
-				if (creature.type == "undead"){return img14}
 			},
+
+			getMonsterByIndex: (index)=>{
+				const store=getStore()
+				const myHeaders = new Headers();
+				myHeaders.append("Accept", "application/json");
+				const requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow"
+				};
+				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
+				.then((response) => response.json())
+				.then((bestiary) =>{ setStore({creatureInfo:[...store.creatureInfo,bestiary]})})
+				.catch((error) => console.error(error));	
+			},
+			
+			getMonsterImage:(creature)=>{				
+				if (creature.image){return `https://www.dnd5eapi.co${creature.image}`}
+				if (creature.type == "aberration") return IMAGES.aberration
+				if (creature.type == "beast") return IMAGES.beast
+				if (creature.type == "celestial") return IMAGES.celestial
+				if (creature.type == "construct") return IMAGES.construct
+				if (creature.type == "dragon") return IMAGES.dragon
+				if (creature.type == "elemental") return IMAGES.elemental
+				if (creature.type == "fey") return IMAGES.fey
+				if (creature.type == "fiend") return IMAGES.fiend
+				if (creature.type == "giant") return IMAGES.giant
+				if (creature.type == "humanoid") return IMAGES.humanoid
+				if (creature.type == "monstrosity") return IMAGES.monstrosity
+				if (creature.type == "ooze") return IMAGES.ooze
+				if (creature.type == "plant") return IMAGES.plant
+				if (creature.type == "undead") return IMAGES.undead
+			},
+
+			////////////////////////////////////////////////////////////////////////////////////////// MONSTERS
 
 			getallMonsters: async ()=>{
 				const store=getStore()
@@ -644,44 +667,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  console.log(store.allMonsters)})
   				.catch((error) => console.error(error));
 			},
-
-			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
-				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and then form 1 to 24
-				const store=getStore()
-				const myHeaders = new Headers();
-				myHeaders.append("Accept", "application/json");
-				const requestOptions = {
-				method: "GET",
-				headers: myHeaders,
-				redirect: "follow"
-				};
-
-
-				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
-				.then((response) => response.json())
-				.then((result) => {setStore({encounterPool: result.results})
-					//console.log(store.encounterPool)
-				})
-				.catch((error) => console.error(error));
-			},
-
-			getMonsterByIndex: (index)=>{
-				const store=getStore()
-				const myHeaders = new Headers();
-				myHeaders.append("Accept", "application/json");
-				const requestOptions = {
-				method: "GET",
-				headers: myHeaders,
-				redirect: "follow"
-				};
-				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
-				.then((response) => response.json())
-				.then((bestiary) =>{ setStore({creatureInfo:[...store.creatureInfo,bestiary]})})
-				.catch((error) => console.error(error));	
-			},
 			
 			getEncounter: (userLevel)=>{
-				const store=getStore()
 				const action=getActions()
 				
 				if(userLevel <= 10) {return action.getMonsterByCr(0.125)}
@@ -707,23 +694,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			},
 
-			getBestiary: async (userId)=>{
+			getMonsterByCr: (challengeRating1,challengeRating2,challengeRating3,challengeRating4,challengeRating5,challengeRating6,challengeRating7,challengeRating8,challengeRating9,challengeRating10,challengeRating11,challengeRating12,challengeRating13,challengeRating14,challengeRating15,challengeRating16,challengeRating17,challengeRating18,challengeRating19,challengeRating20,challengeRating21,challengeRating22,challengeRating23,challengeRating24,challengeRating25,challengeRating26)=>{
+				//monster challenge ranting goes like this 0.125, 0.250 , 0.500 and then form 1 to 24
 				const store=getStore()
-				const action=getActions()
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/"+userId)
-					const data = await resp.json()
-					setStore({ bestiary: data})
-					store.bestiary.map((item)=>action.getMonsterByIndex(item.monster_name))
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-				
+				const myHeaders = new Headers();
+				myHeaders.append("Accept", "application/json");
+				const requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow"
+				};
+
+
+				fetch(`https://www.dnd5eapi.co/api/monsters?challenge_rating=${challengeRating1},${challengeRating2},${challengeRating3},${challengeRating4},${challengeRating5},${challengeRating6},${challengeRating7},${challengeRating8},${challengeRating9},${challengeRating10},${challengeRating11},${challengeRating12},${challengeRating13},${challengeRating14},${challengeRating15},${challengeRating16},${challengeRating17},${challengeRating18},${challengeRating19},${challengeRating20},${challengeRating21},${challengeRating22},${challengeRating23},${challengeRating24},${challengeRating25},${challengeRating26}`, requestOptions)
+				.then((response) => response.json())
+				.then((result) => {setStore({encounterPool: result.results})
+					//console.log(store.encounterPool)
+				})
+				.catch((error) => console.error(error));
 			},
+
 			getEncounterInfo:()=>{
-				const store=getStore()
 				const monster = localStorage.getItem("randomMonster")
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -818,7 +809,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(process.env.BACKEND_URL + "api/combat")
 					const data = await resp.json()
 					setStore({ combatText: data})
-					console.log(store.combatText)
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
@@ -842,63 +832,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "ooze"){return store.combatText[11].text}
 				if (creature.type == "plant"){return store.combatText[12].text}
 				if (creature.type == "undead"){return store.combatText[13].text}				
-			},
-
-			getCombatText:async ()=>{
-				const store=getStore()
-				const action=getActions()
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "api/combat")
-					const data = await resp.json()
-					setStore({ combatText: data})
-					console.log(store.combatText)
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
-
-			selectCombatText:(creature)=>{
-				const store=getStore()
-				const action=getActions()
-				
-				if (creature.type == "aberration"){return store.combatText[0].text}
-				if (creature.type == "beast"){return store.combatText[1].text}
-				if (creature.type == "celestial"){return store.combatText[2].text}
-				if (creature.type == "construct"){return store.combatText[3].text}
-				if (creature.type == "dragon"){return store.combatText[4].text}
-				if (creature.type == "elemental"){return store.combatText[5].text}
-				if (creature.type == "fey"){return store.combatText[6].text}
-				if (creature.type == "fiend"){return store.combatText[7].text}
-				if (creature.type == "giant"){return store.combatText[8].text}
-				if (creature.type == "humanoid"){return store.combatText[9].text}
-				if (creature.type == "monstrosity"){return store.combatText[10].text}
-				if (creature.type == "ooze"){return store.combatText[11].text}
-				if (creature.type == "plant"){return store.combatText[12].text}
-				if (creature.type == "undead"){return store.combatText[13].text}
-			},
-
-			getMonsterimage:(creature,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14)=>{
-				const store=getStore()
-				const action=getActions()
-				
-				if(creature.image){return `https://www.dnd5eapi.co${creature.image}`}
-				if (creature.type == "aberration"){return img1}
-				if (creature.type == "beast"){return img2}
-				if (creature.type == "celestial"){return img3}
-				if (creature.type == "construct"){return img4}
-				if (creature.type == "dragon"){return img5}
-				if (creature.type == "elemental"){return img6}
-				if (creature.type == "fey"){return img7}
-				if (creature.type == "fiend"){return img8}
-				if (creature.type == "giant"){return img9}
-				if (creature.type == "humanoid"){return img10}
-				if (creature.type == "monstrosity"){return img11}
-				if (creature.type == "ooze"){return img12}
-				if (creature.type == "plant"){return img13}
-				if (creature.type == "undead"){return img14}
-				
 			},
 		}
 	};

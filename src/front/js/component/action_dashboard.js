@@ -22,7 +22,7 @@ export const TakeAction = ({id, view, label, tier, done}) => {
             { view === "rewards" && energy === true
             ? <i className={actionIcon} data-bs-toggle="modal" data-bs-target={`#attackReward${id}`}></i>
             : view === "rewards" && energy === false
-            ? <i className={actionIcon} data-bs-toggle="modal" data-bs-target="#sorry"></i>
+            ? <i className={actionIcon} data-bs-toggle="modal" data-bs-target={`#sorry${id}`}></i>
             : view === "tasks" && done === true
             ? <i className={actionIcon}></i>
             : <i className={actionIcon} data-bs-toggle="modal" data-bs-target={`#taskDone?${id}`}></i>}
@@ -88,7 +88,8 @@ export const TakeAction = ({id, view, label, tier, done}) => {
                         <img className="col-6 align-self-center" src={abilityImg} alt="ability" />
                         {/* message */} 
                         <div>
-                            <h5>{ability !== undefined? ability.name : null}</h5>
+                            <h5>Use {ability !== undefined? ability.name : null} on</h5>
+                            <p>{label}</p>
                         </div>             
                         {/* confirm */}
 						<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target={`#rewardResponse${id}`}>
@@ -124,7 +125,7 @@ export const TakeAction = ({id, view, label, tier, done}) => {
 
 
         {/* not enough energy modal */}
-		<div className="modal fade" id="sorry" tabIndex="-1" aria-hidden="true">
+		<div className="modal fade" id={`sorry${id}`} tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="card modal-content p-4">
                     {/* title */}
@@ -133,7 +134,8 @@ export const TakeAction = ({id, view, label, tier, done}) => {
                         {/* image */} 
                         <img className="col-6 align-self-center" src={IMAGES.weak} alt="injured" />
                         {/* message */} 
-						<h5>You're still weak from the injuries of your last adventure. You can't go into battle now, your energy is too low...</h5>               
+						<h5>You're still weak from the injuries of your last adventure. You can't go into battle now, your energy is too low...</h5>
+                        <p>You need {ability !== undefined? ability.energy_required : null} energy</p>
                         {/* confirm */}
 						<div type="reset" className="card p-2 text-center bg-black" data-bs-dismiss="modal">
 							<h5>Retrieve</h5>
