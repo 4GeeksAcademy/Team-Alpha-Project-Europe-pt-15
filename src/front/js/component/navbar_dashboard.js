@@ -12,7 +12,10 @@ export const Navbar = ({view, modal}) => {
         actions.getBestiary()
     },[]);
 
-    // active view css
+    //alertPin
+    let alertPin = actions.alertPin()
+
+    // active view css focus
     let focusQ=""
     let focusR=""
 
@@ -34,14 +37,11 @@ export const Navbar = ({view, modal}) => {
                 <div className="d-flex flex-row gap-3">
                     {/* profile button */}
                     <button className="card circle" data-bs-toggle="offcanvas" data-bs-target="#Profile" aria-controls="Profile">
-                        {/* energy alert */}
-                        {store.user.energy >= 85
-                        ? <span className="position-absolute top-1 start-100 translate-middle">
-                        <i className="fa-solid fa-circle fa-beat txt-yellow"></i></span> : null}
-                        {/* encounter alert */}
-                        {store.user.encounter === true
-                        ? <span className="position-absolute top-1 start-100 translate-middle">
-                        <i className="fa-solid fa-circle fa-beat txt-purple"></i></span> : null}
+                        {/* alerts */}
+                        <span className="position-absolute top-1 start-100 translate-middle">
+                        <i className={alertPin}></i>
+                        </span>
+                        {/* profile icon */}
                         <i className="fa-solid fa-user"></i>
                     </button>
                     {/* create task/reward button */}
@@ -81,7 +81,15 @@ export const Navbar = ({view, modal}) => {
         </div>
         <div className="offcanvas-body text-center">
             {/* image */}
-                <img className="col-5 mb-3" src={actions.getRoleImage(store.user.user_role)} alt="user role icon" />
+            <img className="col-5 mb-3" src={actions.getRoleImage(store.user.user_role)} alt="user role icon" />
+            {/* choose role button */}
+            {store.user.role === undefined
+            ? <Link to="/role">
+            <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
+                <h5>You have to choose a role</h5>
+            </div>
+            </Link>
+            : null }
             {/* name */}
             <div className="card col my-3 p-2">
                 <h5>{store.user.name}</h5>

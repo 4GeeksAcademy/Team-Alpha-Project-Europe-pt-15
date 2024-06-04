@@ -20,7 +20,7 @@ export const Login = () => {
 
 	return (
 		<>
-		<form className="col-lg-4 mx-auto p-5 gap-4 card">
+		<form className="col-xl-4 mx-auto p-5 gap-4 card">
 			<h1>Log in</h1>
 			{/* email input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">

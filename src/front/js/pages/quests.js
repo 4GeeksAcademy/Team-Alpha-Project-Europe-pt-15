@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { useNavigate } from "react-router-dom";
 
 import { Navbar } from "../component/navbar_dashboard";
 import { DashCard } from "../component/card_dashboard";
@@ -8,7 +7,6 @@ import { AddEditModal } from "../component/add_edit_modal_dashboard";
 
 export const Quests = () => {
 	const { store, actions } = useContext(Context);
-	const navigate = useNavigate();
 
 	useEffect(() => {
         actions.getTaskList()

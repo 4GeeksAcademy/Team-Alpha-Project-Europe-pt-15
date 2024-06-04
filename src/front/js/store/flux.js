@@ -57,6 +57,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
+			alertPin: () => {
+				if (getStore().user.energy >= 85)  return "fa-solid fa-circle fa-beat txt-yellow"
+				if (getStore().user.encounter === true) return "fa-solid fa-circle fa-beat txt-purple"
+				if (getStore().user.role === undefined && getStore().user.experience === 0 && getStore().user.energy === 0) return "fa-solid fa-circle fa-beat txt-red"
+				else return null
+			},
+			
 			getRoleColor: (view, tier, done) => {
 				let roleColor="";
 
@@ -255,11 +262,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					getActions().getTaskList()
 					getActions().getRewardList()
 				}).catch((err) => {
+					alert("Could not login, email or password is wrong.")
 					console.error('Something Wrong when calling API', err)
 				})
-
-				//console.log("login auth", localStorage.getItem('jwt-token'))
-				//console.log("login id", localStorage.getItem('user'))
 			},
 
 			Logout: () => {
@@ -267,9 +272,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem('user')
 				getActions().resetInput()
 				setStore({...getStore, user:[], tasks:[], rewards:[], bestiary:[], abilities:[]})
-
-				//console.log("logout auth", localStorage.getItem('jwt-token'))
-				//console.log("logout id", localStorage.getItem('user'))
 			},
 			
 			////////////////////////////////////////////////////////////////////////////////////////// USER 
