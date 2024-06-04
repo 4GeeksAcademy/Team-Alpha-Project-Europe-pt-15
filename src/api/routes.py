@@ -339,6 +339,7 @@ def new_monster_aquired():
    
     new_monster = Bestiary(
         monster_name = new_monster['monster_name'],
+        type = new_monster['type'],
         user_id = new_monster['user_id'] 
         )
 

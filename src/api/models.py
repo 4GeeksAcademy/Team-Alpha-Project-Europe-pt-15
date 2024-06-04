@@ -165,6 +165,7 @@ class Bestiary(db.Model):
     __tablename__ = "bestiary"
     id = db.Column(db.Integer, primary_key=True)
     monster_name = db.Column(db.String(120), unique=False, nullable=False)
+    type = db.Column(db.String(120), unique=False, nullable=False)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     user=db.relationship(User)
   
@@ -176,6 +177,7 @@ class Bestiary(db.Model):
         return {
             "id": self.id,
             "monster_name": self.monster_name,
+            "type": self.type,
             "user_id": self.user_id
         }
     
