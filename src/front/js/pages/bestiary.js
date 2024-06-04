@@ -3,7 +3,6 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 
 export const Bestiary = () =>{
-
   const { store, actions } = useContext(Context);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext"
+import { Link, useNavigate } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
 
 export const Login = () => {
@@ -20,7 +20,7 @@ export const Login = () => {
 
 	return (
 		<>
-		<form className="col-md-4 mx-auto p-5 gap-4 card">
+		<form className="col-lg-4 mx-auto p-5 gap-4 card">
 			<h1>Log in</h1>
 			{/* email input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">

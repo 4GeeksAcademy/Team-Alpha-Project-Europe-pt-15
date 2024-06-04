@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { Context } from "../store/appContext";
+import { Context } from "../store/appContext"
 import { IMAGES } from "../../img/all_images";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
+
 import { NavbarHome } from "../component/navbarHome";
 import { Footer } from "../component/footer";
 

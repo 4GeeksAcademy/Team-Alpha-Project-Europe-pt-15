@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Context } from "../store/appContext";
-import "../../styles/index.css"
+import { Context } from "../store/appContext"
 
 import { Navbar } from "../component/navbar_dashboard";
 import { DashCard } from "../component/card_dashboard";

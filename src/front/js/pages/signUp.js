@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext"
+import { Link, useNavigate } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
-
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 export const SignUp = () => {
   

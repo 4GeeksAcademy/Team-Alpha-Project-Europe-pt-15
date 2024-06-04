@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Context } from "../store/appContext"
+import { Link } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
 
 export const Forgot = () => {
