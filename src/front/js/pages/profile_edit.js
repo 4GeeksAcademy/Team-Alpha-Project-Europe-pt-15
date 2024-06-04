@@ -31,15 +31,6 @@ export const ProfileEdit = () => {
                     value={store.inputs.email || ""} 
                     onChange={event => actions.getInput(event)} />
 			</div>
-			{/* password */}
-			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
-				<img src={IMAGES.password} alt="email icon" />
-				<input type="password" id="password" name="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" className="col-7"
-                    value={store.inputs.password || ""} 
-                    onChange={event => actions.getInput(event)} />
-                {/* see password */}
-                <img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
-			</div>
             {/* role */}
 			<select className="form-select card mb-2"
                 name="role"
@@ -51,6 +42,10 @@ export const ProfileEdit = () => {
                     <option value={item.id} key={item.id}>{item.name}</option>
                     ))}
             </select>
+			{/* password */}
+			<div type="button" className="card p-3 text-center bg-green" data-bs-toggle="modal" data-bs-target="#changePassword">
+				<h5>Change Password</h5>
+			</div>
 			{/* submit */}
 			<Link to="/quests" >
 				<div type="button" className="card p-3 text-center bg-yellow" onClick={actions.updateUser}>
@@ -68,6 +63,44 @@ export const ProfileEdit = () => {
 				<h5>Leave campaign</h5>
 			</div>
 		</form>
+
+		{/* change password modal */}
+		<div className="modal fade" id="changePassword" tabIndex="-1" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="card modal-content p-4">
+                    {/* title */}
+                    <h1>Change password</h1>                 
+                    <div className="modal-body d-flex flex-column gap-4">
+						{/* current password */}
+						<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
+							<img src={IMAGES.password} alt="email icon" />
+							<input type="password" id="password" name="currentPassword" placeholder="current password" className="col-7"
+								value={store.inputs.currentPassword || ""} 
+								onChange={event => actions.getInput(event)} />
+							{/* see password */}
+							<img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
+						</div>
+						{/* new password */}
+						<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
+							<img src={IMAGES.password_confirm} alt="email icon" />
+							<input type="password" id="confirmPassword" name="newPassword" placeholder="new password" className="col-7"
+								value={store.inputs.newPassword || ""} 
+								onChange={event => actions.getInput(event)} />
+							{/* see password */}
+							<img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
+						</div>
+                        {/* change password */}
+							<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" onClick={actions.changePassword}>
+								<h5>Change</h5>
+							</div>
+                        {/* cancel */}
+                        <div type="reset" className="card p-2 text-center bg-black" data-bs-dismiss="modal">
+                            <h5>Nevermind</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 		{/* confirm delete account modal */}
 		<div className="modal fade" id="accDelete" tabIndex="-1" aria-hidden="true">

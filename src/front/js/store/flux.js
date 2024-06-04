@@ -49,9 +49,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			seePassword: () => {
-				let passwordInput = document.getElementById("password");
-				let confirmPasswordInput = document.getElementById("confirmPassword");
-				if (passwordInput.type === "password"){passwordInput.type = "text", confirmPasswordInput.type = "text" }
+				let passwordInput = document.getElementById("password")
+				let confirmPasswordInput = document.getElementById("confirmPassword")
+				if (passwordInput.type === "password"){passwordInput.type = "text", confirmPasswordInput.type = "text"}
 				else {passwordInput.type = "password", confirmPasswordInput.type = "password"}
 			},
 
@@ -179,7 +179,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw Error(response.status)
 				}).then((rolesData) => {
 					setStore({...getStore, roles: rolesData})
-					console.log(rolesData)
 				}).catch((err) => {
 					console.log('Couldnt get classes from API', err)
 				})
@@ -313,7 +312,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const updatedUser = {
 					"name": input.name,
 					"email": input.email,
-					"password": input.password,
 					"user_role": input.role,
 					"level": input.level,
 					"experience": input.experience,
@@ -335,6 +333,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
+
+			changePassword: async () =>{
+				const user = localStorage.getItem('user')
+
+				const input = getStore().inputs
+
+				const passwords = {
+					"currentPassword": input.currentPassword,
+					"newPassword": input.newPassword
+				}
+
+				fetch(process.env.BACKEND_URL + "api/password/" + user, {
+					method: "PUT",
+					body: JSON.stringify(passwords),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(response => {
+					console.log(response);
+					   if(response.ok) return response.json()
+						throw Error(response.status)
+					}).then(() => {
+						getActions().getUserDataAndAbilities()
+						getActions().resetInput()
+					}).catch(error => {
+						alert("Could not change password.")
+						getActions().resetInput()
+						console.log(error);
+				   });
+			},
+
 			forgotPassword: async () => {
 				const input = getStore().inputs
 

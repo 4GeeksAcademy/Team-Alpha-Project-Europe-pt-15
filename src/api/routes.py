@@ -143,6 +143,22 @@ def get_user(user_id):
 
     return jsonify(one_user, role_abilities), 200
 
+@api.route('/password/<int:user_id>', methods=['PUT'])
+def change_password(user_id):
+
+    passwords = request.get_json()
+    user = User.query.get(user_id)
+    if user is None:
+        return "No People with id: " + str(user_id), 400
+    
+    if passwords['currentPassword'] == user.password :
+        user.password = passwords['newPassword']
+        db.session.commit()
+        return jsonify({"msg": "Password is updated"}), 200
+        
+    else :
+        return jsonify({"msg": "Could not change password"}), 400
+
 @api.route('/user/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
 
@@ -170,9 +186,6 @@ def update_user(user_id):
     if 'experience' in new_updated_user:
         old_user_obj.experience = new_updated_user['experience']
 
-    if 'password' in new_updated_user:
-        old_user_obj.password = new_updated_user['password']
-
     if 'encounter' in new_updated_user:
         old_user_obj.encounter = new_updated_user['encounter']
 
@@ -187,6 +200,13 @@ def get_tasks():
     tasks= Task.query.all()
     all_tasks= list(map(lambda x: x.serialize(), tasks))
     return jsonify(all_tasks), 200
+
+@api.route('/tasksDone', methods=['GET'])
+def get_all_task_done_onboard():
+    tasks = Task.query.filter_by(done = True, onboard = True)
+    task_list = list(map(lambda x: x.serialize(), tasks))
+
+    return jsonify(task_list), 200
 
 @api.route("/tasks",  methods=['POST'])
 def create_task():
