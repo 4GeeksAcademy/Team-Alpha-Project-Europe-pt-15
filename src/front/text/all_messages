@@ -3,4 +3,8 @@ export const TEXT = {
     zeroBeasts: "Your Bestiary is empty. You'll aquire a beast by defeacting it in an encounter. This encounter happens each time you level up. So what are you waiting for?",
     zeroQuests: "Tasks are the labour of fools and you aint no fool. This board is for your life's side quests. You will get experience and energy by completing them. The more challenging the quest is, the greater your stats will be. Why do these matter? Fret not, you'll understand soon enough.",
     zeroRewards: "What is it your heart desires? Ethernal youth is a bit of a stretch... Fill this board with rewards to unlock as you get enough energy to do so. Be aware it is not a boundless resource so be sure to use it until it reaches it's limit.",
+    thugResponse: "The mysterious figure responds as it fades back into the dark corner. No one notices your interaction, as you face the tavern again, it is filled with noise and the smell of strong ale.",
+    rewardClaimed: "You're too powerful, they never saw it coming. Your hard work is paying off, keep it up.",
+    rewardLocked: "The injuries from your last adventure still got you weak. You can't have this battle now, your energy is too low...",
+
 }

@@ -12,7 +12,7 @@ export const Bestiary = () =>{
   
     return (
     <>
-    <div className="col-md-9 mx-auto p-5 card">
+    <div className="col-md-10 mx-auto p-5 card">
     {/* title */}
     <h1>Bestiary</h1>
     {/* zero beasts */}
@@ -35,10 +35,10 @@ export const Bestiary = () =>{
     </div>
     {/* close bestiary */}
     <div className="navbar fixed-bottom py-3 d-flex justify-content-center">
-			<Link to="/quests" className="card p-3 text-center bg-black">
-				<h5>Back to questing!</h5>
-			</Link>
-    </div>
+      <Link to="/quests" className="card col-9 p-3 text-center bg-black">
+        <h5>Back to questing!</h5>
+      </Link>
+    </div>   
     </> 
 );
 

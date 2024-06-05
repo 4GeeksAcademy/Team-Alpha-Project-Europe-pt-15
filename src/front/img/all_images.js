@@ -15,7 +15,7 @@ import email from './icon_email.png'
 import password from './icon_pw.png'
 import password_confirm from './icon_pwc.png'
 import see_password from './icon_pweye.png'
-import bandid from './bandid.png'
+import thug from './thug.png'
 import reward from './reward.png'
 import weak from './weak.png'
 import volcano from './volcano.png'
@@ -61,7 +61,7 @@ export const IMAGES = {
     password_confirm: password_confirm,
     see_password: see_password,
     bestiary: bestiary,
-    bandid: bandid,
+    thug: thug,
     volcano: volcano,
     reward: reward,
     weak: weak,

@@ -58,9 +58,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
 			alertPin: () => {
-				if (getStore().user.energy >= 85)  return "fa-solid fa-circle fa-beat txt-yellow"
-				if (getStore().user.encounter === true) return "fa-solid fa-circle fa-beat txt-purple"
-				if (getStore().user.role === undefined && getStore().user.experience === 0 && getStore().user.energy === 0) return "fa-solid fa-circle fa-beat txt-red"
+				if (getStore().user.energy >= 85
+				|| getStore().user.encounter === true
+				|| getStore().user.role === undefined
+				&& getStore().user.experience === 0
+				&& getStore().user.energy === 0) return "fa-solid fa-circle fa-beat txt-red"
 				else return null
 			},
 			
@@ -163,6 +165,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getBackgroundColor: (page) => {
+				if (page === "home" ) document.querySelector("body").setAttribute("class", "bg-white")
 				if (page === "login" ) document.querySelector("body").setAttribute("class", "bg-green")
 				if (page === "signup" ) document.querySelector("body").setAttribute("class", "bg-yellow")
 				if (page === "role" ) document.querySelector("body").setAttribute("class", "bg-red")

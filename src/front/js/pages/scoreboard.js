@@ -14,7 +14,7 @@ export const Scoreboard = () => {
 
 	return (
 		<>
-		<div className="col-md-9 mx-auto p-5 gap-4 card">
+		<div className="col-md-10 mx-auto p-5 gap-4 card">
 			<h1>Top 10</h1>
             {/* user bar */}
             <div className="card d-flex flex-row p-3 bg-yellow">
@@ -23,7 +23,7 @@ export const Scoreboard = () => {
                 <h5 className="col">LVL {store.user.level}</h5>
                 <h5 className="col">{store.bestiary.length} Beasts</h5>
             </div>
-            <div className="d-flex flex-row gap-2">
+            <div className="d-flex flex-row gap-4">
                 <div className="card col p-2 bg-black" data-bs-toggle="collapse" href="#TopLevel" role="button" aria-controls="TopLevel">
                     <h5>By Level</h5>
                 </div>
@@ -83,7 +83,7 @@ export const Scoreboard = () => {
             </div>
             {/* close bestiary */}
             <div className="navbar fixed-bottom py-3 d-flex justify-content-center">
-                    <Link to="/quests" className="card p-3 text-center bg-black">
+                    <Link to="/quests" className="card col-9 p-3 text-center bg-black">
                         <h5>Back to questing!</h5>
                     </Link>
             </div>            
