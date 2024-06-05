@@ -193,7 +193,7 @@ def setup_commands(app):
         user.level = 1
         user.experience = 78
         user.energy = 23
-        user.encounter = False
+        user.encounter = 0
         db.session.add(user)
         db.session.commit()
         print("Test user created.")

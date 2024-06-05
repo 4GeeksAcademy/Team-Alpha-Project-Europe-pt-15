@@ -4,8 +4,8 @@ import { Context } from "../store/appContext";
 export const CreatureModal= ({id, index}) => {
     const { store, actions } = useContext(Context);
 
-    actions.getMonsterByIndex(index)
-
+    
+    
     return (
         <>
              <div className="modal fade" id={id} tabIndex="-1" aria-hidden="true">

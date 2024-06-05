@@ -10,12 +10,12 @@ export const Encounter = () => {
     const [isDisabled, setIsDisabled]=useState(false)
 
 
-    const handleClick=()=>{
+    const handleClick=(monster,type)=>{
         setIsDisabled(true)
         actions.creatureRoll()
         actions.userRoll()
         setTimeout(() => {
-           actions.decideVictory()
+           actions.decideVictory(monster, type)
         }, "500");
     }
   
@@ -39,7 +39,7 @@ export const Encounter = () => {
                         <h6>A {store.encounterInfo?.name} appears, getting ready to attack</h6>
                         <p>{roleText()}</p>
                         <div className="d-grid gap-2">
-                        <button className="card p-3 bg-yellow" data-bs-toggle="modal" data-bs-target="#encounter" onClick={()=>handleClick()} disabled={isDisabled}>
+                        <button className="card p-3 bg-yellow" data-bs-toggle="modal" data-bs-target="#encounter" onClick={()=>handleClick(store.encounterInfo?.index,store.encounterInfo?.type)} disabled={isDisabled}>
                             <h5 style={{margin:"auto"}}>Defend Yourself</h5>
                         </button>
                         </div>

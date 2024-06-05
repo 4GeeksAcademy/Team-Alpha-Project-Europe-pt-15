@@ -30,7 +30,7 @@ class User(db.Model):
     email = db.Column(db.String(80), unique=False, nullable=False)
     user_role= db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship(Role)
-    encounter = db.Column(db.Boolean(), unique=False, nullable=False)
+    encounter = db.Column(db.Integer, unique=False, nullable=False)
     level = db.Column(db.Integer, unique=False, nullable=False)
     experience = db.Column(db.Numeric(3,1), unique=False, nullable=False)
     energy = db.Column(db.Numeric(3,1), unique=False, nullable=False)
