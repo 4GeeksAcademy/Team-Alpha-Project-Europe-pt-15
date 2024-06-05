@@ -14,7 +14,8 @@ export const TakeAction = ({id, view, label, tier, done}) => {
 
     // tasks data
     let difficulty = store.difficulties[tier]
-
+    let randomIndex = localStorage.getItem('randomNPC')
+    
     //rewards data
     let ability = store.abilities[tier]
     let energy = actions.checkEnoughEnergy(tier)
@@ -33,7 +34,7 @@ export const TakeAction = ({id, view, label, tier, done}) => {
         </div>
 
 
-        {/* task done confirmation modal */}
+        {/* task done modals */}
 		<BetweenModal 
             id={`taskDone?${id}`}
             title="Is it Done?"
@@ -41,12 +42,11 @@ export const TakeAction = ({id, view, label, tier, done}) => {
             targetModal={`#taskResponse${id}`}
             dismissLabel="Retrieve"
         />
-        {/* task response modal */}
         <ResponseModal
             id={`taskResponse${id}`}
-            title="Gooooood"
-            image={IMAGES.thug}
-            message={TEXT.thugResponse}
+            title={store.npc[randomIndex].title}
+            image={store.npc[randomIndex].image}
+            message={store.npc[randomIndex].response}
             subMessage={<p className="d-flex flex-row mx-auto gap-3">
                         <i className="fa-solid fa-angles-up fa-bounce txt-green"></i>
                         {difficulty !== undefined? difficulty.experience_given : null} experience
@@ -58,7 +58,7 @@ export const TakeAction = ({id, view, label, tier, done}) => {
         />
 
 
-        {/* reward claim confirmation modal */}
+        {/* reward claim modals */}
         <BetweenModal 
             id={`attackReward${id}`}
             title="Attack this reward?"
@@ -69,7 +69,6 @@ export const TakeAction = ({id, view, label, tier, done}) => {
             targetModal={`#rewardResponse${id}`}
             dismissLabel="Not yet"
         />
-        {/* reward claim response modal */}
         <ResponseModal
             id={`rewardResponse${id}`}
             title="Yeaaahhh"
