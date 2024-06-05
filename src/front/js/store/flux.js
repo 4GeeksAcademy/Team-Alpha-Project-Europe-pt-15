@@ -11,6 +11,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			difficulties: [],
 			rarities: [],
 			abilities: [],
+			scoreboard: [],
 			message: null,
 			allMonsters : null,
 			encounterPool: [],
@@ -48,14 +49,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			seePassword: () => {
-				let passwordInput = document.getElementById("password");
-				let confirmPasswordInput = document.getElementById("confirmPassword");
-				if (passwordInput.type === "password"){passwordInput.type = "text", confirmPasswordInput.type = "text" }
+				let passwordInput = document.getElementById("password")
+				let confirmPasswordInput = document.getElementById("confirmPassword")
+				if (passwordInput.type === "password"){passwordInput.type = "text", confirmPasswordInput.type = "text"}
 				else {passwordInput.type = "password", confirmPasswordInput.type = "password"}
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
+			alertPin: () => {
+				if (getStore().user.energy >= 85)  return "fa-solid fa-circle fa-beat txt-yellow"
+				if (getStore().user.encounter === true) return "fa-solid fa-circle fa-beat txt-purple"
+				if (getStore().user.role === undefined && getStore().user.experience === 0 && getStore().user.energy === 0) return "fa-solid fa-circle fa-beat txt-red"
+				else return null
+			},
+			
 			getRoleColor: (view, tier, done) => {
 				let roleColor="";
 
@@ -159,11 +167,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (page === "signup" ) document.querySelector("body").setAttribute("class", "bg-yellow")
 				if (page === "role" ) document.querySelector("body").setAttribute("class", "bg-red")
 				if (page === "forgot" ) document.querySelector("body").setAttribute("class", "bg-purple")
-				if (page === "quests" ) document.querySelector("body").setAttribute("class", "bg-white")
-				if (page === "rewards" ) document.querySelector("body").setAttribute("class", "bg-white")
+				if (page === "quests" ) document.querySelector("body").setAttribute("class", "bg-yellow")
+				if (page === "rewards" ) document.querySelector("body").setAttribute("class", "bg-yellow")
 				if (page === "profile" ) document.querySelector("body").setAttribute("class", "bg-purple")
 				if (page === "bestiary" ) document.querySelector("body").setAttribute("class", "bg-green")
 				if (page === "encounter" ) document.querySelector("body").setAttribute("class", "bg-red")
+				if (page === "scoreboard" ) document.querySelector("body").setAttribute("class", "bg-purple")
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// DB DATA 
@@ -177,7 +186,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw Error(response.status)
 				}).then((rolesData) => {
 					setStore({...getStore, roles: rolesData})
-					console.log(rolesData)
 				}).catch((err) => {
 					console.log('Couldnt get classes from API', err)
 				})
@@ -254,11 +262,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					getActions().getTaskList()
 					getActions().getRewardList()
 				}).catch((err) => {
+					alert("Could not login, email or password is wrong.")
 					console.error('Something Wrong when calling API', err)
 				})
-
-				//console.log("login auth", localStorage.getItem('jwt-token'))
-				//console.log("login id", localStorage.getItem('user'))
 			},
 
 			Logout: () => {
@@ -266,13 +272,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem('user')
 				getActions().resetInput()
 				setStore({...getStore, user:[], tasks:[], rewards:[], bestiary:[], abilities:[]})
-
-				//console.log("logout auth", localStorage.getItem('jwt-token'))
-				//console.log("logout id", localStorage.getItem('user'))
 			},
 			
 			////////////////////////////////////////////////////////////////////////////////////////// USER 
-
+			
 			getUserDataAndAbilities: async () => {
 				const user = localStorage.getItem('user')
 				//console.log("user data auth", localStorage.getItem('jwt-token'))
@@ -311,7 +314,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const updatedUser = {
 					"name": input.name,
 					"email": input.email,
-					"password": input.password,
 					"user_role": input.role,
 					"level": input.level,
 					"experience": input.experience,
@@ -333,13 +335,41 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
+
+			changePassword: async () =>{
+				const user = localStorage.getItem('user')
+
+				const input = getStore().inputs
+
+				const passwords = {
+					"currentPassword": input.currentPassword,
+					"newPassword": input.newPassword
+				}
+
+				fetch(process.env.BACKEND_URL + "api/password/" + user, {
+					method: "PUT",
+					body: JSON.stringify(passwords),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(response => {
+					console.log(response);
+					   if(response.ok) return response.json()
+						throw Error(response.status)
+					}).then(() => {
+						getActions().getUserDataAndAbilities()
+						getActions().resetInput()
+					}).catch(error => {
+						alert("Could not change password.")
+						getActions().resetInput()
+						console.log(error);
+				   });
+			},
+
 			forgotPassword: async () => {
 				const input = getStore().inputs
 
 				const recoveryMail = {
 					"email": input.email
-				}
-				
+				}			
 				
 				fetch(process.env.BACKEND_URL + "passwordreset", {
 					method: "PUT",
@@ -354,7 +384,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
-						
+			
+			getScoreboard: async () => {
+				fetch(process.env.BACKEND_URL + "api/users", {
+					method: "GET",
+				   	headers: {"Content-Type": "application/json"}
+				}).then(response => {
+	  				if(response.ok) return response.json()
+					throw Error(response.status)
+				}).then((data) => setStore({...getStore, scoreboard: data})
+				).catch(error => {
+				   console.log(error);
+				});
+			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// TASKS 
 
@@ -477,11 +519,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				getActions().updateUser()				
 				setStore({...getStore, inputs: {"done": true}})
-				getActions().updateTask(taskId)		
+				getActions().updateTask(taskId)	
 			},
 
 			cleanDashboard: async () => {
-				let offBoard = getStore().tasks.filter(item => item.done === true && item.onboard === true)
+				let offBoard = getStore().tasks.filter(item => item.done === true)
 				
 				for (let task of offBoard){
 					setStore({...getStore, inputs: {"onboard": false}})
@@ -713,8 +755,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       
 			decideEncounter: ()=>{
 				const userLvL = getStore().user.level
-
-				console.log(userLvL);
 
 				const store=getStore()
 				const action=getActions()

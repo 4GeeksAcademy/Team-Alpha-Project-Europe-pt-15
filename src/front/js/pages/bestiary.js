@@ -1,29 +1,24 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { TEXT } from "../../text/all_messages";
 
 export const Bestiary = () =>{
-
   const { store, actions } = useContext(Context);
 
   useEffect(() => {
-    actions.getBestiary()
     actions.getBackgroundColor("bestiary")
     },[]);
   
-  const navigate = useNavigate()
-
-  const handleClick=()=>{
-    setTimeout(() => navigate("/encounter"), "500")
-  }
-
-  console.log("creature info", store.creatureInfo);
-  console.log("bestiary", store.bestiary);
-  
     return (
     <>
-    <div className="col-xl-10 mx-auto p-5 card">
+    <div className="col-md-9 mx-auto p-5 card">
+    {/* title */}
     <h1>Bestiary</h1>
+    {/* zero beasts */}
+    {store.bestiary.length === 0
+    ? <div className="col m-3 p-3"><h5>{TEXT.zeroBeasts}</h5></div>
+    : null}
     {/* beasts */}
     <div className="row row-cols-1 row-cols-md-5 gy-4">
           {store.creatureInfo?.map((item,index)=>(

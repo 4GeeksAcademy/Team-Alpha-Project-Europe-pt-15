@@ -1,10 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext"
 import { useNavigate } from "react-router-dom";
 
 import { EcounterModal } from "../component/encountermodal";
-
 
 export const Encounter = () => {
     const { store, actions } = useContext(Context);

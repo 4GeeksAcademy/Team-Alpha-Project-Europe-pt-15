@@ -9,10 +9,13 @@ export const Navbar = ({view, modal}) => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
+        actions.getBestiary()
     },[]);
 
+    //alertPin
+    let alertPin = actions.alertPin()
 
-    // active view css
+    // active view css focus
     let focusQ=""
     let focusR=""
 
@@ -34,14 +37,11 @@ export const Navbar = ({view, modal}) => {
                 <div className="d-flex flex-row gap-3">
                     {/* profile button */}
                     <button className="card circle" data-bs-toggle="offcanvas" data-bs-target="#Profile" aria-controls="Profile">
-                        {/* energy alert */}
-                        {store.user.energy >= 85
-                        ? <span className="position-absolute top-1 start-100 translate-middle">
-                        <i className="fa-solid fa-circle fa-beat txt-yellow"></i></span> : null}
-                        {/* encounter alert */}
-                        {store.user.encounter === true
-                        ? <span className="position-absolute top-1 start-100 translate-middle">
-                        <i className="fa-solid fa-circle fa-beat txt-purple"></i></span> : null}
+                        {/* alerts */}
+                        <span className="position-absolute top-1 start-100 translate-middle">
+                        <i className={alertPin}></i>
+                        </span>
+                        {/* profile icon */}
                         <i className="fa-solid fa-user"></i>
                     </button>
                     {/* create task/reward button */}
@@ -81,7 +81,15 @@ export const Navbar = ({view, modal}) => {
         </div>
         <div className="offcanvas-body text-center">
             {/* image */}
-                <img className="col-5 mb-3" src={actions.getRoleImage(store.user.user_role)} alt="user role icon" />
+            <img className="col-5 mb-3" src={actions.getRoleImage(store.user.user_role)} alt="user role icon" />
+            {/* choose role button */}
+            {store.user.role === undefined
+            ? <Link to="/role">
+                <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
+                    <h5>You have to choose a role</h5>
+                </div>
+            </Link>
+            : null }
             {/* name */}
             <div className="card col my-3 p-2">
                 <h5>{store.user.name}</h5>
@@ -113,26 +121,31 @@ export const Navbar = ({view, modal}) => {
                     </div>
                 </div>
             </div>
-            {/* beastiary */}
             <div className="d-flex gap-3 my-3">
+                {/* beastiary */}
                 <Link to="/bestiary" className="card col-5 p-3" >
                     <div data-bs-dismiss="offcanvas">
                         <img src={IMAGES.bestiary} className="w-100" />
                         <h5>Bestiary</h5>
                     </div>
                 </Link>
-                {/* count */}
                 <div className="col">
-                    <div className="card p-1">
-                        <h5>loading...</h5>
+                    {/* experience and energy numbers */}
+                    <div className="card p-2">
+                        <h5>{parseFloat(store.user.experience)} <i className="fa-solid fa-forward sizeDown"></i>    {parseFloat(store.user.energy)} <i className="fa-solid fa-bolt sizeDown"></i></h5>
                     </div>
+                    {/* beast count */}
                     <div className="card my-3 p-1">
-                        <h5>loading...</h5>
+                    <h5>{store.bestiary.length} Beasts</h5>
                     </div>
-                    <div className="card p-1">
-                        <h5>loading...</h5>
-                    </div>
+                    {/* scoreboard top10 */}
+                    <Link to="/scoreboard">
+                        <div className="card p-1 bg-black" data-bs-dismiss="offcanvas">
+                        <h5>Scoreboard</h5>
+                        </div>
+                    </Link>
                 </div>
+            {/* encounter button */}
             </div>
             {store.user.encounter === true
             ? <Link to="/encounter">
