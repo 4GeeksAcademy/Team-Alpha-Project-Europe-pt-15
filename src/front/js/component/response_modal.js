@@ -19,7 +19,7 @@ export const ResponseModal = ({id, title, image, message, subMessage, confirmLab
                     <h5>{message}</h5>
                     <div className="d-flex flex-row mx-auto gap-3">
                         {/* + info */} 
-                        <p>{subMessage}</p>
+                        {subMessage}
                     </div>              
                     {/* confirm */}
                     <div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" onClick={action}>

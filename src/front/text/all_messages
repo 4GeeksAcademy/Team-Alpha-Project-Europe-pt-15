@@ -1,6 +1,29 @@
 export const TEXT = {
     forgotPassword: "Let's begin the ritual of summoning thee. You will receive and email if there is an account associated to it. Either that or instant death.",
+    
     zeroBeasts: "Your Bestiary is empty. You'll aquire a beast by defeacting it in an encounter. This encounter happens each time you level up. So what are you waiting for?",
     zeroQuests: "Tasks are the labour of fools and you aint no fool. This board is for your life's side quests. You will get experience and energy by completing them. The more challenging the quest is, the greater your stats will be. Why do these matter? Fret not, you'll understand soon enough.",
     zeroRewards: "What is it your heart desires? Ethernal youth is a bit of a stretch... Fill this board with rewards to unlock as you get enough energy to do so. Be aware it is not a boundless resource so be sure to use it until it reaches it's limit.",
+    
+    rewardClaimed: "You're too powerful, they never saw it coming. Your hard work is paying off, keep it up.",
+    rewardLocked: "The injuries from your last adventure still got you weak. You can't have this battle now, your energy is too low...",
+
+    thugTitle: "Gooood",
+    thugResponse: "The mysterious figure responds as it fades back into the dark corner. No one notices your interaction. Good, you're not proud of it but sometimes you do what you gotta do...",
+    bardTitle: "Woooow",
+    bardResponse: "Tha waaaaas epic! I can already think of so many song I can make about you, oh oh, they're rushing to me I gotta write this down! It won't take long until everyone hears your tale and I'm going to make so much coin for it!",
+    gandalfTitle: "Is that...?",
+    gandalfResponse: "Oh my god... Is that... Gandaaalf?! Shhhh, keep it down! Wasn't he supposed to be all white and shiny now? Well it's still worth it that I left the house today.",
+    knightTitle: "Thank you",
+    knightResponse: "That was a great help. Thanks to your valuable insights and knowledge our army will now be much better prepared to defend our nation from any attack. This is my livelihood but hopefully it won't be needed.",
+    mageTitle: "Oooof",
+    mageResponse: "That was a close one... Just for a moment I wasn't sure we'd get out of there. These dungeons keep getting harder and I ain't getting younger... Well wanna stop by the tavern on the way back? I could use a drink!",
+    queenTitle: "Rise up",
+    queenResponse: "Indeed honor and valor can be found in the most unexpected of places and that's why I bestow upon you this title to remind others of the rewards that come with honorable deeds.",
+    seaMerchantTitle: "I knew it",
+    seaMerchantResponse: "Don't believe in chance I tell ya, the sea is ruthless. With cargo this valuable I knew we needed a group to ward us on this trip and turns out I was right. Felt it in my bones I tell ya that.",
+    villagerTitle: "You saved me",
+    villagerResponse: "I could take them down if it was one or two thugs but a group of them?! Thanks for not turning a blind eye and lending a hand, otherwise I'd be a gonner by now.",
+    warGoddessTitle: "You've fought well",
+    warGoddessResponse: "Without your awareness of it, the goddess of war was watching you this whole time. She's impressed by your bravery and resilience. She smiles while pointing her spear at you signaling you've gained her favor.",
 }

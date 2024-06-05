@@ -32,9 +32,9 @@ const Layout = () => {
                         <Route element={<Login />} path="/login" />
                         <Route element={<Forgot />} path="/forgot" />
                         <Route element={<SignUp />} path="/signup" />
+                        <Route element={<Quests />} path="/quests" />
+                        <Route element={<Role />} path="/role" />
                         <Route element={<PrivateRoutes />}>
-                            <Route element={<Role />} path="/role" />
-                            <Route element={<Quests />} path="/quests" />
                             <Route element={<Rewards />} path="/rewards" />
                             <Route element={<Bestiary />} path="/bestiary" />
                             <Route element={<Encounter />} path="/encounter" />

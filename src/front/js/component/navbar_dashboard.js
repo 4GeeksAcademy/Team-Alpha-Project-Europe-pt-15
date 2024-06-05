@@ -123,8 +123,8 @@ export const Navbar = ({view, modal}) => {
             </div>
             <div className="d-flex gap-3 my-3">
                 {/* beastiary */}
-                <Link to="/bestiary" className="card col-5 p-3" >
-                    <div data-bs-dismiss="offcanvas">
+                <Link to="/bestiary" className="card col-5 p-2" >
+                    <div className="d-flex flex-column gap-2" data-bs-dismiss="offcanvas">
                         <img src={IMAGES.bestiary} className="w-100" />
                         <h5>Bestiary</h5>
                     </div>

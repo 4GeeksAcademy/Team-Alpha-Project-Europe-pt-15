@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { IMAGES } from "../../img/all_images";
 import { TEXT } from "../../text/all_messages";
 
 import { Navbar } from "../component/navbar_dashboard";

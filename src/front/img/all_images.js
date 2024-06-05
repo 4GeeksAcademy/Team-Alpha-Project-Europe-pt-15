@@ -15,7 +15,6 @@ import email from './icon_email.png'
 import password from './icon_pw.png'
 import password_confirm from './icon_pwc.png'
 import see_password from './icon_pweye.png'
-import bandid from './bandid.png'
 import reward from './reward.png'
 import weak from './weak.png'
 import volcano from './volcano.png'
@@ -40,6 +39,15 @@ import logo from './logo.png'
 import barbarian_home from './barbarian_home.png'
 import wizard_home from './wizard_home.png'
 import rougue_home from './rougue_home.png'
+import thug from './thug.png'
+import bard from './bard.png'
+import knight from './knight.png'
+import mage from './mage.png'
+import queen from './queen.png'
+import sea_merchant from './sea_merchant.png'
+import villager from './villager.png'
+import war_goddess from './war_goddess.png'
+import gandalf from './gandalf.png'
 
 
 export const IMAGES = {
@@ -55,17 +63,19 @@ export const IMAGES = {
     rogue1: rogue1,
     rogue2: rogue2,
     rogue3: rogue3,
+
     user: user,
     email: email,
     password: password,
     password_confirm: password_confirm,
     see_password: see_password,
+    
     bestiary: bestiary,
-    bandid: bandid,
     volcano: volcano,
     reward: reward,
     weak: weak,
     summon: summon,
+
     aberration: aberration,
     beast: beast,
     celestial: celestial,
@@ -80,9 +90,20 @@ export const IMAGES = {
     ooze: ooze,
     plant: plant,
     undead: undead,
+
     landingImg: landingImg,
     logo: logo,
     barbarian_home: barbarian_home,
     wizard_home: wizard_home,
-    rougue_home: rougue_home
+    rougue_home: rougue_home,
+
+    thug: thug,
+    bard: bard,
+    knight: knight,
+    mage: mage,
+    queen: queen,
+    sea_merchant: sea_merchant,
+    villager: villager,
+    war_goddess: war_goddess,
+    gandalf: gandalf,
 }

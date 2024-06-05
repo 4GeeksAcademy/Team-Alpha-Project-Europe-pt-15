@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { IMAGES } from "../../img/all_images";
+import { TEXT } from "../../text/all_messages";
 
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -14,7 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rarities: [],
 			abilities: [],
 			scoreboard: [],
-			message: null,
+			npc: [],
 			allMonsters : null,
 			encounterPool: [],
 			creatureInfo:[],
@@ -22,21 +23,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
-
 			////////////////////////////////////////////////////////////////////////////////////////// FORMS
 
 			getInput: (event) => {
@@ -59,10 +45,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			////////////////////////////////////////////////////////////////////////////////////////// CONDITIONAL RENDERING
 
+			randomNPC: () => {
+				let npc = Math.floor(Math.random() * 8)
+				localStorage.setItem('randomNPC', npc)
+			},
+
 			alertPin: () => {
-				if (getStore().user.energy >= 85)  return "fa-solid fa-circle fa-beat txt-yellow"
-				if (getStore().user.encounter > 0) return "fa-solid fa-circle fa-beat txt-purple"
-				if (getStore().user.role === undefined && getStore().user.experience === 0 && getStore().user.energy === 0) return "fa-solid fa-circle fa-beat txt-red"
+				if (getStore().user.energy >= 85
+				|| getStore().user.encounter > 0
+				|| getStore().user.role === undefined
+				&& getStore().user.experience === 0
+				&& getStore().user.energy === 0) return "fa-solid fa-circle fa-beat txt-red"
 				else return null
 			},
 			
@@ -165,6 +158,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getBackgroundColor: (page) => {
+				if (page === "home" ) document.querySelector("body").setAttribute("class", "bg-white")
 				if (page === "login" ) document.querySelector("body").setAttribute("class", "bg-green")
 				if (page === "signup" ) document.querySelector("body").setAttribute("class", "bg-yellow")
 				if (page === "role" ) document.querySelector("body").setAttribute("class", "bg-red")
@@ -217,6 +211,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}catch(error){
 					console.log("Error loading rarity table", error)
 				}
+			},
+
+			setNPCs: () => {
+				setStore({...getStore, npc: [
+					{ image: IMAGES.thug, title: TEXT.thugTitle, response: TEXT.thugResponse },
+					{ image: IMAGES.bard, title: TEXT.bardTitle, response: TEXT.bardResponse },
+					{ image: IMAGES.gandalf, title: TEXT.gandalfTitle, response: TEXT.gandalfResponse },
+					{ image: IMAGES.knight, title: TEXT.knightTitle, response: TEXT.knightResponse },
+					{ image: IMAGES.mage, title: TEXT.mageTitle, response: TEXT.mageResponse },
+					{ image: IMAGES.queen, title: TEXT.queenTitle, response: TEXT.queenResponse },
+					{ image: IMAGES.sea_merchant, title: TEXT.seaMerchantTitle, response: TEXT.seaMerchantResponse },
+					{ image: IMAGES.villager, title: TEXT.villagerTitle, response: TEXT.villagerResponse },
+					{ image: IMAGES.war_goddess, title: TEXT.warGoddessTitle, response: TEXT.warGoddessResponse },
+				]})
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// AUTHENTICATION
@@ -567,7 +575,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				getActions().updateUser()				
 				setStore({...getStore, inputs: {"done": true}})
-				getActions().updateTask(taskId)	
+				getActions().updateTask(taskId)
+				getActions().randomNPC()
 			},
 
 			cleanDashboard: async () => {
