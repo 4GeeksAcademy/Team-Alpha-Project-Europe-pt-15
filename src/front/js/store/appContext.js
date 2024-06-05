@@ -33,7 +33,6 @@ const injectContext = PassedComponent => {
 			state.actions.getDifficulties();
 			state.actions.getRarities();
 			state.actions.getCombatText();
-
 			state.actions.getMessage();
 
 		}, []);

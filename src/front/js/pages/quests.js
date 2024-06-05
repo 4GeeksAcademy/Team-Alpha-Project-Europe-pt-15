@@ -15,6 +15,7 @@ export const Quests = () => {
 		actions.getBackgroundColor("quests")
 		actions.decideEncounter()
 		actions.getEncounterInfo()
+
     },[]);
 
     let view = "tasks"

@@ -9,7 +9,14 @@ export const Navbar = ({view, modal}) => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
-        actions.getBestiary()
+
+        setTimeout(() => {
+			actions.decideEncounter()
+		 }, "1000");
+         setTimeout(() => {
+			actions.getEncounterInfo()
+		 }, "2000");
+
     },[]);
 
     //alertPin

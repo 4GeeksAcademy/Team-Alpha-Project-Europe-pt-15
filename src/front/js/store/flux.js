@@ -1,4 +1,6 @@
+import React from "react";
 import { IMAGES } from "../../img/all_images";
+
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -371,7 +373,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					"email": input.email
 				}			
 				
-				fetch(process.env.BACKEND_URL + "passwordreset", {
+				fetch(process.env.BACKEND_URL + "api/passwordreset", {
 					method: "PUT",
 					body: JSON.stringify(recoveryMail),
 				   	headers: {"Content-Type": "application/json"}
@@ -384,6 +386,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
+
+
+			resetUserEncounter: async () => {
+				const user = localStorage.getItem('user')
+
+				const updatedUser = {
+					"encounter": false
+				}
+
+				fetch(process.env.BACKEND_URL + "api/user/" + user, {
+					method: "PUT",
+					body: JSON.stringify(updatedUser),
+				   	headers: {"Content-Type": "application/json"}
+				   }).then(response => {
+					   if(response.ok) return response.json()
+						throw Error(response.status)
+				   }).then(() => {
+					getActions().getUserDataAndAbilities()
+					getActions().resetInput()
+				   }).catch(error => {
+					   console.log(error);
+				   });
+			},		
+
 			
 			getScoreboard: async () => {
 				fetch(process.env.BACKEND_URL + "api/users", {
@@ -397,6 +423,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   console.log(error);
 				});
 			},
+
 
 			////////////////////////////////////////////////////////////////////////////////////////// TASKS 
 
@@ -649,13 +676,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(process.env.BACKEND_URL + "api/bestiary/" + user)
 					const data = await resp.json()
 					setStore({ bestiary: data})
-					store.bestiary.map((item)=>action.getMonsterByIndex(item.monster_name))
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}
 			},
-
 			getMonsterByIndex: (index)=>{
 				const store=getStore()
 				const myHeaders = new Headers();
@@ -667,9 +692,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 				fetch("https://www.dnd5eapi.co/api/monsters/"+index, requestOptions)
 				.then((response) => response.json())
-				.then((bestiary) =>{ setStore({creatureInfo:[...store.creatureInfo,bestiary]})})
+				.then((info) =>{setStore({creatureInfo: info})})
 				.catch((error) => console.error(error));	
 			},
+
 			
 			getMonsterImage:(creature)=>{				
 				if (creature.image){return `https://www.dnd5eapi.co${creature.image}`}
@@ -758,7 +784,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				const store=getStore()
 				const action=getActions()
-
+				action.getBestiary()
 				action.getEncounter(userLvL)
 				setTimeout(() => {
 				const encounterPool = store.encounterPool?.map((item)=>{return item.index});
@@ -771,6 +797,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getEncounterInfo:()=>{
+				
 				const monster = localStorage.getItem("randomMonster")
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -781,7 +808,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 				fetch("https://www.dnd5eapi.co/api/monsters/"+ monster, requestOptions)
 				.then((response) => response.json())
-				.then((result) =>{setStore({encounterInfo: result})})
+				.then((result) =>{setStore({encounterInfo: result})	
+				})
 				.catch((error) => console.error(error));
 			},
 
@@ -790,9 +818,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 				
 				const monster = store.randomMonster
-
+				const type = store.encounterInfo?.type
+				const image = store.encounterInfo?.image
+				console.log(type)
+				
 				const bestiaryEntry={
 					monster_name : monster,
+					type : type,
 					user_id: userId
 				}
 				
@@ -811,7 +843,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				   });
 			},
 			creatureRoll:()=>{
-				const monsterDice =Math.floor(Math.random() * 6) + 1;
+				const monsterDice =Math.floor(Math.random() * 2) + 1;
 				setStore({creatureRoll: monsterDice})
 			},
 
@@ -860,6 +892,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			selectCombatText:(creature)=>{
 				const store=getStore()
 				const action=getActions()
+				console.log(creature.type)
 				
 				if (creature.type == "aberration"){return store.combatText[0].text}
 				if (creature.type == "beast"){return store.combatText[1].text}
