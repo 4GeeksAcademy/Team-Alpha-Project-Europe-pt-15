@@ -9,7 +9,7 @@ export const Navbar = ({view, modal}) => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
-        actions.getBestiary()
+        actions.getEncounterInfo()
     },[]);
 
     //alertPin
@@ -147,7 +147,7 @@ export const Navbar = ({view, modal}) => {
                 </div>
             {/* encounter button */}
             </div>
-            {store.user.encounter === true
+            {store.user.encounter > 0
             ? <Link to="/encounter">
             <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
                 <h5>Watch Out</h5>

@@ -30,7 +30,7 @@ class User(db.Model):
     email = db.Column(db.String(80), unique=False, nullable=False)
     user_role= db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship(Role)
-    encounter = db.Column(db.Boolean(), unique=False, nullable=False)
+    encounter = db.Column(db.Integer, unique=False, nullable=False)
     level = db.Column(db.Integer, unique=False, nullable=False)
     experience = db.Column(db.Numeric(3,1), unique=False, nullable=False)
     energy = db.Column(db.Numeric(3,1), unique=False, nullable=False)
@@ -165,6 +165,7 @@ class Bestiary(db.Model):
     __tablename__ = "bestiary"
     id = db.Column(db.Integer, primary_key=True)
     monster_name = db.Column(db.String(120), unique=False, nullable=False)
+    type = db.Column(db.String(120), unique=False, nullable=False)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     user=db.relationship(User)
   
@@ -176,7 +177,8 @@ class Bestiary(db.Model):
         return {
             "id": self.id,
             "monster_name": self.monster_name,
-            "user_id": self.user_id,
+            "type": self.type,
+            "user_id": self.user_id
         }
     
 class Combat_text(db.Model):

@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Role, Difficulty, Task, Rarity, Reward, Bestiary, Ability, Combat_text
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from random import randint
 
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
@@ -12,6 +13,11 @@ api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
+
+
+# Mail config
+
+
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -78,7 +84,7 @@ def login_user():
         return jsonify({"msg": "Email or Password is Wrong!"}), 401
     
     jwt_token = create_access_token(identity=user.id)
-    return jsonify({ "token": jwt_token, "user_id": user.id })
+    return jsonify({ "token": jwt_token, "user_id": user.id, "level": user.level })
 
 @api.route("/users",  methods=['GET'])
 def get_all_users():
@@ -112,7 +118,7 @@ def create_user():
         level= 1,
         experience = 0,
         energy = 0,
-        encounter = False
+        encounter = 0
     )
 
     db.session.add(new_user)
@@ -360,8 +366,8 @@ def new_monster_aquired():
    
     new_monster = Bestiary(
         monster_name = new_monster['monster_name'],
-        user_id = new_monster['user_id'],
-         
+        type = new_monster['type'],
+        user_id = new_monster['user_id'] 
         )
 
     db.session.add(new_monster)
@@ -379,3 +385,4 @@ def get_monster_list(the_user_id):
     monster_list = list(map(lambda x: x.serialize(), monster))
 
     return jsonify(monster_list), 200
+
