@@ -8,13 +8,12 @@ export const ProfileEdit = () => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
-		actions.getRoles()
 		actions.getBackgroundColor("profile")
     },[]);
 
 	return (
 		<>
-		<form className="col-xl-5 mx-auto p-5 gap-4 card">
+		<form className="col-xl-6 mx-auto p-5 gap-4 card">
 			<h1>How may I assist you oh powerful one?</h1>
             {/* username */}
 			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
@@ -30,31 +29,24 @@ export const ProfileEdit = () => {
                     value={store.inputs.email || ""} 
                     onChange={event => actions.getInput(event)} />
 			</div>
-            {/* role */}
-			<select className="form-select card mb-2"
-                name="role"
-                value={store.inputs.role || ""}
-        	    onChange={event => actions.getInput(event)}>
-                    <option value={0} default >Change role?</option>
-                    {/* tier options */}
-                    {store.roles?.map( item => (
-                    <option value={item.id} key={item.id}>{item.name}</option>
-                    ))}
-            </select>
-			{/* password */}
-			<div type="button" className="card p-3 text-center bg-green" data-bs-toggle="modal" data-bs-target="#changePassword">
-				<h5>Change Password</h5>
-			</div>
 			{/* submit */}
-			<Link to="/quests" >
-				<div type="button" className="card p-3 text-center bg-yellow" onClick={actions.updateUser}>
-					<h5>Change</h5>
+			<div type="button" className="card p-3 text-center bg-yellow" onClick={actions.updateUser}>
+				<h5>Change</h5>
+			</div>
+			<div className="d-flex flex-row gap-4">
+				{/* password */}
+				<div type="button" className="card col p-3 text-center bg-green" data-bs-toggle="modal" data-bs-target="#changePassword">
+					<h5>Change Password</h5>
 				</div>
-			</Link>
+				{/* role */}
+				<Link to="/role" type="button" className="card col p-3 text-center bg-purple text-light">
+					<h5>Change Role</h5>
+				</Link>
+			</div>
             {/* cancel */}
             <Link to="/quests">
 			<div type="reset" className="card p-3 text-center bg-black" onClick={actions.resetInput}>
-				<h5>Nevermind</h5>
+				<h5>Back to questing!</h5>
 			</div>
             </Link>
 			{/* delete account */}

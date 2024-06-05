@@ -85,9 +85,9 @@ export const Navbar = ({view, modal}) => {
             {/* choose role button */}
             {store.user.role === undefined
             ? <Link to="/role">
-            <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
-                <h5>You have to choose a role</h5>
-            </div>
+                <div className="card col p-2 encounter text-light" data-bs-dismiss="offcanvas">
+                    <h5>You have to choose a role</h5>
+                </div>
             </Link>
             : null }
             {/* name */}
