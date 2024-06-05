@@ -167,8 +167,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (page === "signup" ) document.querySelector("body").setAttribute("class", "bg-yellow")
 				if (page === "role" ) document.querySelector("body").setAttribute("class", "bg-red")
 				if (page === "forgot" ) document.querySelector("body").setAttribute("class", "bg-purple")
-				if (page === "quests" ) document.querySelector("body").setAttribute("class", "bg-white")
-				if (page === "rewards" ) document.querySelector("body").setAttribute("class", "bg-white")
+				if (page === "quests" ) document.querySelector("body").setAttribute("class", "bg-yellow")
+				if (page === "rewards" ) document.querySelector("body").setAttribute("class", "bg-yellow")
 				if (page === "profile" ) document.querySelector("body").setAttribute("class", "bg-purple")
 				if (page === "bestiary" ) document.querySelector("body").setAttribute("class", "bg-green")
 				if (page === "encounter" ) document.querySelector("body").setAttribute("class", "bg-red")
@@ -519,11 +519,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				getActions().updateUser()				
 				setStore({...getStore, inputs: {"done": true}})
-				getActions().updateTask(taskId)		
+				getActions().updateTask(taskId)	
 			},
 
 			cleanDashboard: async () => {
-				let offBoard = getStore().tasks.filter(item => item.done === true && item.onboard === true)
+				let offBoard = getStore().tasks.filter(item => item.done === true)
 				
 				for (let task of offBoard){
 					setStore({...getStore, inputs: {"onboard": false}})
@@ -755,8 +755,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       
 			decideEncounter: ()=>{
 				const userLvL = getStore().user.level
-
-				console.log(userLvL);
 
 				const store=getStore()
 				const action=getActions()

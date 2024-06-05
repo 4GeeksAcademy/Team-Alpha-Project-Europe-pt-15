@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+import { TEXT } from "../../text/all_messages";
 
 export const Bestiary = () =>{
   const { store, actions } = useContext(Context);
@@ -12,7 +13,12 @@ export const Bestiary = () =>{
     return (
     <>
     <div className="col-md-9 mx-auto p-5 card">
+    {/* title */}
     <h1>Bestiary</h1>
+    {/* zero beasts */}
+    {store.bestiary.length === 0
+    ? <div className="col m-3 p-3"><h5>{TEXT.zeroBeasts}</h5></div>
+    : null}
     {/* beasts */}
     <div className="row row-cols-1 row-cols-md-5 gy-4">
           {store.creatureInfo?.map((item,index)=>(

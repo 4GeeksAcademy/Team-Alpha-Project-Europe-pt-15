@@ -237,10 +237,9 @@ def create_task():
 @api.route('/tasks/<int:the_user_id>', methods=['GET'])
 def get_task_list(the_user_id):
 
-    tasks = Task.query.filter_by(user_id = the_user_id)
+    tasks = Task.query.filter_by(user_id = the_user_id, onboard = True)
     if tasks is None:
         return "No tasks from user: " + str(the_user_id), 400
-    
     
     task_list = list(map(lambda x: x.serialize(), tasks))
 
@@ -311,7 +310,7 @@ def create_reward():
 @api.route('/rewards/<int:the_user_id>', methods=['GET'])
 def get_reward_list(the_user_id):
 
-    reward = Reward.query.filter_by(user_id = the_user_id)
+    reward = Reward.query.filter_by(user_id = the_user_id, done = False)
     if reward is None:
         return "No rewards from user: " + str(the_user_id), 400
     
