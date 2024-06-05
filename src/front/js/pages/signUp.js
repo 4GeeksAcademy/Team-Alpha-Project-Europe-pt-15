@@ -1,19 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext"
+import { Link, useNavigate } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
 
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-
 export const SignUp = () => {
-  
 	const { store, actions } = useContext(Context);
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		actions.getBackgroundColor("signup")
     },[]);
-	
-	const navigate = useNavigate()
 
   	const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
@@ -34,7 +30,7 @@ export const SignUp = () => {
 
   return (
     <>
-		<form className="col-md-4 mx-auto p-5 gap-4 card">
+		<form className="col-xl-4 mx-auto p-5 gap-4 card">
 			<h1> Sing Up</h1>
 			{/* email input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">

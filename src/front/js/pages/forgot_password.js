@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Context } from "../store/appContext"
+import { Link } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
+import { TEXT } from "../../text/all_messages";
 
 export const Forgot = () => {
 	const { store, actions } = useContext(Context);
@@ -17,7 +18,7 @@ export const Forgot = () => {
             {/* image */}
             <img className="col-6 align-self-center" src={IMAGES.summon} alt="summon email" />
             {/* message */} 
-			<h5>Let's begin the ritual of summoning thee.<br></br> You will receive and email if there is an account associated to it.</h5>
+			<h5>{TEXT.forgotPassword}</h5>
 			{/* email input */}
 			<div className="d-lg-flex flex-row justify-content-evenly p-2 card">
 				<img src={IMAGES.email} alt="email icon" />

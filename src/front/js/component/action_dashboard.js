@@ -135,7 +135,7 @@ export const TakeAction = ({id, view, label, tier, done}) => {
                         <img className="col-6 align-self-center" src={IMAGES.weak} alt="injured" />
                         {/* message */} 
 						<h5>You're still weak from the injuries of your last adventure. You can't go into battle now, your energy is too low...</h5>
-                        <p>You need {ability !== undefined? ability.energy_required : null} energy</p>
+                        <p>You need to have {ability !== undefined? ability.energy_required : null} energy</p>
                         {/* confirm */}
 						<div type="reset" className="card p-2 text-center bg-black" data-bs-dismiss="modal">
 							<h5>Retrieve</h5>

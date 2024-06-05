@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
-
 import { Context } from "../store/appContext"
+import { Link } from "react-router-dom";
 import { IMAGES } from "../../img/all_images";
 
 export const ProfileEdit = () => {
@@ -9,13 +8,12 @@ export const ProfileEdit = () => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
-		actions.getRoles()
 		actions.getBackgroundColor("profile")
     },[]);
 
 	return (
 		<>
-		<form className="col-xl-5 mx-auto p-5 gap-4 card">
+		<form className="col-xl-6 mx-auto p-5 gap-4 card">
 			<h1>How may I assist you oh powerful one?</h1>
             {/* username */}
 			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
@@ -31,36 +29,24 @@ export const ProfileEdit = () => {
                     value={store.inputs.email || ""} 
                     onChange={event => actions.getInput(event)} />
 			</div>
-			{/* password */}
-			<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
-				<img src={IMAGES.password} alt="email icon" />
-				<input type="password" id="password" name="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" className="col-7"
-                    value={store.inputs.password || ""} 
-                    onChange={event => actions.getInput(event)} />
-                {/* see password */}
-                <img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
-			</div>
-            {/* role */}
-			<select className="form-select card mb-2"
-                name="role"
-                value={store.inputs.role || ""}
-        	    onChange={event => actions.getInput(event)}>
-                    <option value={0} default >Change role?</option>
-                    {/* tier options */}
-                    {store.roles?.map( item => (
-                    <option value={item.id} key={item.id}>{item.name}</option>
-                    ))}
-            </select>
 			{/* submit */}
-			<Link to="/quests" >
-				<div type="button" className="card p-3 text-center bg-yellow" onClick={actions.updateUser}>
-					<h5>Change</h5>
+			<div type="button" className="card p-3 text-center bg-yellow" onClick={actions.updateUser}>
+				<h5>Change</h5>
+			</div>
+			<div className="d-flex flex-row gap-4">
+				{/* password */}
+				<div type="button" className="card col p-3 text-center bg-green" data-bs-toggle="modal" data-bs-target="#changePassword">
+					<h5>Change Password</h5>
 				</div>
-			</Link>
+				{/* role */}
+				<Link to="/role" type="button" className="card col p-3 text-center bg-purple text-light">
+					<h5>Change Role</h5>
+				</Link>
+			</div>
             {/* cancel */}
             <Link to="/quests">
 			<div type="reset" className="card p-3 text-center bg-black" onClick={actions.resetInput}>
-				<h5>Nevermind</h5>
+				<h5>Back to questing!</h5>
 			</div>
             </Link>
 			{/* delete account */}
@@ -68,6 +54,44 @@ export const ProfileEdit = () => {
 				<h5>Leave campaign</h5>
 			</div>
 		</form>
+
+		{/* change password modal */}
+		<div className="modal fade" id="changePassword" tabIndex="-1" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="card modal-content p-4">
+                    {/* title */}
+                    <h1>Change password</h1>                 
+                    <div className="modal-body d-flex flex-column gap-4">
+						{/* current password */}
+						<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
+							<img src={IMAGES.password} alt="email icon" />
+							<input type="password" id="password" name="currentPassword" placeholder="current password" className="col-7"
+								value={store.inputs.currentPassword || ""} 
+								onChange={event => actions.getInput(event)} />
+							{/* see password */}
+							<img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
+						</div>
+						{/* new password */}
+						<div className="d-inline-flex flex-row justify-content-evenly p-2 card">
+							<img src={IMAGES.password_confirm} alt="email icon" />
+							<input type="password" id="confirmPassword" name="newPassword" placeholder="new password" className="col-7"
+								value={store.inputs.newPassword || ""} 
+								onChange={event => actions.getInput(event)} />
+							{/* see password */}
+							<img src={IMAGES.see_password} alt="see password" onClick={actions.seePassword} />
+						</div>
+                        {/* change password */}
+							<div type="submit" className="card p-2 text-center bg-yellow" data-bs-dismiss="modal" onClick={actions.changePassword}>
+								<h5>Change</h5>
+							</div>
+                        {/* cancel */}
+                        <div type="reset" className="card p-2 text-center bg-black" data-bs-dismiss="modal">
+                            <h5>Nevermind</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 		{/* confirm delete account modal */}
 		<div className="modal fade" id="accDelete" tabIndex="-1" aria-hidden="true">

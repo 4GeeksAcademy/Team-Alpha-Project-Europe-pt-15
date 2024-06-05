@@ -1,8 +1,7 @@
 import React, { useContext, useEffect} from "react";
-import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { Link } from "react-router-dom";
 
-import "../../styles/index.css";
 
 export const Role = () => {
 	const { store, actions } = useContext(Context);
