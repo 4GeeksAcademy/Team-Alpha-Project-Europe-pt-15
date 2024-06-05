@@ -16,7 +16,7 @@ export const NavbarHome = () => {
                 <img src={IMAGES.logo} alt="Logo" width="30" height="24" className="d-inline-block align-text-top"/>
                 TaskSlayer
                 </a>
-                <button class="btn btn-primary" type="submit" onClick={()=>navigate("/login")}>Log in</button>
+                <button className="btn btn-primary" type="submit" onClick={()=>navigate("/login")}>Log in</button>
             </div>
         </nav>
         </>

@@ -84,7 +84,7 @@ def login_user():
         return jsonify({"msg": "Email or Password is Wrong!"}), 401
     
     jwt_token = create_access_token(identity=user.id)
-    return jsonify({ "token": jwt_token, "user_id": user.id })
+    return jsonify({ "token": jwt_token, "user_id": user.id, "level": user.level })
 
 @api.route("/users",  methods=['GET'])
 def get_all_users():
@@ -118,7 +118,7 @@ def create_user():
         level= 1,
         experience = 0,
         energy = 0,
-        encounter = False
+        encounter = 0
     )
 
     db.session.add(new_user)

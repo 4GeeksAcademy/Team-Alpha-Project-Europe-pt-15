@@ -11,14 +11,12 @@ export const Bestiary = () =>{
 
   useEffect(() => {
     actions.getBackgroundColor("bestiary")
+    actions.getBestiary()
     },[]);
   
 
   const navigate = useNavigate()
 
-  const handleClick=()=>{
-    setTimeout(() => navigate("/encounter"), "500")
-  }
 
   //console.log("creature info", store.creatureInfo);
   //console.log("bestiary", store.bestiary);
@@ -38,13 +36,12 @@ export const Bestiary = () =>{
     <div className="row row-cols-1 row-cols-md-5 gy-4">
           {store.bestiary?.map((item,index)=>(
             <div className="col" key={index}>
-              <div className="card p-3 gap-3" data-bs-toggle="modal" data-bs-target="#info">
+              <div className="card p-3 gap-3" data-bs-toggle="modal" data-bs-target="#info" onClick={()=>actions.getMonsterByIndex(item.monster_name)}>
                 <img src={actions.getMonsterImage(item)} className="col-8 align-self-center"/>
                 <div className="card p-1 text-center bg-yellow">
                   <h6>{item.monster_name}</h6>
                 </div>
               </div>
-              <CreatureModal id="info" index={item.monster_name}/>
             </div>
           ))}
     </div>
@@ -55,6 +52,9 @@ export const Bestiary = () =>{
 				<h5>Back to questing!</h5>
 			</Link>
     </div>
+
+
+    {store.bestiary?.map((item,index)=>(<CreatureModal id="info" key={index}/>))}
     </> 
 );
 
