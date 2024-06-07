@@ -129,7 +129,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							actionIcon = "fa-solid fa-check"
 							break;
 						default:
-							actionIcon = "fa-solid fa-tents"
+							actionIcon = "fa-solid fa-crosshairs"
 							break;
 					}
 				} else actionIcon = "fa-solid fa-question"
@@ -896,20 +896,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			battle: () => {
 				const store=getStore()
 
-				const creatureRoll =Math.floor(Math.random() * 3) + 1;
-				setStore({creatureRoll: creatureRoll})
-
-				const userRoll =Math.floor(Math.random() * 6) + 1;
 				const barbarianRoll=Math.floor(Math.random() * 8) + 1;
+				const creatureRoll =Math.floor(Math.random() * 3) + 1;
+				const userRoll =Math.floor(Math.random() * 6) + 1;
+
+				setStore({creatureRoll: creatureRoll})
 				if(store.user.role=== "Barbarian"){setStore({userRoll: barbarianRoll})}
 				else{setStore({userRoll: userRoll})}
 
 				if(store.userRoll > store.creatureRoll) {
-					const encounterCount = getStore().user.encounter
-					setStore({...getStore, inputs:{"encounter" : encounterCount - 1}})
-					getActions().updateUser()
 					getActions().addMosnterOnBestiary()
 				}
+
+				const encounterCount = getStore().user.encounter
+				setStore({...getStore, inputs:{"encounter" : encounterCount - 1}})
+				getActions().updateUser()
 			},
 
 			addMosnterOnBestiary: ()=>{

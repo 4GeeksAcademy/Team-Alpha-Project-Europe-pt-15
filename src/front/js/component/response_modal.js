@@ -12,12 +12,12 @@ export const ResponseModal = ({id, title, image, message, subMessage, confirmLab
             <div className="card modal-content p-4">
                 {/* title */}
                 <h1>{title}</h1>                 
-                <div className="modal-body d-flex flex-column gap-4">
+                <div className="modal-body d-flex flex-column gap-3">
                     {/* image */} 
                     <img className="col-6 align-self-center" src={image} />
                     {/* message */} 
                     <h5>{message}</h5>
-                    <div className="d-flex flex-row mx-auto gap-3">
+                    <div className="mx-auto">
                         {/* + info */} 
                         {subMessage}
                     </div>              

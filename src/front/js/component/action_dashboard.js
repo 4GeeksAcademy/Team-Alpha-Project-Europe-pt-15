@@ -47,12 +47,14 @@ export const TakeAction = ({id, view, label, tier, done}) => {
             title={store.npc[randomIndex].title}
             image={store.npc[randomIndex].image}
             message={store.npc[randomIndex].response}
-            subMessage={<p className="d-flex flex-row mx-auto gap-3">
+            subMessage={<> <p className="d-flex flex-row gap-3">
                         <i className="fa-solid fa-angles-up fa-bounce txt-green"></i>
                         {difficulty !== undefined? difficulty.experience_given : null} experience
                         <i className="fa-solid fa-angles-up fa-bounce txt-yellow"></i>
-                        {difficulty !== undefined? difficulty.energy_given : null} energy
-                        </p>}
+                        {difficulty !== undefined? difficulty.energy_given : null} energy</p> 
+                        {store.user.role === "Rogue"? <p className="d-inline-flex gap-3">
+                        <i className="fa-solid fa-plus fa-bounce txt-purple"></i> some you stole!</p> : null}
+                        </>}
             confirmLabel="Collect prize"
             action={() => actions.doTask(tier, id)}
         />
