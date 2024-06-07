@@ -44,7 +44,7 @@ def setup_commands(app):
 
         W = Role()
         W.name = "Wizard"
-        W.description = "Being a master at conjuring comes with it's own perks. Your Arcana abilities provide you a second shot at succeeding in a encounter."
+        W.description = "Being a master at conjuring comes with it's own perks. Your Arcana abilities enable you to summon a second encounter."
         W.passive = 1
         db.session.add(W)
         db.session.commit()

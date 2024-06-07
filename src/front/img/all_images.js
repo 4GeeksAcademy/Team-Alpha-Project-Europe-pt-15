@@ -10,16 +10,28 @@ import rogue from './rogue_icon.png'
 import rogue1 from './rogue1.png'
 import rogue2 from './rogue2.png'
 import rogue3 from './rogue3.png'
+
 import user from './icon_user.png'
 import email from './icon_email.png'
 import password from './icon_pw.png'
 import password_confirm from './icon_pwc.png'
 import see_password from './icon_pweye.png'
+
 import reward from './reward.png'
 import weak from './weak.png'
 import volcano from './volcano.png'
 import bestiary from './bestiary.png'
 import summon from './summon.png'
+import shame from './shame.png'
+import idiot from './idiot.png'
+
+import map from './map.jpg'
+import cave from './cave.png'
+import desert from './desert.png'
+import ocean from './ocean.png'
+import snow_forest from './snow_forest.png'
+import waterfall from './waterfall.png'
+
 import aberration from './aberration.png'
 import beast from './beast.png'
 import celestial from './celestial.png'
@@ -34,11 +46,23 @@ import monstrosity from './monstrosity.png'
 import ooze from './ooze.png'
 import plant from './plant.png'
 import undead from './undead.png'
+import creature from './creature.png'
+
+import dice1 from './dice1.png'
+import dice2 from './dice2.png'
+import dice3 from './dice3.png'
+import dice4 from './dice4.png'
+import dice5 from './dice5.png'
+import dice6 from './dice6.png'
+import dice7 from './dice7.png'
+import dice8 from './dice8.png'
+
 import landingImg from './landingImg.png'
 import logo from './logo.png'
 import barbarian_home from './barbarian_home.png'
 import wizard_home from './wizard_home.png'
 import rougue_home from './rougue_home.png'
+
 import thug from './thug.png'
 import bard from './bard.png'
 import knight from './knight.png'
@@ -75,6 +99,15 @@ export const IMAGES = {
     reward: reward,
     weak: weak,
     summon: summon,
+    shame: shame,
+    idiot: idiot,
+
+    map: map,
+    cave: cave,
+    desert: desert,
+    ocean: ocean,
+    snow_forest: snow_forest,
+    waterfall: waterfall,
 
     aberration: aberration,
     beast: beast,
@@ -90,6 +123,16 @@ export const IMAGES = {
     ooze: ooze,
     plant: plant,
     undead: undead,
+    creature: creature,
+
+    dice1: dice1,
+    dice2: dice2,
+    dice3: dice3,
+    dice4: dice4,
+    dice5: dice5,
+    dice6: dice6,
+    dice7: dice7,
+    dice8: dice8,
 
     landingImg: landingImg,
     logo: logo,

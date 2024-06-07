@@ -8,7 +8,6 @@ import { AddEditModal } from "../component/add_edit_modal_dashboard";
 
 
 export const Rewards = () => {
-
     const { store, actions } = useContext(Context);
    
     useEffect(() => {

@@ -6,17 +6,17 @@ export const DashCard = ({id, view, label, tier, modal, done}) => {
 
     const { store, actions } = useContext(Context);
 
-    let roleColor = actions.getRoleColor(view, tier, done)
-    let roleIcon = actions.getRoleIcon(tier)
+    let tierColor = actions.tierColor(view, tier, done)
+    let tierIcon = actions.tierIcon(view, tier)
 
     return (
         <>
         <div className="col" key={id}> 
             <div className="card">
-            <div className={`card-header d-flex flex-row justify-content-between p-3 ${roleColor}`}>
+            <div className={`card-header d-flex flex-row justify-content-between p-3 ${tierColor}`}>
                 <div className="d-flex flex-row gap-3">
                     <div className="card circle">
-                    <i className={roleIcon}></i>
+                    <i className={tierIcon}></i>
                     </div>
                     <TakeAction id={id} view={view} label={label} tier={tier} done={done} />
                 </div>

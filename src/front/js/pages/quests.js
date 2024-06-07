@@ -12,9 +12,6 @@ export const Quests = () => {
 	useEffect(() => {
         actions.getTaskList()
 		actions.getBackgroundColor("quests")
-		actions.decideEncounter()
-		actions.getEncounterInfo()
-
     },[]);
 
     let view = "tasks"

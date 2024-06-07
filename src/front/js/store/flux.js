@@ -59,48 +59,64 @@ const getState = ({ getStore, getActions, setStore }) => {
 				else return null
 			},
 			
-			getRoleColor: (view, tier, done) => {
-				let roleColor="";
+			tierColor: (view, tier, done) => {
+				let tierColor="";
 
 				if (view === "rewards" || view === "tasks" && done === true) {
 					switch(tier){
 						case 1:
-							roleColor = "bg-yellow"
+							tierColor = "bg-yellow"
 							break;
 						case 2:
-							roleColor = "bg-green"
+							tierColor = "bg-green"
 							break;
 						case 3:
-							roleColor = "bg-purple"
+							tierColor = "bg-purple"
 							break;
 						default:
-							roleColor = null
+							tierColor = null
 							break;
 					}
-				} else roleColor = null
+				} else tierColor = null
 		
-				return roleColor
+				return tierColor
 			},
 
-			getRoleIcon: (tier) => {
-				let roleIcon="";
+			tierIcon: (view, tier) => {
+				let tierIcon="";
 				
-				switch(tier){
-					case 1:
-						roleIcon = "far fa-star"
-						break;
-					case 2:
-						roleIcon = "fas fa-star-half-alt"
-						break;
-					case 3:
-						roleIcon = "fas fa-star"
-						break;
-					default:
-						roleIcon = "fa-solid fa-question"
-						break;
-				}
+				if (view === "tasks") {
+					switch(tier){
+						case 1:
+							tierIcon = "fa-regular fa-circle"
+							break;
+						case 2:
+							tierIcon = "fa-solid fa-circle-half-stroke"
+							break;
+						case 3:
+							tierIcon = "fa-solid fa-circle"
+							break;
+						default:
+							tierIcon = "fa-solid fa-question"
+							break;
+					}
+				} else if (view === "rewards") {
+					switch(tier){
+						case 1:
+							tierIcon = "far fa-star"
+							break;
+						case 2:
+							tierIcon = "fas fa-star-half-alt"
+							break;
+						case 3:
+							tierIcon = "fas fa-star"
+							break;
+						default:
+							tierIcon = "fa-solid fa-question"
+							break;
+					}}
 
-				return roleIcon
+				return tierIcon
 			},
 			
 			getActionIcon: (view, done) => {
@@ -167,8 +183,38 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (page === "rewards" ) document.querySelector("body").setAttribute("class", "bg-yellow")
 				if (page === "profile" ) document.querySelector("body").setAttribute("class", "bg-purple")
 				if (page === "bestiary" ) document.querySelector("body").setAttribute("class", "bg-green")
-				if (page === "encounter" ) document.querySelector("body").setAttribute("class", "bg-red")
+				if (page === "encounter" ) document.querySelector("body").setAttribute("class", "bg-purple")
+				if (page === "battle" ) document.querySelector("body").setAttribute("class", "bg-red")
 				if (page === "scoreboard" ) document.querySelector("body").setAttribute("class", "bg-purple")
+			},
+
+			encounterText: () => {
+				const creature = getStore().encounterInfo
+
+				if (creature.type == "aberration") return TEXT.aberration
+				if (creature.type == "beast") return TEXT.beast
+				if (creature.type == "celestial") return TEXT.celestial
+				if (creature.type == "construct") return TEXT.construct
+				if (creature.type == "dragon") return TEXT.dragon
+				if (creature.type == "elemental") return TEXT.elemental
+				if (creature.type == "fey") return TEXT.fey
+				if (creature.type == "fiend") return TEXT.fiend
+				if (creature.type == "giant") return TEXT.giant
+				if (creature.type == "humanoid") return TEXT.humanoid
+				if (creature.type == "monstrosity") return TEXT.monstrosity
+				if (creature.type == "ooze") return TEXT.ooze
+				if (creature.type == "plant") return TEXT.plant
+				if (creature.type == "undead") return TEXT.undead
+			},
+
+			dice: () => {
+				setStore({...getStore, dice: [0, IMAGES.dice1, IMAGES.dice2, IMAGES.dice3, IMAGES.dice4, IMAGES.dice5, IMAGES.dice6, IMAGES.dice7, IMAGES.dice8]})
+			},
+
+			battleResponse: () => {
+				const store = getStore()
+				if(store.userRoll > store.creatureRoll) return {title: TEXT.victoryTitle, response: TEXT.victory}
+				else return {title: TEXT.defeatTitle, response: TEXT.defeat}
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// DB DATA 
@@ -727,7 +773,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			
-			getMonsterImage:(creature)=>{				
+			getMonsterImage:(creature) => {
 				if (creature.image){return `https://www.dnd5eapi.co${creature.image}`}
 				if (creature.type == "aberration") return IMAGES.aberration
 				if (creature.type == "beast") return IMAGES.beast
@@ -743,11 +789,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "ooze") return IMAGES.ooze
 				if (creature.type == "plant") return IMAGES.plant
 				if (creature.type == "undead") return IMAGES.undead
+				else return IMAGES.creature
 			},
 
 			////////////////////////////////////////////////////////////////////////////////////////// MONSTERS
 
-			getallMonsters: async ()=>{
+			getallMonsters: ()=>{
 				const store=getStore()
 				const myHeaders = new Headers();
 				myHeaders.append("Accept", "application/json");
@@ -784,8 +831,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.catch((error) => console.error(error));
 			},
 			
-			getEncounter: (userLevel)=>{
+			getEncounter: ()=>{
 				const action=getActions()
+				const userLevel = localStorage.getItem("userLevel")
 				
 				if(userLevel <= 10) {return action.getMonsterByCr(0.125)}
 				if(userLevel <= 20) {return action.getMonsterByCr(0.125,0.250)}
@@ -809,16 +857,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if(userLevel <= 200) {return action.getMonsterByCr(0.125,0.250,0.500,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24)}
 			},
       
-			decideEncounter: ()=>{
+			encounterMonster: ()=>{
 				const store=getStore()
 				const action=getActions()
-				const userLvl = localStorage.getItem("userLevel")
-				
-				
-				
 				
 				action.getBestiary()
-				action.getEncounter(userLvl)
+				action.getEncounter()
 				setTimeout(() => {
 				const encounterPool = store.encounterPool?.map((item)=>{return item.index});
 				const bestiary = store.bestiary?.map((item)=>{return item.monster_name});
@@ -826,13 +870,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const randomMonster = monsterpool[Math.floor(Math.random() * monsterpool.length)]
 				setStore({randomMonster: randomMonster})
 				localStorage.setItem("randomMonster", randomMonster)
-				  }, "1000");				
+				  }, "1000");
 			},
 
-			getEncounterInfo:()=>{
+			encounterInfo: async ()=>{
 				const action=getActions()
 
-				action.decideEncounter()
+				action.encounterMonster()
 				
 				const monster = localStorage.getItem("randomMonster")
 				const myHeaders = new Headers();
@@ -849,19 +893,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 				.catch((error) => console.error(error));
 			},
 
-			addMosnterOnBestiary:async (userId, monster, type)=>{
+			battle: () => {
 				const store=getStore()
-				const action=getActions()
-				
-				//const monster = store.randomMonster
-				//const type = store.encounterInfo?.type
-				//const image = store.encounterInfo?.image
-				console.log(type)
-				
+
+				const creatureRoll =Math.floor(Math.random() * 3) + 1;
+				setStore({creatureRoll: creatureRoll})
+
+				const userRoll =Math.floor(Math.random() * 6) + 1;
+				const barbarianRoll=Math.floor(Math.random() * 8) + 1;
+				if(store.user.role=== "Barbarian"){setStore({userRoll: barbarianRoll})}
+				else{setStore({userRoll: userRoll})}
+
+				if(store.userRoll > store.creatureRoll) {
+					const encounterCount = getStore().user.encounter
+					setStore({...getStore, inputs:{"encounter" : encounterCount - 1}})
+					getActions().updateUser()
+					getActions().addMosnterOnBestiary()
+				}
+			},
+
+			addMosnterOnBestiary: ()=>{
+				const user = localStorage.getItem("user")
+				const monster = getStore().encounterInfo.index
+				const type = getStore().encounterInfo.type
+
 				const bestiaryEntry={
 					monster_name : monster,
 					type : type,
-					user_id: userId
+					user_id: user
 				}
 				
 				fetch(process.env.BACKEND_URL + "api/bestiary", {
@@ -878,6 +937,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					   console.log(error);
 				   });
 			},
+			/*
 			creatureRoll:()=>{
 				const monsterDice =Math.floor(Math.random() * 2) + 1;
 				setStore({creatureRoll: monsterDice})
@@ -885,9 +945,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			userRoll:()=>{
 				const store=getStore()
-				const action=getActions()
 				const userRoll =Math.floor(Math.random() * 6) + 1;
 				const barbarianRoll=Math.floor(Math.random() * 8) + 1;
+
 				if(store.user.role=== "Barbarian"){setStore({userRoll: barbarianRoll})}
 				else{setStore({userRoll: userRoll})}
 			},
@@ -897,13 +957,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const action=getActions()
 				const user = localStorage.getItem('user')
 				const encounterCount = getStore().user.encounter
-				console.log(encounterCount);
-				setStore({...getStore, inputs:{"encounter" : encounterCount - 1}})
-				action.updateUser()
-				
+				//setStore({...getStore, inputs:{"encounter" : encounterCount - 1}})
+				action.updateUser()	
 
-				
-				
 				if(store.userRoll > store.creatureRoll){return action.addMosnterOnBestiary(user,monster,type), 
 					setStore({victoryMessage:<div><h2>You are Victorius!!!!!</h2><p>As the final blow is struck, your enemiy falls to the ground with a resounding thud. Silence fills the air, broken only by your labored breathing. 
 					You have done it. You have triumphed against all odds. The battlefield, once a scene of chaos and violence, now lies still.<br/> The remnants of your foe lie scattered, 
@@ -913,14 +969,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					and the tales of your bravery will inspire future generations. This is your moment. Savor it, for you have earned it.</p></div>})} 
 					
 				else{return setStore({defeatMessage:<div><h2>You will have to try agin next time</h2><p>The clashing of steel and the roar of battle finally come to a halt. As you fall, an eerie silence descends upon the battlefield.
-					You stand up amidst the wreckage of what you where defending, bruised, battered, and barely holding on. The weight of defeat settles heavily on your shoulders.<br/>
+					You stand up amidst the wreckage of what you were defending, bruised, battered, and barely holding on. The weight of defeat settles heavily on your shoulders.<br/>
 					The enemies, now victorious, survey the carnage with grim satisfaction. Though you fought valiantly, the odds were insurmountable, and your strength was not enough to turn the tide.<br/> 
 					The bitter taste of failure lingers in the air, mingling with the scent of blood and smoke.As the enemy withdraws, leaving you alone with your thoughts and the bodies of your comrades, 
 					a sense of sorrow and loss fills your heart.<br/> This defeat is a harsh reminder of the perils and unpredictability of the life you have chosen. Yet, within this darkness, 
-					a glimmer of resolve begins to stir.</p></div> })}
-
-				
-
+					a glimmer of resolve begins to stir.</p></div> })}	
 			},
 
 			getCombatText:async ()=>{
@@ -940,7 +993,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			selectCombatText:(creature)=>{
 				const store=getStore()
 				const action=getActions()
-				console.log(creature.type)
 				
 				if (creature.type == "aberration"){return store.combatText[0].text}
 				if (creature.type == "beast"){return store.combatText[1].text}
@@ -956,7 +1008,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (creature.type == "ooze"){return store.combatText[11].text}
 				if (creature.type == "plant"){return store.combatText[12].text}
 				if (creature.type == "undead"){return store.combatText[13].text}				
-			},
+			},*/
 		}
 	};
 };

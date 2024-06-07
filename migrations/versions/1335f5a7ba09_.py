@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ea0297a80d9b
+Revision ID: 1335f5a7ba09
 Revises: 
-Create Date: 2024-06-05 14:41:17.510835
+Create Date: 2024-06-05 22:04:41.453615
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ea0297a80d9b'
+revision = '1335f5a7ba09'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -67,7 +67,7 @@ def upgrade():
     sa.Column('password', sa.String(length=80), nullable=False),
     sa.Column('email', sa.String(length=80), nullable=False),
     sa.Column('user_role', sa.Integer(), nullable=True),
-    sa.Column('encounter', sa.Boolean(), nullable=False),
+    sa.Column('encounter', sa.Integer(), nullable=False),
     sa.Column('level', sa.Integer(), nullable=False),
     sa.Column('experience', sa.Numeric(precision=3, scale=1), nullable=False),
     sa.Column('energy', sa.Numeric(precision=3, scale=1), nullable=False),
@@ -78,6 +78,7 @@ def upgrade():
     op.create_table('bestiary',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('monster_name', sa.String(length=120), nullable=False),
+    sa.Column('type', sa.String(length=120), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')

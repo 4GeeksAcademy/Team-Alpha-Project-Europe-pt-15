@@ -3,7 +3,7 @@ import { Context } from "../store/appContext";
 import { IMAGES } from "../../img/all_images";
 import { TEXT } from "../../text/all_messages";
 
-import { BetweenModal } from "./inbetween_modal";
+import { ConfirmationModal } from "./confirmation_modal";
 import { ResponseModal } from "./response_modal";
 
 export const TakeAction = ({id, view, label, tier, done}) => {
@@ -35,7 +35,7 @@ export const TakeAction = ({id, view, label, tier, done}) => {
 
 
         {/* task done modals */}
-		<BetweenModal 
+		<ConfirmationModal 
             id={`taskDone?${id}`}
             title="Is it Done?"
             confirmLabel="Firmly nod once"
@@ -59,7 +59,7 @@ export const TakeAction = ({id, view, label, tier, done}) => {
 
 
         {/* reward claim modals */}
-        <BetweenModal 
+        <ConfirmationModal 
             id={`attackReward${id}`}
             title="Attack this reward?"
             image={abilityImg}

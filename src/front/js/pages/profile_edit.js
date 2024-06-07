@@ -46,7 +46,7 @@ export const ProfileEdit = () => {
             {/* cancel */}
             <Link to="/quests">
 			<div type="reset" className="card p-3 text-center bg-black" onClick={actions.resetInput}>
-				<h5>Back to questing!</h5>
+				<h5>Back to quests</h5>
 			</div>
             </Link>
 			{/* delete account */}

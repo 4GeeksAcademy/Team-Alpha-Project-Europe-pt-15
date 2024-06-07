@@ -9,7 +9,7 @@ export const Navbar = ({view, modal}) => {
 
     useEffect(() => {
         actions.getUserDataAndAbilities()
-        actions.getEncounterInfo()
+        actions.encounterInfo()
     },[]);
 
     //alertPin
@@ -136,7 +136,7 @@ export const Navbar = ({view, modal}) => {
                     </div>
                     {/* beast count */}
                     <div className="card my-3 p-1">
-                    <h5>{store.bestiary.length} Beasts</h5>
+                    <h5>{store.bestiary.length}/334 Beasts</h5>
                     </div>
                     {/* scoreboard top10 */}
                     <Link to="/scoreboard">
